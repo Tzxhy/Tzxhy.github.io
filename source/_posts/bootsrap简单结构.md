@@ -11,7 +11,7 @@ tags:
 ## 标题:
 Bootstrap和普通的HTML页面一样, 定义标题都是使用标签&lt;h1&gt;到&lt;h6&gt;,只不过Bootstrap覆盖了其默认的样式, 使用其在所有浏览器下显示的效果一样.
 除此之外, 我们在Web的制作中, 常常会碰到在一个标题后面紧跟着一行小的副标题. 在Bootstrap中他也考虑了这种排版效果, 使用了&lt;small&gt;标签来制作副标题. 这个副标题具有其自己的一些独特样式.
-
+<!--more-->
 ## 段落(正文文本)
 全局文本字号为14px(font-size),行高为1.42857143(line-height), 大约是20px,深灰色(#333),字体为"Helvetica Neue", Helvetica, Arial, sans-serif;(font-family)
 

@@ -15,7 +15,7 @@ tags: js 笔记
 ````
 上面的代码在运行时, 全局变量scope, check1()运行时, 返回f(),f()中的scope为局部变量 (在check1中var 了 scope , 覆盖了全局变量, 虽然并未运行到赋值语句, 但js中var的变量在这一层作用域中从开始就存在, 因此alert中的scope为undefined)
 
-
+<!--more-->
 ``` bash
 	var scope = "global";
 	function check2(){

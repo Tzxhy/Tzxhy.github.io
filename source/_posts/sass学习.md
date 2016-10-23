@@ -24,6 +24,7 @@ nav {
   }
 }
 ```
+<!--more-->
 2, sass --watch test.scss:test.css --style expanded
 ``` bash
 nav {

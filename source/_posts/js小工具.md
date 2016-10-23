@@ -14,4 +14,4 @@ void window.open('http://baidu.com/s?wd='+q);
 
 ```
 
-
+<!--more-->

@@ -12,7 +12,7 @@ tags: 教程 Hexo next git
 	[Git](http://pan.baidu.com/s/1kVGurND/), 密码：2266 
 	Nodepad++ , 这个自己找一下.
 	github帐号.
-	
+	<!--more-->
 ## 教程开始
 
 ### 链接github
