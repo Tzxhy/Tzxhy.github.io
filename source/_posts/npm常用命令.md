@@ -12,6 +12,7 @@ npm install
 安装当前目录package.json文件中配置的dependencies模块
 安装本地的模块文件
 npm install <tarball file>
+<!-- more -->
 Example:
 npm install ./package.tgz
 安装指定URL的模块
