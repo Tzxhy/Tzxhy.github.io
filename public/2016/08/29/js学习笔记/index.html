@@ -1,0 +1,629 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js 笔记," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="var scope = &quot;global&quot;;	function check1()&amp;#123;		return function f()&amp;#123;			alert(scope);		&amp;#125;	   var scope = &quot;local&quot;;	&amp;#125;;	check1()();     //输出 undefined`
+上面的代码在运行时, 全局变量scope, check1()运行时, 返回f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/29/js学习笔记/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="var scope = &quot;global&quot;;	function check1()&amp;#123;		return function f()&amp;#123;			alert(scope);		&amp;#125;	   var scope = &quot;local&quot;;	&amp;#125;;	check1()();     //输出 undefined`
+上面的代码在运行时, 全局变量scope, check1()运行时, 返回f">
+<meta property="og:updated_time" content="2016-10-23T02:42:55.702Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js学习笔记">
+<meta name="twitter:description" content="var scope = &quot;global&quot;;	function check1()&amp;#123;		return function f()&amp;#123;			alert(scope);		&amp;#125;	   var scope = &quot;local&quot;;	&amp;#125;;	check1()();     //输出 undefined`
+上面的代码在运行时, 全局变量scope, check1()运行时, 返回f">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'TanZhiXuan'
+    }
+  };
+</script>
+
+  <title> js学习笔记 | CMeUp </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">CMeUp</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Welcome to my blog, pleased to accept your remark.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                js学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T03:31:59+08:00" content="2016-08-28">
+              2016-08-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/js学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/js学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">	var scope = <span class="string">"global"</span>;</div><div class="line">	<span class="keyword">function</span> <span class="function"><span class="title">check1</span></span>()&#123;</div><div class="line">		<span class="built_in">return</span> <span class="keyword">function</span> <span class="function"><span class="title">f</span></span>()&#123;</div><div class="line">			alert(scope);</div><div class="line">		&#125;</div><div class="line">	   var scope = <span class="string">"local"</span>;</div><div class="line">	&#125;;</div><div class="line">	check1()();     //输出 undefined</div><div class="line">`</div></pre></td></tr></table></figure>
+<p>上面的代码在运行时, 全局变量scope, check1()运行时, 返回f(),f()中的scope为局部变量 (在check1中var 了 scope , 覆盖了全局变量, 虽然并未运行到赋值语句, 但js中var的变量在这一层作用域中从开始就存在, 因此alert中的scope为undefined)</p>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var scope = <span class="string">"global"</span>;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">check2</span></span>()&#123;</div><div class="line">  <span class="keyword">function</span> <span class="function"><span class="title">f</span></span>()&#123;</div><div class="line">		alert(scope);</div><div class="line">  &#125;</div><div class="line">		var scope = <span class="string">"local"</span>;</div><div class="line">		<span class="built_in">return</span> f;</div><div class="line"> &#125;;</div><div class="line"> check2()();     //输出 <span class="built_in">local</span></div></pre></td></tr></table></figure>
+<p>上面的代码, f()中scope同样为局部变量, 但此时仍然为 undefined , 当运行到赋值时, 变为 local , 再将f函数返回. 当调用f()时, 能正确显示局部变量的值, local .</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var s = <span class="string">"test"</span>;</div><div class="line">var S = new String(<span class="string">"test"</span>);</div><div class="line">s.len = 4;</div><div class="line">alert(s.len);	//输出  undefined , 因为s.len为临时对象添加属性, 在引用完成后随即销毁. typeof s 为string</div><div class="line">S.len = 4;</div><div class="line">alert(S.len);	//输出4 ; typeof S 为 object</div></pre></td></tr></table></figure>
+<p>–js总是严格按照从左至右的顺序来计算表达式–<br>如: 在w = x + y <em> z 中 , 将首先计算字表达式 w , 然后计算x, y和z, 然后, y的值和z的值相乘, 再加上x的值, 最后将其赋值给表达式 w 所指代的变量的属性. 给表达式添加圆括号将会改变乘法/加法和赋值运算的关系, 但是从左至右的顺序是不会改变的.<br>例子: date[++i] </em>= 2;</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var point = &#123;</div><div class="line">	x:2,</div><div class="line">	y:1,</div><div class="line">&#125;;</div><div class="line">var point2 = &#123;</div><div class="line">	x:point.x,</div><div class="line">	y:point.y + 1,</div><div class="line">&#125;;</div><div class="line">alert(point2.x+<span class="string">" "</span>+point2.y);   // 2 2</div><div class="line">point.x = 4;</div><div class="line">point.y *= 2;</div><div class="line">alert(point2.x+<span class="string">" "</span>+point2.y);   // 2 2</div></pre></td></tr></table></figure>
+<p>每次计算对象直接量的时候, 也都会计算它的每个属性的值. </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var point = &#123;</div><div class="line">	x:2,</div><div class="line">	y:1,</div><div class="line">&#125;;</div><div class="line">var point2 = &#123;</div><div class="line">	x:point,</div><div class="line">&#125;;</div><div class="line">alert(point2.x.x+<span class="string">" "</span>+point2.x.y);   // 2 1</div><div class="line">point.x = 4;</div><div class="line">point.y *= 2;</div><div class="line">alert(point2.x.x+<span class="string">" "</span>+point2.x.y);   // 4 2</div></pre></td></tr></table></figure>
+<p>当值为引用时, 情况不一致, 思考为什么?</p>
+<p><strong>js 属性值为原始值或者对象值的区别</strong></p>
+<p>javascript的数据类型可以分为两种：原始类型和引用类型。原始类型也称为基本类型或简单类型，javascript基本数据类型包括Undefined、Null、Boolean、Number和String五种，而引用类型也称为复杂类型，在Javascript中是Object。与此相对应，它们的值也分别被称为原始值和复杂值<br><strong>原始值(primitive value)</strong></p>
+<p>简单的说：原始值是固定而简单的值,是存放在栈(stack)中的简单数据段,也就是说,它们的值直接存储在变量访问的位置.</p>
+<p>　　原始值是表示Javascript中可用的数据或信息的最底层形式或最简单形式。原始类型的值被称为原始值，是因为它们是不可细化的。也就是说，数字是数字，字符是字符，布尔值则是true或false，null和undefined就是null和undefined。这些值本身很简单，不能表示由其他值组成的值.</p>
+<p><em>有哪些类型是原始类型呢?</em></p>
+<p>原始类型(primitive type)有以下五种类型:Undefined,Null,Boolean,Number,String</p>
+<p>我们可以使用typeof来判断一个是否在某个类型的范围内.<br><span style="color:red;">typeof运算符</span><br>注意:<br>1.返回值为字符串类型.</p>
+<p>2.和原始类型比,还差了个null,这个比较特殊,使用typeof(null),返回的是”object”,我们将null理解成是object的占位符.</p>
+<p><strong>复杂值</strong><br>　复杂值可以由很多不同类型的javascript对象组成。复杂对象其在内存中的大小是未知的，因为复杂对象可以包含任何值，而不是一个特定的已知值<br>存储方式<br>栈存储<br>　　因为原始值占据空间固定，是简单的数据段，为了便于提升变量查询速度，将其存储在栈(stack)中<br>堆存储<br>　　由于复杂值的大小会改变，所以不能将其存放在栈中，否则会降低变量查询速度，因此其存储在堆(heap)中，存储在变量处的值是一个指针，指向存储对象的内存处</p>
+<p>访问方式</p>
+<p>按值访问</p>
+<p>　　原始值是作为不可细化的值进行存储和操作的，引用它们会转移其值<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var myString = <span class="string">'foo'</span>;</div><div class="line">var myStringCopy = myString;</div><div class="line">var myString = null;</div><div class="line">console.log(myString,myStringCopy);//null,<span class="string">'foo'</span></div></pre></td></tr></table></figure></p>
+<p>引用访问</p>
+<p>　　复杂值是通过引用进行存储和操作的，而不是实际的值。创建一个包含复杂对象的变量时，其值是内存中的一个引用地址。引用一个复杂对象时，使用它的名称(即变量或对象属性)通过内存中的引用地址获取该对象值<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var myObject = &#123;&#125;;</div><div class="line">var copyOfMyObject = myObject;//没有复制值，而是复制了引用</div><div class="line">myObject.foo = <span class="string">'bar'</span>;//操作myObject中的值</div><div class="line">//现在如果输出myObject和copyOfMyObject，则都会输出foo属性，因为它们引用的是同一个对象</div><div class="line">console.log(myObject,copyOfMyObject);//Object&#123;foo=<span class="string">"bar"</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>比较方式</p>
+<p>　　原始值采用值比较，而复杂值采用引用比较。复杂值只有在引用相同的对象(即有相同的地址)时才相等。即使是包含相同对象的两个变量也彼此不相等，因为它们并不指向同一个对象<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var price1 = 10;</div><div class="line">var price2 = 10;</div><div class="line">var price3 = new Number(<span class="string">'10'</span>);</div><div class="line">var price4 = price3;</div><div class="line">console.log(price1 == price2);//<span class="literal">true</span></div><div class="line">console.log(price1 == price3);//<span class="literal">true</span></div><div class="line">price4 = 10;</div><div class="line">console.log(price4 == price3);//<span class="literal">true</span></div><div class="line">console.log(price4 === price3);//<span class="literal">false</span> </div><div class="line">var objectFoo = &#123;same:<span class="string">'same'</span>&#125;;</div><div class="line">var objectBar = &#123;same:<span class="string">'same'</span>&#125;;</div><div class="line">console.log(objectFoo == objectBar);//<span class="literal">false</span></div><div class="line">var objectA = &#123;foo: <span class="string">'bar'</span>&#125;;</div><div class="line">var objectB = objectA;</div><div class="line">console.log(objectA == objectB);//<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<p>动态属性</p>
+<p>　　对于复杂值，可以为其添加属性和方法，也可以改变和删除其属性和方法；但简单值不可以添加属性和方法</p>
+<p>　　复杂值支持动态对象属性，因为我们可以定义对象，然后创建引用，再更新对象，并且所有指向该对象的变量都会获得更新。一个新变量指向现有的复杂对象，并没有复制该对象。这就是复杂值有时被称为引用值的原因。复杂值可以根据需求有任意多个引用，即使对象改变，它们也总是指向同一个对象<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">var str = <span class="string">'test'</span>;</div><div class="line">str.property = <span class="literal">true</span>;</div><div class="line">console.log(str.property);//undefined　 </div><div class="line">var objA = &#123;property: <span class="string">'value'</span>&#125;;</div><div class="line">var pointer1 = objA;</div><div class="line">var pointer2 = pointer1;</div><div class="line">objA.property = null;</div><div class="line">console.log(objA.property,pointer1.property,pointer2.property);//null null null</div></pre></td></tr></table></figure></p>
+<p>包装类型</p>
+<p>　　原始值被当作构造函数创建的一个对象来使用时，Javascript会将其转换成一个对象，以便可以使用对象的特性和方法，而后抛弃对象性质，并将它变回到原始值</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="keyword">function</span> constfunc(v) &#123;</div><div class="line">	<span class="built_in">return</span> <span class="function"><span class="title">function</span></span> () &#123;</div><div class="line">		<span class="built_in">return</span> v;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var funcs = [];</div><div class="line"><span class="keyword">for</span>( var i = 0 ; i　&lt; 10 ; ++i )&#123;</div><div class="line">	funcs[i] = constfunc(i);</div><div class="line">&#125;</div><div class="line">console.log(funcs[5]());		//输出 5</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">constfuncs</span></span>() &#123;</div><div class="line">	var funcs = [];</div><div class="line">	<span class="keyword">for</span> ( var i = 0; i &lt; 10; ++ i)&#123;</div><div class="line">		funcs[i] = <span class="function"><span class="title">function</span></span>()&#123;<span class="built_in">return</span> i;&#125;;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">return</span> funcs;</div><div class="line">&#125;</div><div class="line">var funcs = constfuncs();</div><div class="line">console.log(funcs[3]());		// 输出10   闭包中共享变量 i ,i最后为10, 所以funcs[i]() 都为10</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">yi</span></span>() &#123;</div><div class="line">	<span class="built_in">let</span> a = 1;</div><div class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)&#123;</div><div class="line">		yield a;</div><div class="line">		++a;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">	<span class="built_in">let</span> f = yi();</div><div class="line">	<span class="keyword">for</span>(<span class="built_in">let</span>  i = 0; i &lt; 10; ++i)</div><div class="line">		console.log(f.next());</div><div class="line">	f.close();</div></pre></td></tr></table></figure>
+<p>对于生成器 yield 的用法, 在上面的例子中, 如果不用f = yi() 语句, 而将 console.log(f.next()) 改为 console.log(yi().next()); 的话, 不能正确调用生成器. 这是因为使用yi().next()的话,相当于每次都先调用yi(), (这时就相当于函数调用, 使局部变量全部重新初始化, 当然得不到预期的结果), 使用f = yi(); 时, 相当于得到了yi()中的生成器对象, 这时调用next()方法, 当然就是正确的了. </p>
+<p><strong>style.height</strong><br>我们都知道obj.offsetHeight与obj.style.height都可以获取obj的高度，但是在js使用中，我们通常会使用前者来获取高度，这是为什么，二者有什么样的区别呢。<br>1、obj.offsetHeight可以获取写在样式文件里的属性值，而obj.style.height只能获取行内属性，在表现与结构分离的今天，这显然是不合适的<br>2、obj.offsetHeight返回的是一个数值，而obj.style.height返回的是一个字符串，单位是“px”<br>3、obj.offsetHeight是只读，而obj.style.height是可读写<br>4、如果没有为元素设置高度，obj.offsetHeight会根据内容获取高度值，而obj.style.height会返回undefind<br>jQuery里我们使用\$(obj).height()来获取元素的高度，（\$(obj).css(‘height’)返回的是一个带有单位的字符串）。<br>与其他三个（\$(obj).height()、\$(obj).css(‘height’)、obj.style.height）不同的是，obj.offsetHeight的高度就是height+padding,其他是不把padding计入高度的</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js-笔记/" rel="tag">#js 笔记</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/28/遇到的问题集合/" rel="next" title="遇到的问题集合">
+                <i class="fa fa-chevron-left"></i> 遇到的问题集合
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/01/git-学习笔记-三/" rel="prev" title="git 学习笔记(三)">
+                git 学习笔记(三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/29/js学习笔记/"
+           data-title="js学习笔记" data-url="http://yoursite.com/2016/08/29/js学习笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Tzx" />
+          <p class="site-author-name" itemprop="name">Tzx</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tzx</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"tzxhy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
