@@ -1,0 +1,635 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/VEN/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/VEN/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hello">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/1.png?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="学习范围：Application 目的了解安卓中 Application 的概念，提供的能力。 介绍代表应用程序（即 Android App）的类，也属于Android中的一个系统组件。官网中说到：  维护全局应用状态的基类。可以提供你自己的实现，通过创建一个该类的子类，并且指定其类名为 AndroidManifest.xml’s  标签中 “android:name” 的值即可。Applicat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Andr学习第3天">
+<meta property="og:url" content="http://yoursite.com/2020/03/12/Andr学习第3天/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="学习范围：Application 目的了解安卓中 Application 的概念，提供的能力。 介绍代表应用程序（即 Android App）的类，也属于Android中的一个系统组件。官网中说到：  维护全局应用状态的基类。可以提供你自己的实现，通过创建一个该类的子类，并且指定其类名为 AndroidManifest.xml’s  标签中 “android:name” 的值即可。Applicat">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-06T13:12:41.992Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Andr学习第3天">
+<meta name="twitter:description" content="学习范围：Application 目的了解安卓中 Application 的概念，提供的能力。 介绍代表应用程序（即 Android App）的类，也属于Android中的一个系统组件。官网中说到：  维护全局应用状态的基类。可以提供你自己的实现，通过创建一个该类的子类，并且指定其类名为 AndroidManifest.xml’s  标签中 “android:name” 的值即可。Applicat">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'TanZhiXuan'
+    }
+  };
+</script>
+
+  <title> Andr学习第3天 | CMeUp </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">CMeUp</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Andr学习第3天
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-03-12T17:55:44+08:00" content="2020-03-12">
+              2020-03-12
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Andr/" itemprop="url" rel="index">
+                    <span itemprop="name">Andr</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>学习范围：Application</p>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解安卓中 Application 的概念，提供的能力。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>代表应用程序（即 Android App）的类，也属于Android中的一个系统组件。<a href="https://developer.android.com/reference/android/app/Application" target="_blank" rel="noopener">官网</a>中说到：</p>
+<blockquote>
+<p>维护全局应用状态的基类。可以提供你自己的实现，通过创建一个该类的子类，并且指定其类名为 AndroidManifest.xml’s <application> 标签中 “android:name” 的值即可。Application 类或者你的子类，会在你的程序启动时第一时间初始化。</application></p>
+</blockquote>
+<a id="more"></a>
+<p>完整代码如下：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AndroidApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AndroidApplication instance;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">        instance = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> AndroidApplication <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:name</span>=<span class="string">".AndroidApplication"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:allowBackup</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:icon</span>=<span class="string">"@mipmap/ic_launcher"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:supportsRtl</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".MainActivity"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><h3 id="实例创建方式：单例模式"><a href="#实例创建方式：单例模式" class="headerlink" title="实例创建方式：单例模式"></a>实例创建方式：单例模式</h3><p>每个Android App运行时，会首先自动创建Application 类并实例化 Application 对象，且只有一个。也可通过 继承 Application 类自定义Application 类和实例。</p>
+<h3 id="实例形式：全局实例"><a href="#实例形式：全局实例" class="headerlink" title="实例形式：全局实例"></a>实例形式：全局实例</h3><p>即不同的组件（如Activity、Service）都可获得Application对象且都是同一个对象。</p>
+<h3 id="生命周期：等于-Android-App-的生命周期"><a href="#生命周期：等于-Android-App-的生命周期" class="headerlink" title="生命周期：等于 Android App 的生命周期"></a>生命周期：等于 Android App 的生命周期</h3><p>Application 对象的生命周期是整个程序中最长的，即等于Android App的生命周期。</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><h3 id="onCreate"><a href="#onCreate" class="headerlink" title="onCreate"></a>onCreate</h3><p>调用时刻： Application 实例创建时调用。Android系统的入口是Application类的 onCreate（），默认为空实现。<br>作用：</p>
+<ol>
+<li>初始化应用程序级别的资源，如全局对象、环境配置变量、图片资源初始化、推送服务的注册等。<strong>注：请不要执行耗时操作，否则会拖慢应用程序启动速度</strong></li>
+<li>数据共享、数据缓存。设置全局共享数据，如全局共享变量、方法等。注：这些共享数据只在应用程序的生命周期内有效，当该应用程序被杀死，这些数据也会被清空，所以只能存储一些具备 <strong>临时性的共享数据</strong>。</li>
+</ol>
+<h3 id="registerComponentCallbacks-amp-unregisterComponentCallbacks"><a href="#registerComponentCallbacks-amp-unregisterComponentCallbacks" class="headerlink" title="registerComponentCallbacks &amp; unregisterComponentCallbacks"></a>registerComponentCallbacks &amp; unregisterComponentCallbacks</h3><p>作用：注册和注销 ComponentCallbacks2 回调接口。本质上是复写 ComponentCallbacks2回调接口里的方法从而实现更多的操作，具体下面会详细介绍。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">registerComponentCallbacks(<span class="keyword">new</span> ComponentCallbacks2() &#123;</span><br><span class="line"><span class="comment">// 接口里方法下面会继续介绍</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTrimMemory</span><span class="params">(<span class="keyword">int</span> level)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLowMemory</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onConfigurationChanged</span><span class="params">(Configuration newConfig)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="onTrimMemory"><a href="#onTrimMemory" class="headerlink" title="onTrimMemory"></a>onTrimMemory</h3><p>作用：通知 应用程序 当前内存使用情况（以内存级别进行识别）。应用场景：根据当前内存使用情况进行自身的内存资源的不同程度释放，以避免被系统直接杀掉 &amp; 优化应用程序的性能体验。</p>
+<h3 id="onLowMemory"><a href="#onLowMemory" class="headerlink" title="onLowMemory"></a>onLowMemory</h3><p>作用：监听 Android系统整体内存较低时刻。调用时刻：Android系统整体内存较低时。</p>
+<h3 id="onConfigurationChanged"><a href="#onConfigurationChanged" class="headerlink" title="onConfigurationChanged"></a>onConfigurationChanged</h3><p>作用：监听应用程序配置信息的改变，如屏幕旋转等。调用时刻：应用程序配置信息 改变时调用。<br>该配置信息是指 ：Manifest.xml文件下的 Activity标签属性android:configChanges的值，如下：<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".MainActivity"</span>&gt;</span></span><br><span class="line">    android:configChanges="keyboardHidden|orientation|screenSize"</span><br><span class="line">    // 设置该配置属性会使 Activity在配置改变时不重启，只执行onConfigurationChanged（）</span><br><span class="line">    // 上述语句表明，设置该配置属性可使 Activity 在屏幕旋转时不重启</span><br><span class="line"> <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="registerActivityLifecycleCallbacks-amp-unregisterActivityLifecycleCallbacks"><a href="#registerActivityLifecycleCallbacks-amp-unregisterActivityLifecycleCallbacks" class="headerlink" title="registerActivityLifecycleCallbacks &amp; unregisterActivityLifecycleCallbacks"></a>registerActivityLifecycleCallbacks &amp; unregisterActivityLifecycleCallbacks</h3><p>作用：注册 / 注销对应用程序内所有Activity的生命周期监听。调用时刻：当应用程序内 Activity 生命周期发生变化时就会调用。实际上是调用registerActivityLifecycleCallbacks（）里 ActivityLifecycleCallbacks接口里的方法。</p>
+<h3 id="onTerminate"><a href="#onTerminate" class="headerlink" title="onTerminate"></a>onTerminate</h3><p>调用时刻：应用程序结束时调用。但该方法只用于Android仿真机测试，在Android产品机是不会调用的。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>从Applicaiton类的方法可以看出，Applicaiton类的应用场景有：（已按优先级排序）</p>
+<ul>
+<li>初始化 应用程序级别 的资源，如全局对象、环境配置变量等</li>
+<li>数据共享、数据缓存，如设置全局共享变量、方法等</li>
+<li>获取应用程序当前的内存使用情况，及时释放资源，从而避免被系统杀死</li>
+<li>监听 应用程序 配置信息的改变，如屏幕旋转等</li>
+<li>监听应用程序内 所有Activity的生命周期</li>
+</ul>
+<h2 id="不要误用-Application"><a href="#不要误用-Application" class="headerlink" title="不要误用 Application"></a>不要误用 Application</h2><h3 id="用于缓存状态"><a href="#用于缓存状态" class="headerlink" title="用于缓存状态"></a>用于缓存状态</h3><p>因为Application会因为进入background后内存不足被系统干掉，进入后系统会重现创建一个Application类，而导致缓存在Application类里的数据全部初始化而丢失。</p>
+<h3 id="错误的获取全局Context对象的方式"><a href="#错误的获取全局Context对象的方式" class="headerlink" title="错误的获取全局Context对象的方式"></a>错误的获取全局Context对象的方式</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnddroidApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AnddroidApplication app;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> AnddroidApplication <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (app == <span class="keyword">null</span>) &#123;</span><br><span class="line">            app = <span class="keyword">new</span> AnddroidApplication();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> app;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>组件必须被系统创建才有作用，而不仅仅是一个类。它是有上下文环境的。正确的获取方式是在 onCreate 中保存引用。</p>
+<h3 id="在控件的构造方法中获取Context或者做其他视图操作"><a href="#在控件的构造方法中获取Context或者做其他视图操作" class="headerlink" title="在控件的构造方法中获取Context或者做其他视图操作"></a>在控件的构造方法中获取Context或者做其他视图操作</h3><p>写过Android的同学应该知道自己或者看别人dome都很少或者基本看不到在控件构造函数内进行初始化，获取参数等这些操作吧！是的，这样做是很容易出难以发现的Bug的。具体原因是在ContextWrapper类的源码中，他有一个attachBaseContext()方法，这个方法会将传入的一个Context参数赋值给mBase对象，之后mBase对象就有值了。而我们又知道，所有Context的方法都是调用这个mBase对象的同名方法，那么也就是说如果在mBase对象还没赋值的情况下就去调用Context中的任何一个方法时，就会出现空指针异常。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.jianshu.com/p/3138f9c351e8" target="_blank" rel="noopener">在Android开发中怎样使用Application类</a><br><a href="https://juejin.im/entry/59c30e0ff265da06611f7024" target="_blank" rel="noopener">Android：全面解析 Application类</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/11/Andr学习第2天/" rel="next" title="Andr学习第2天">
+                <i class="fa fa-chevron-left"></i> Andr学习第2天
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/17/Andr学习第5天/" rel="prev" title="Andr学习第5天">
+                Andr学习第5天 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+          <p class="site-author-name" itemprop="name">谭智轩</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.</span> <span class="nav-text">特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实例创建方式：单例模式"><span class="nav-number">3.1.</span> <span class="nav-text">实例创建方式：单例模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例形式：全局实例"><span class="nav-number">3.2.</span> <span class="nav-text">实例形式：全局实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期：等于-Android-App-的生命周期"><span class="nav-number">3.3.</span> <span class="nav-text">生命周期：等于 Android App 的生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">4.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onCreate"><span class="nav-number">4.1.</span> <span class="nav-text">onCreate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#registerComponentCallbacks-amp-unregisterComponentCallbacks"><span class="nav-number">4.2.</span> <span class="nav-text">registerComponentCallbacks &amp; unregisterComponentCallbacks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onTrimMemory"><span class="nav-number">4.3.</span> <span class="nav-text">onTrimMemory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onLowMemory"><span class="nav-number">4.4.</span> <span class="nav-text">onLowMemory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onConfigurationChanged"><span class="nav-number">4.5.</span> <span class="nav-text">onConfigurationChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#registerActivityLifecycleCallbacks-amp-unregisterActivityLifecycleCallbacks"><span class="nav-number">4.6.</span> <span class="nav-text">registerActivityLifecycleCallbacks &amp; unregisterActivityLifecycleCallbacks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onTerminate"><span class="nav-number">4.7.</span> <span class="nav-text">onTerminate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">5.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不要误用-Application"><span class="nav-number">6.</span> <span class="nav-text">不要误用 Application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用于缓存状态"><span class="nav-number">6.1.</span> <span class="nav-text">用于缓存状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误的获取全局Context对象的方式"><span class="nav-number">6.2.</span> <span class="nav-text">错误的获取全局Context对象的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在控件的构造方法中获取Context或者做其他视图操作"><span class="nav-number">6.3.</span> <span class="nav-text">在控件的构造方法中获取Context或者做其他视图操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/VEN/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/VEN/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

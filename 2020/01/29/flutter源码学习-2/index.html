@@ -1,0 +1,641 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/VEN/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/VEN/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hello">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/1.png?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本篇深入 lib/services。 库定义暴露给 flutter 程序的平台相关服务。仅依赖核心的 dart 库和 lib/foundation。 主asset_bundle.dartnative 程序可以携带一些静态资源，比如图片、字体等文件。这需要提前定义。在 flutter 中即是在 pubspec.yaml 中定义。对外暴露一个 rootBundle，但最好是通过 DefaultAsse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flutter源码学习(2)">
+<meta property="og:url" content="http://yoursite.com/2020/01/29/flutter源码学习-2/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="本篇深入 lib/services。 库定义暴露给 flutter 程序的平台相关服务。仅依赖核心的 dart 库和 lib/foundation。 主asset_bundle.dartnative 程序可以携带一些静态资源，比如图片、字体等文件。这需要提前定义。在 flutter 中即是在 pubspec.yaml 中定义。对外暴露一个 rootBundle，但最好是通过 DefaultAsse">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-06T13:12:41.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flutter源码学习(2)">
+<meta name="twitter:description" content="本篇深入 lib/services。 库定义暴露给 flutter 程序的平台相关服务。仅依赖核心的 dart 库和 lib/foundation。 主asset_bundle.dartnative 程序可以携带一些静态资源，比如图片、字体等文件。这需要提前定义。在 flutter 中即是在 pubspec.yaml 中定义。对外暴露一个 rootBundle，但最好是通过 DefaultAsse">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'TanZhiXuan'
+    }
+  };
+</script>
+
+  <title> flutter源码学习(2) | CMeUp </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">CMeUp</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                flutter源码学习(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-01-29T03:24:31+08:00" content="2020-01-28">
+              2020-01-28
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/flutter/services/" itemprop="url" rel="index">
+                    <span itemprop="name">services</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇深入 lib/services。</p>
+<h2 id="库定义"><a href="#库定义" class="headerlink" title="库定义"></a>库定义</h2><p>暴露给 flutter 程序的平台相关服务。仅依赖核心的 dart 库和 lib/foundation。</p>
+<h2 id="主"><a href="#主" class="headerlink" title="主"></a>主</h2><h3 id="asset-bundle-dart"><a href="#asset-bundle-dart" class="headerlink" title="asset_bundle.dart"></a>asset_bundle.dart</h3><p>native 程序可以携带一些静态资源，比如图片、字体等文件。这需要提前定义。在 flutter 中即是在 pubspec.yaml 中定义。对外暴露一个 <code>rootBundle</code>，但最好是通过 <code>DefaultAssetBundle.of</code> 获取 bundle。</p>
+<h3 id="binary-messenger-dart"><a href="#binary-messenger-dart" class="headerlink" title="binary_messenger.dart"></a>binary_messenger.dart</h3><p>定义了一个flutter 内部使用的消息通道。暴露了一个 <code>defaultBinaryMessenger</code> 常量。</p>
+<h3 id="binding-dart"><a href="#binding-dart" class="headerlink" title="binding.dart"></a>binding.dart</h3><p>定义了 <code>ServicesBinding</code> 。监听平台事件（onPlatformMessage）。主要做了添加凭证（license）的工作。<br><a id="more"></a></p>
+<h3 id="clipboard-dart"><a href="#clipboard-dart" class="headerlink" title="clipboard.dart"></a>clipboard.dart</h3><p>定义了剪切板功能。剪切板只能获取字符型数据。</p>
+<h3 id="font-loader-dart"><a href="#font-loader-dart" class="headerlink" title="font_loader.dart"></a>font_loader.dart</h3><p>定义了一个可以在运行时加载字体的类。</p>
+<h3 id="haptic-feedback-dart"><a href="#haptic-feedback-dart" class="headerlink" title="haptic_feedback.dart"></a>haptic_feedback.dart</h3><p>触觉反馈模块。根据 iOS、Andr 做了不同适配。</p>
+<h3 id="keyboard-key-dart"><a href="#keyboard-key-dart" class="headerlink" title="keyboard_key.dart"></a>keyboard_key.dart</h3><p>定义了两个类。<code>LogicalKeyboardKey</code>/ <code>PhysicalKeyboardKey</code>，逻辑按键和物理按键。逻辑按键帮助区分了标志符、模式等，而物理按键跟键盘布局有关。</p>
+<h3 id="keyboard-maps-dart"><a href="#keyboard-maps-dart" class="headerlink" title="keyboard_maps.dart"></a>keyboard_maps.dart</h3><p>按键 maps</p>
+<h3 id="message-codec-dart-message-codecs-dart"><a href="#message-codec-dart-message-codecs-dart" class="headerlink" title="message_codec.dart message_codecs.dart"></a>message_codec.dart message_codecs.dart</h3><p>定义了 flutter 程序间、plugins 之间通信时的编码、解码。</p>
+<h3 id="platform-messages-dart-platform-channel-dart"><a href="#platform-messages-dart-platform-channel-dart" class="headerlink" title="platform_messages.dart platform_channel.dart"></a>platform_messages.dart platform_channel.dart</h3><p>定义了 flutter plugins 通信的channel。</p>
+<h3 id="platform-views-dart"><a href="#platform-views-dart" class="headerlink" title="platform_views.dart"></a>platform_views.dart</h3><p>跟 iOS、Andr 原生View 相关。不太清楚作用。TODO</p>
+<h3 id="raw-keyboard-dart-raw-keyboard-dart"><a href="#raw-keyboard-dart-raw-keyboard-dart" class="headerlink" title="raw_keyboard.dart  raw_keyboard_*.dart"></a>raw_keyboard.dart  raw_keyboard_*.dart</h3><p>按键相关。</p>
+<h3 id="system-channels-dart"><a href="#system-channels-dart" class="headerlink" title="system_channels.dart"></a>system_channels.dart</h3><p>定义了 flutter 程序的系统级平台 channel。包括：</p>
+<ol>
+<li>navigation</li>
+<li>platform</li>
+<li>textInput</li>
+<li>keyEvent</li>
+<li>lifecycle</li>
+<li>system</li>
+<li>accessibility</li>
+<li>platform_views</li>
+<li>skia</li>
+</ol>
+<h3 id="system-chrome-dart"><a href="#system-chrome-dart" class="headerlink" title="system_chrome.dart"></a>system_chrome.dart</h3><p>定义了 <code>SystemChrome</code> 用于控制操作系统图形界面的特定方面以及它与应用程序的交互方式，比如设置屏幕方向、应用程序切换描述、设置可见的系统覆盖层（顶部状态栏、安卓底部导航栏）。</p>
+<h3 id="system-navigator-dart"><a href="#system-navigator-dart" class="headerlink" title="system_navigator.dart"></a>system_navigator.dart</h3><p>定义了一个 <code>SystemNavigator</code> 类，用于退出当前activity。iOS 上无效（程序不应该自己退出）。<code>SystemNavigator.pop</code>方法比<code>dart:io</code>‘s [exit] 好，因为后者表达了一个异常退出的意图。</p>
+<h3 id="system-sound-dart"><a href="#system-sound-dart" class="headerlink" title="system_sound.dart"></a>system_sound.dart</h3><p>定义了 <code>SystemSound</code> 类，用于调起声音播放，具体应用场景不清楚。TODO</p>
+<h3 id="text-formatter-dart-text-input-dart-text-editing-dart"><a href="#text-formatter-dart-text-input-dart-text-editing-dart" class="headerlink" title="text_formatter.dart text_input.dart text_editing.dart"></a>text_formatter.dart text_input.dart text_editing.dart</h3><p>定义了文本的输入。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/28/flutter源码学习-1/" rel="next" title="flutter源码学习(1)">
+                <i class="fa fa-chevron-left"></i> flutter源码学习(1)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/12/flutter-学习线路图/" rel="prev" title="flutter 学习线路图">
+                flutter 学习线路图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+          <p class="site-author-name" itemprop="name">谭智轩</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#库定义"><span class="nav-number">1.</span> <span class="nav-text">库定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主"><span class="nav-number">2.</span> <span class="nav-text">主</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#asset-bundle-dart"><span class="nav-number">2.1.</span> <span class="nav-text">asset_bundle.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binary-messenger-dart"><span class="nav-number">2.2.</span> <span class="nav-text">binary_messenger.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binding-dart"><span class="nav-number">2.3.</span> <span class="nav-text">binding.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clipboard-dart"><span class="nav-number">2.4.</span> <span class="nav-text">clipboard.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#font-loader-dart"><span class="nav-number">2.5.</span> <span class="nav-text">font_loader.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#haptic-feedback-dart"><span class="nav-number">2.6.</span> <span class="nav-text">haptic_feedback.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keyboard-key-dart"><span class="nav-number">2.7.</span> <span class="nav-text">keyboard_key.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keyboard-maps-dart"><span class="nav-number">2.8.</span> <span class="nav-text">keyboard_maps.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#message-codec-dart-message-codecs-dart"><span class="nav-number">2.9.</span> <span class="nav-text">message_codec.dart message_codecs.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#platform-messages-dart-platform-channel-dart"><span class="nav-number">2.10.</span> <span class="nav-text">platform_messages.dart platform_channel.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#platform-views-dart"><span class="nav-number">2.11.</span> <span class="nav-text">platform_views.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#raw-keyboard-dart-raw-keyboard-dart"><span class="nav-number">2.12.</span> <span class="nav-text">raw_keyboard.dart  raw_keyboard_*.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-channels-dart"><span class="nav-number">2.13.</span> <span class="nav-text">system_channels.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-chrome-dart"><span class="nav-number">2.14.</span> <span class="nav-text">system_chrome.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-navigator-dart"><span class="nav-number">2.15.</span> <span class="nav-text">system_navigator.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-sound-dart"><span class="nav-number">2.16.</span> <span class="nav-text">system_sound.dart</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#text-formatter-dart-text-input-dart-text-editing-dart"><span class="nav-number">2.17.</span> <span class="nav-text">text_formatter.dart text_input.dart text_editing.dart</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/VEN/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/VEN/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/VEN/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/VEN/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="GraphQL,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/1.png?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="官网，可以理解成翻译官方文档。在下篇中将来一发实战。 介绍GraphQL是API查询语言，也是一个在服务端根据你定义的类型系统数据来执行查询的运行时。它并不与任何数据库或者存储引擎绑定。通过描述你需要的数据格式，返回对应的JSON数据，最大可能地减少多余字段以及请求数量。">
+<meta name="keywords" content="GraphQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GraphQL入门(1)">
+<meta property="og:url" content="http://yoursite.com/2019/03/27/GraphQL入门-二/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="官网，可以理解成翻译官方文档。在下篇中将来一发实战。 介绍GraphQL是API查询语言，也是一个在服务端根据你定义的类型系统数据来执行查询的运行时。它并不与任何数据库或者存储引擎绑定。通过描述你需要的数据格式，返回对应的JSON数据，最大可能地减少多余字段以及请求数量。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-06T13:12:41.994Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GraphQL入门(1)">
+<meta name="twitter:description" content="官网，可以理解成翻译官方文档。在下篇中将来一发实战。 介绍GraphQL是API查询语言，也是一个在服务端根据你定义的类型系统数据来执行查询的运行时。它并不与任何数据库或者存储引擎绑定。通过描述你需要的数据格式，返回对应的JSON数据，最大可能地减少多余字段以及请求数量。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'TanZhiXuan'
+    }
+  };
+</script>
+
+  <title> GraphQL入门(1) | CMeUp </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">CMeUp</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GraphQL入门(1)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-27T02:26:51+08:00" content="2019-03-26">
+              2019-03-26
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/GraphQL/" itemprop="url" rel="index">
+                    <span itemprop="name">GraphQL</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://graphql.github.io" target="_blank" rel="noopener">官网</a>，可以理解成翻译官方文档。在下篇中将来一发实战。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>GraphQL是API查询语言，也是一个在服务端根据你定义的类型系统数据来执行查询的运行时。它并不与任何数据库或者存储引擎绑定。通过描述你需要的数据格式，返回对应的JSON数据，最大可能地减少多余字段以及请求数量。</p>
+<a id="more"></a>
+<h1 id="查询和更新"><a href="#查询和更新" class="headerlink" title="查询和更新"></a>查询和更新</h1><h2 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h2><p>例子来一发：<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  hero &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"hero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>直接描述你要的数据格式，然后返回相应的数据格式。字段可以不仅返回一个String，也可以是一个对象。下面这个例子，<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  hero &#123;</span><br><span class="line">    name</span><br><span class="line">    # Queries can have comments!</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"hero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span>,</span><br><span class="line">      <span class="attr">"friends"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Han Solo"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Leia Organa"</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个例子， <strong>friends</strong> 返回了一个数组。这是在 <strong>schema</strong> 中定义的，后面会说。</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  human(id: &quot;1000&quot;) &#123;</span><br><span class="line">    name</span><br><span class="line">    height</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"human"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span>,</span><br><span class="line">      <span class="attr">"height"</span>: <span class="number">1.72</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在像REST这样的系统中，你只能传递参数的一个集合：查询参数和URL中的参数。在GraphQL中，每一个字段和嵌套的对象都能得到它自己的一系列参数，使得GraphQL完全替代了多个API请求。你可以在标量上传入参数，在server端完成转换，而不用在客户端单独处理，再继续请求下一个API。如下：<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  human(id: &quot;1000&quot;) &#123;</span><br><span class="line">    name</span><br><span class="line">    height(unit: FOOT)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"human"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span>,</span><br><span class="line">      <span class="attr">"height"</span>: <span class="number">5.6430448</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参数可能会有非常多不同的类型。在上面的例子上，我们使用了一个枚举的类型，代表了有限集合的一个（本例中，长度的单位，METER或者FOOT）。GraphQL提出了一些默认的类型，但GraphQL服务器能定义自己的类型，只要它们能够被序列化到你的变换格式中。</p>
+<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><p>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  empireHero: hero(episode: EMPIRE) &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">  jediHero: hero(episode: JEDI) &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"empireHero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"jediHero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个例子中，我们是要查询多个hero的数据。由于js语法限制，一个对象中不能有同名的key，因此出现了别名的概念。使用empireHero/jediHero来代替hero。</p>
+<h2 id="片段"><a href="#片段" class="headerlink" title="片段"></a>片段</h2><p>设想一下这样的场景：在上面的例子中，对hero使用了别名。这两个key都包含了name字段。如果此时需要多个字段，那么会这样写：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  empireHero: hero(episode: EMPIRE) &#123;</span><br><span class="line">    name</span><br><span class="line">    key1</span><br><span class="line">    key2</span><br><span class="line">    key3</span><br><span class="line">  &#125;</span><br><span class="line">  jediHero: hero(episode: JEDI) &#123;</span><br><span class="line">    name</span><br><span class="line">    key1</span><br><span class="line">    key2</span><br><span class="line">    key3</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一下子就看出来其冗余。为了避免代码重复，引入了片段的概念。它类似于js的对象展开符号：…<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  leftComparison: hero(episode: EMPIRE) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">  rightComparison: hero(episode: JEDI) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fragment comparisonFields on Character &#123;</span><br><span class="line">  name</span><br><span class="line">  appearsIn</span><br><span class="line">  friends &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"leftComparison"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span>,</span><br><span class="line">      <span class="attr">"appearsIn"</span>: [</span><br><span class="line">        <span class="string">"NEWHOPE"</span>,</span><br><span class="line">        <span class="string">"EMPIRE"</span>,</span><br><span class="line">        <span class="string">"JEDI"</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">"friends"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Han Solo"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Leia Organa"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"C-3PO"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"R2-D2"</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"rightComparison"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span>,</span><br><span class="line">      <span class="attr">"appearsIn"</span>: [</span><br><span class="line">        <span class="string">"NEWHOPE"</span>,</span><br><span class="line">        <span class="string">"EMPIRE"</span>,</span><br><span class="line">        <span class="string">"JEDI"</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">"friends"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Han Solo"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Leia Organa"</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面的fragment定义也是建立在schame上的。</p>
+<h3 id="在片段中使用变量"><a href="#在片段中使用变量" class="headerlink" title="在片段中使用变量"></a>在片段中使用变量</h3><p>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroComparison($first: Int = 3) &#123;</span><br><span class="line">  leftComparison: hero(episode: EMPIRE) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">  rightComparison: hero(episode: JEDI) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fragment comparisonFields on Character &#123;</span><br><span class="line">  name</span><br><span class="line">  friendsConnection(first: $first) &#123;</span><br><span class="line">    totalCount</span><br><span class="line">    edges &#123;</span><br><span class="line">      node &#123;</span><br><span class="line">        name</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>query定义了一个变量first，类型为Int，默认值为3。在fragment中，friendsConnection传递了变量first，值为$first（即query定义的这个同名变量）。这样就实现了在fragment中使用变量。</p>
+<h2 id="操作名称"><a href="#操作名称" class="headerlink" title="操作名称"></a>操作名称</h2><p>下面的例子中，使用 <strong>query</strong> 作为操作类型， <strong>HeroNameAndFriends</strong> 作为操作名称。<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroNameAndFriends &#123;</span><br><span class="line">  hero &#123;</span><br><span class="line">    name</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"hero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span>,</span><br><span class="line">      <span class="attr">"friends"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Luke Skywalker"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Han Solo"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"Leia Organa"</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>操作类型会是：query，mutaion，subscription和你要做的操作描述。操作类型是必须的，除非你使用查询的简略语法，也就是不用提供名称或者对于你操作的变量。</p>
+<p>操作名称是针对你操作的明确的、有意义的名字。它只在多操作文档中必须。但是鼓励都写上操作名字，方便日志记录即错误追踪。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>很明显，对于很多接口我们都是有参数的。而如果把参数拼在请求req中的话，手动来拼凑，非常低效。相反地，GraphQL提供了query外的变量。</p>
+<p>当我们开始使用变量，需要这3件事：</p>
+<ol>
+<li>替换query中的静态内容为$virableName</li>
+<li>声明$virableName为变量的一个值</li>
+<li>传递 varibleName: value 字典</li>
+</ol>
+<p>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroNameAndFriends($episode: Episode) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// varibles: </span><br><span class="line">&#123;</span><br><span class="line">  &quot;episode&quot;: &quot;JEDI&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><p>在上面例子中，变量定义长得像：($episode: Episode)。列出所有变量，前缀为$，紧跟着类型，这里是Episode.</p>
+<p>所有声明的变量都必须是标量、枚举值或者输入的对象类型。所以如果你想要传递一个复杂的对象给一个字段，你需要知道服务端能匹配的输入类型。详情看schema。</p>
+<p>变量定义可能是可选的，也可能必须。在上面例子，引入在Episode类型后没有! 感叹号，它就是可选的。否则，必须提供。</p>
+<h3 id="默认变量"><a href="#默认变量" class="headerlink" title="默认变量"></a>默认变量</h3><p>在类型后可以直接接上: = defaultValue。如下：<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroNameAndFriends($episode: Episode = JEDI) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><p>有时候我们会需要通过变量来决定query的结构。比如，有一个UI组件，有一个总结和详情的view，其中一个包含了更多的字段。</p>
+<p>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query Hero($episode: Episode, $withFriends: Boolean!) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends @include(if: $withFriends) &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// variables:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;episode&quot;: &quot;JEDI&quot;,</span><br><span class="line">  &quot;withFriends&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"hero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果把 withFriends 改为 true ，结果就会包含 withFriends 字段。</p>
+<p>GraphQL的核心包括两个指令，任何对其的实现都必须支持这两个：</p>
+<ul>
+<li>@include(if: Boolean) 当argument为true时包含该字段</li>
+<li>@skip(if: Boolean) 当为true时跳过该字段。跟上面刚好相反。</li>
+</ul>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h2><p>许多关于GraphQL的讨论关注在数据获取，但也需要一种方式去修改服务端的数据。</p>
+<p>在 REST 中，任何请求都可能对服务器造成一些副作用，但传统来说，不要使用 <strong>GET</strong> 请求来修改数据。 GraphQL 也是类似的 — 技术上来说，任何查询都被实现去造成数据的写入。然而，最好的方式是通过明确的更新来写入数据。</p>
+<p>像query一样，如果更新字段返回了一个一个对象类型，你可以请求嵌套的字段。在一次更新后或者新的状态，这点非常有用。举个梨子：<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) &#123;</span><br><span class="line">  createReview(episode: $ep, review: $review) &#123;</span><br><span class="line">    stars</span><br><span class="line">    commentary</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// variables:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;ep&quot;: &quot;JEDI&quot;,</span><br><span class="line">  &quot;review&quot;: &#123;</span><br><span class="line">    &quot;stars&quot;: 5,</span><br><span class="line">    &quot;commentary&quot;: &quot;This is a great movie!&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"createReview"</span>: &#123;</span><br><span class="line">      <span class="attr">"stars"</span>: <span class="number">5</span>,</span><br><span class="line">      <span class="attr">"commentary"</span>: <span class="string">"This is a great movie!"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就把传统的更新后再查询变成了，更新同时获取新的值，变为一次请求。</p>
+<p>review变量不是一个标量，而是一个 <strong>input object type</strong> 输入对象类型。同样是在 Schema 中定义。</p>
+<h3 id="更新多个字段"><a href="#更新多个字段" class="headerlink" title="更新多个字段"></a>更新多个字段</h3><p>一次更新可以包含多个字段，就像查询一样。不过有个重要的区别是：</p>
+<blockquote>
+<p>查询字段是并且执行，更新字段却是 <strong>串行</strong> 执行。一个完了，下一个才开始。</p>
+</blockquote>
+<p>这表明如果我们在一个请求中发送了两个 incrementCredits 更新，第一个结束后，第二个才会开始，确保了不会存在竞态问题。</p>
+<h2 id="内联片段"><a href="#内联片段" class="headerlink" title="内联片段"></a>内联片段</h2><p>像其他许多的类型系统一样，GraphQL 的 schema 也能够定义接口和联合类型。</p>
+<p>如果你请求了一个返回一个接口或者联合类型的字段，你需要使用内联片段去访问底层具体类型的数据。举个梨子：<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroForEpisode($ep: Episode!) &#123;</span><br><span class="line">  hero(episode: $ep) &#123;</span><br><span class="line">    name</span><br><span class="line">    ... on Droid &#123;</span><br><span class="line">      primaryFunction</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Human &#123;</span><br><span class="line">      height</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// variables:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;ep&quot;: &quot;JEDI&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"hero"</span>: &#123;</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"R2-D2"</span>,</span><br><span class="line">      <span class="attr">"primaryFunction"</span>: <span class="string">"Astromech"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这个请求中， <strong>hero</strong> 字段返回了 Character 类型，它可能是 Human 或者 Droid ，取决于 episode 参数。在这种情况下，你只能访问 Character 上存在的字段，比如 name 。</p>
+<p>请求混合类型的字段，你需要用一个类型判断来使用 <strong>内联片段</strong> 。因为第一个参数被标记为 …on Droid， 字段 primaryFunction 只会在 Character 返回了 hero 是一个Dorid 才会被执行。同样的 height 对于 Human 类型。</p>
+<p>在内联片段中也可以使用具名片段，即：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">query HeroForEpisode($ep: Episode!) &#123;</span><br><span class="line">  hero(episode: $ep) &#123;</span><br><span class="line">    name</span><br><span class="line">    ... on Droid &#123;</span><br><span class="line">      ...DroidFragment</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Human &#123;</span><br><span class="line">      height</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fragment DroidFragment on Droid &#123;</span><br><span class="line">  primaryFunction</span><br><span class="line">  model</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="元字段"><a href="#元字段" class="headerlink" title="元字段"></a>元字段</h3><p>鉴于这种情况：你不知道你会从GraphQL服务中返回什么类型的数据，你需要确定在客户端中怎么处理这些数据。GraphQL允许你是用 <strong>__typename</strong> ,一种元字段，可以写在query的任何地方。<br>req:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  search(text: &quot;an&quot;) &#123;</span><br><span class="line">    __typename</span><br><span class="line">    ... on Human &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Droid &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Starship &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>res:<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"search"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"__typename"</span>: <span class="string">"Human"</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Han Solo"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"__typename"</span>: <span class="string">"Human"</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Leia Organa"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"__typename"</span>: <span class="string">"Starship"</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"TIE Advanced x1"</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面的query中， search 返回了一个联合类型，可以是3种类型之一。如果不使用 <strong>__typename</strong> 字段，就不可能区分这几种类型。</p>
+<p>GraphQL提供了不多的源字段，剩下的在 Introspection 系统中说明。</p>
+<h2 id="结束。即将开启-Schema-章节。"><a href="#结束。即将开启-Schema-章节。" class="headerlink" title="结束。即将开启 Schema 章节。"></a>结束。即将开启 Schema 章节。</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GraphQL/" rel="tag">#GraphQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/14/v11-10-nodejs学习-三/" rel="next" title="v11-10-nodejs学习-三">
+                <i class="fa fa-chevron-left"></i> v11-10-nodejs学习-三
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/28/GraphQL入门-一/" rel="prev" title="GraphQL入门(2)">
+                GraphQL入门(2) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+          <p class="site-author-name" itemprop="name">谭智轩</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询和更新"><span class="nav-number">2.</span> <span class="nav-text">查询和更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#字段"><span class="nav-number">2.1.</span> <span class="nav-text">字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">2.2.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">2.3.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#片段"><span class="nav-number">2.4.</span> <span class="nav-text">片段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在片段中使用变量"><span class="nav-number">2.4.1.</span> <span class="nav-text">在片段中使用变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作名称"><span class="nav-number">2.5.</span> <span class="nav-text">操作名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.6.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量定义"><span class="nav-number">2.6.1.</span> <span class="nav-text">变量定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认变量"><span class="nav-number">2.6.2.</span> <span class="nav-text">默认变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指令"><span class="nav-number">2.7.</span> <span class="nav-text">指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新"><span class="nav-number">2.8.</span> <span class="nav-text">更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更新多个字段"><span class="nav-number">2.8.1.</span> <span class="nav-text">更新多个字段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内联片段"><span class="nav-number">2.9.</span> <span class="nav-text">内联片段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元字段"><span class="nav-number">2.9.1.</span> <span class="nav-text">元字段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束。即将开启-Schema-章节。"><span class="nav-number">2.10.</span> <span class="nav-text">结束。即将开启 Schema 章节。</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/VEN/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/VEN/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/VEN/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
