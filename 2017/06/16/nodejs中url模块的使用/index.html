@@ -1,1 +1,770 @@
-<!doctype html><html class="theme-next gemini" lang="zh-Hans"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet"><link href="/css/main.css?v=5.1.4" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="nodejs url,"><meta name="description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a"><meta name="keywords" content="nodejs url"><meta property="og:type" content="article"><meta property="og:title" content="nodejs中url模块的使用"><meta property="og:url" content="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a"><meta property="og:locale" content="zh-Hans"><meta property="og:updated_time" content="2020-08-06T13:12:42.004Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="nodejs中url模块的使用"><meta name="twitter:description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"undefined",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/"><title>nodejs中url模块的使用 | CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">nodejs中url模块的使用</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T01:58:04+08:00">2017-06-15</time></span></div></header><div class="post-body" itemprop="articleBody"><p>假如有一个地址为，<br><a href="http://user:pass@host.com:8080/p/a/t/h?query=string#hash" target="_blank" rel="noopener">http://user:pass@host.com:8080/p/a/t/h?query=string#hash</a><h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><ol><li>href<br>The full URL that was originally parsed. Both the protocol and host are lowercased.<br>Example: ‘<a href="http://user:pass@host.com:8080/p/a/t/h?query=string#hash&#39;" target="_blank" rel="noopener">http://user:pass@host.com:8080/p/a/t/h?query=string#hash&#39;</a><li>protocol<br>The request protocol, lowercased.<br>Example: ‘http:’<li>host<br>The full lowercased host portion of the URL, including port information.<br>Example: ‘host.com:8080’<li>auth<br>The authentication information portion of a URL.<br>Example: ‘user:pass’<a id="more"></a><li>hostname<br>Just the lowercased hostname portion of the host.<br>Example: ‘host.com’<li>port<br>The port number portion of the host.<br>Example: ‘8080’<li>pathname<br>The path section of the URL, that comes after the host and before the query, including the initial slash if present.<br>Example: ‘/p/a/t/h’<li>search<br>The ‘query string’ portion of the URL, including the leading question mark.<br>Example: ‘?query=string’<li>path<br>Concatenation of pathname and search.<br>Example: ‘/p/a/t/h?query=string’<li>query<br>Either the ‘params’ portion of the query string, or a querystring-parsed object.<br>Example: ‘query=string’ or {‘query’:’string’}<li>hash<br>The ‘fragment’ portion of the URL including the pound-sign.<br>Example: ‘#hash’</ol><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="url-parse-urlStr-parseQueryString-slashesDenoteHost"><a href="#url-parse-urlStr-parseQueryString-slashesDenoteHost" class="headerlink" title="url.parse(urlStr, [parseQueryString], [slashesDenoteHost])"></a>url.parse(urlStr, [parseQueryString], [slashesDenoteHost])</h3><p>Take a URL string, and return an object.<br>Pass true as the second argument to also parse the query string using the querystring module. Defaults to false.<p>Pass true as the third argument to treat //foo/bar as { host: ‘foo’, pathname: ‘/bar’ } rather than { pathname: ‘//foo/bar’ } defaults to false.<h3 id="url-format-urlObj"><a href="#url-format-urlObj" class="headerlink" title="url.format(urlObj)"></a>url.format(urlObj)</h3><p>Take a parsed URL object, and return a formatted URL string.<p>href will be ignored.<br>protocol is treated the same with or without the trailing : (colon).<br>The protocols http, https, ftp, gopher, file will be postfixed with :// (colon-slash-slash).<br>All other protocols mailto, xmpp, aim, sftp, foo, etc will be postfixed with : (colon)<br>auth will be used if present.<br>hostname will only be used if host is absent.<br>port will only be used if host is absent.<br>host will be used in place of hostname and port<br>pathname is treated the same with or without the leading / (slash)<br>search will be used in place of query<br>query (object; see querystring) will only be used if search is absent.<br>search is treated the same with or without the leading ? (question mark)<br>hash is treated the same with or without the leading # (pound sign, anchor)<h3 id="url-resolve-from-to"><a href="#url-resolve-from-to" class="headerlink" title="url.resolve(from, to)"></a>url.resolve(from, to)</h3><p>Take a base URL, and a href URL, and resolve them as a browser would for an anchor tag. Examples:<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">url.resolve(<span class="string">'/one/two/three'</span>, <span class="string">'four'</span>)         <span class="comment">// '/one/two/four'</span></span><br><span class="line">url.resolve(<span class="string">'http://example.com/'</span>, <span class="string">'/one'</span>)    <span class="comment">// 'http://example.com/one'</span></span><br><span class="line">url.resolve(<span class="string">'http://example.com/one'</span>, <span class="string">'/two'</span>) <span class="comment">// 'http://example.com/two'</span></span><br></pre></table></figure><p></div><footer class="post-footer"><div class="post-tags"><a href="/tags/nodejs-url/" rel="tag"># nodejs url</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2017/06/15/css中有关display-table相关属性的解释/" rel="next" title="css中有关display:table相关属性的解释"><i class="fa fa-chevron-left"></i> css中有关display:table相关属性的解释</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/2017/06/21/viewport/" rel="prev" title="viewport">viewport <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">文章目录<li class="sidebar-nav-overview" data-target="site-overview-wrap">站点概览</ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">96</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">23</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">46</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/tzxhy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金"><i class="fa fa-fw fa-globe"></i>掘金</a> </span><span class="links-of-author-item"><a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀"><i class="fa fa-fw fa-globe"></i>语雀</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">1.</span> <span class="nav-text">属性</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#url-parse-urlStr-parseQueryString-slashesDenoteHost"><span class="nav-number">2.1.</span> <span class="nav-text">url.parse(urlStr, [parseQueryString], [slashesDenoteHost])</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#url-format-urlObj"><span class="nav-number">2.2.</span> <span class="nav-text">url.format(urlObj)</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#url-resolve-from-to"><span class="nav-number">2.3.</span> <span class="nav-text">url.resolve(from, to)</span></a></ol></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/js/src/utils.js?v=5.1.4"></script><script src="/js/src/motion.js?v=5.1.4"></script><script src="/js/src/affix.js?v=5.1.4"></script><script src="/js/src/schemes/pisces.js?v=5.1.4"></script><script src="/js/src/scrollspy.js?v=5.1.4"></script><script src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/bootstrap.js?v=5.1.4"></script><script>!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nodejs url,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a">
+<meta name="keywords" content="nodejs url">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs中url模块的使用">
+<meta property="og:url" content="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-06T13:12:42.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs中url模块的使用">
+<meta name="twitter:description" content="假如有一个地址为，http://user:pass@host.com:8080/p/a/t/h?query=string#hash 属性 hrefThe full URL that was originally parsed. Both the protocol and host are lowercased.Example: ‘http://user:pass@host.com:8080/p/a">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/">
+
+
+
+
+
+  <title>nodejs中url模块的使用 | CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2017/06/16/nodejs中url模块的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nodejs中url模块的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T01:58:04+08:00">
+                2017-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>假如有一个地址为，<br><a href="http://user:pass@host.com:8080/p/a/t/h?query=string#hash" target="_blank" rel="noopener">http://user:pass@host.com:8080/p/a/t/h?query=string#hash</a></p>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><ol>
+<li>href<br>The full URL that was originally parsed. Both the protocol and host are lowercased.<br>Example: ‘<a href="http://user:pass@host.com:8080/p/a/t/h?query=string#hash&#39;" target="_blank" rel="noopener">http://user:pass@host.com:8080/p/a/t/h?query=string#hash&#39;</a></li>
+<li>protocol<br>The request protocol, lowercased.<br>Example: ‘http:’</li>
+<li>host<br>The full lowercased host portion of the URL, including port information.<br>Example: ‘host.com:8080’</li>
+<li>auth<br>The authentication information portion of a URL.<br>Example: ‘user:pass’<a id="more"></a></li>
+<li>hostname<br>Just the lowercased hostname portion of the host.<br>Example: ‘host.com’</li>
+<li>port<br>The port number portion of the host.<br>Example: ‘8080’</li>
+<li>pathname<br>The path section of the URL, that comes after the host and before the query, including the initial slash if present.<br>Example: ‘/p/a/t/h’</li>
+<li>search<br>The ‘query string’ portion of the URL, including the leading question mark.<br>Example: ‘?query=string’</li>
+<li>path<br>Concatenation of pathname and search.<br>Example: ‘/p/a/t/h?query=string’</li>
+<li>query<br>Either the ‘params’ portion of the query string, or a querystring-parsed object.<br>Example: ‘query=string’ or {‘query’:’string’}</li>
+<li>hash<br>The ‘fragment’ portion of the URL including the pound-sign.<br>Example: ‘#hash’</li>
+</ol>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="url-parse-urlStr-parseQueryString-slashesDenoteHost"><a href="#url-parse-urlStr-parseQueryString-slashesDenoteHost" class="headerlink" title="url.parse(urlStr, [parseQueryString], [slashesDenoteHost])"></a>url.parse(urlStr, [parseQueryString], [slashesDenoteHost])</h3><p>Take a URL string, and return an object.<br>Pass true as the second argument to also parse the query string using the querystring module. Defaults to false.</p>
+<p>Pass true as the third argument to treat //foo/bar as { host: ‘foo’, pathname: ‘/bar’ } rather than { pathname: ‘//foo/bar’ } defaults to false.</p>
+<h3 id="url-format-urlObj"><a href="#url-format-urlObj" class="headerlink" title="url.format(urlObj)"></a>url.format(urlObj)</h3><p>Take a parsed URL object, and return a formatted URL string.</p>
+<p>href will be ignored.<br>protocol is treated the same with or without the trailing : (colon).<br>The protocols http, https, ftp, gopher, file will be postfixed with :// (colon-slash-slash).<br>All other protocols mailto, xmpp, aim, sftp, foo, etc will be postfixed with : (colon)<br>auth will be used if present.<br>hostname will only be used if host is absent.<br>port will only be used if host is absent.<br>host will be used in place of hostname and port<br>pathname is treated the same with or without the leading / (slash)<br>search will be used in place of query<br>query (object; see querystring) will only be used if search is absent.<br>search is treated the same with or without the leading ? (question mark)<br>hash is treated the same with or without the leading # (pound sign, anchor)</p>
+<h3 id="url-resolve-from-to"><a href="#url-resolve-from-to" class="headerlink" title="url.resolve(from, to)"></a>url.resolve(from, to)</h3><p>Take a base URL, and a href URL, and resolve them as a browser would for an anchor tag. Examples:<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">url.resolve(<span class="string">'/one/two/three'</span>, <span class="string">'four'</span>)         <span class="comment">// '/one/two/four'</span></span><br><span class="line">url.resolve(<span class="string">'http://example.com/'</span>, <span class="string">'/one'</span>)    <span class="comment">// 'http://example.com/one'</span></span><br><span class="line">url.resolve(<span class="string">'http://example.com/one'</span>, <span class="string">'/two'</span>) <span class="comment">// 'http://example.com/two'</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs-url/" rel="tag"># nodejs url</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/15/css中有关display-table相关属性的解释/" rel="next" title="css中有关display:table相关属性的解释">
+                <i class="fa fa-chevron-left"></i> css中有关display:table相关属性的解释
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/21/viewport/" rel="prev" title="viewport">
+                viewport <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#url-parse-urlStr-parseQueryString-slashesDenoteHost"><span class="nav-number">2.1.</span> <span class="nav-text">url.parse(urlStr, [parseQueryString], [slashesDenoteHost])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#url-format-urlObj"><span class="nav-number">2.2.</span> <span class="nav-text">url.format(urlObj)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#url-resolve-from-to"><span class="nav-number">2.3.</span> <span class="nav-text">url.resolve(from, to)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

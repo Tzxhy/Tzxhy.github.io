@@ -1,1 +1,1270 @@
-<!doctype html><html class="theme-next gemini" lang="zh-Hans"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet"><link href="/css/main.css?v=5.1.4" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="Hexo, NexT"><meta property="og:type" content="website"><meta property="og:title" content="CMeUp"><meta property="og:url" content="https://tzxhy.github.io/page/2/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:locale" content="zh-Hans"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="CMeUp"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"undefined",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://tzxhy.github.io/page/2/"><title>CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-home"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><section id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/11/Andr学习第2天/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2020/03/11/Andr学习第2天/" itemprop="url">Andr学习第2天</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T21:02:36Z">2020-03-10 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Andr/" itemprop="url" rel="index"><span itemprop="name">Andr</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><p>学习范围：第二章-探究 Activity<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解活动的生命周期，与活动相关的交互，了解活动提供的能力。<h2 id="活动是什么"><a href="#活动是什么" class="headerlink" title="活动是什么"></a>活动是什么</h2><p>活动(Activity)是最容易吸引用户的地方，它是一种可以包含用户界面的组件，主要用于 和用户进行交互。<h2 id="活动的基操"><a href="#活动的基操" class="headerlink" title="活动的基操"></a>活动的基操</h2><p>在 Android Studio 中，新建一个 Activity 时，可以勾选是否创建对应的布局文件。同时 AS 会自动把 Activity 注册到 Manifest 中。<p>一般在 onCreate 回调中加载布局：setContentView(R.layout.LAYOUT_ID)。<div class="post-button text-center"><a class="btn" href="/2020/03/11/Andr学习第2天/#more" rel="contents">阅读全文 &raquo;</a></div></div><footer class="post-footer"><div class="post-eof"></div></footer></div></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/10/Andr学习第1天/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2020/03/10/Andr学习第1天/" itemprop="url">Andr学习第1天</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T08:55:11Z">2020-03-10 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Andr/" itemprop="url" rel="index"><span itemprop="name">Andr</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><p>学习范围：第一章-开始启程<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解安卓项目的基础结构，了解各项配置文件。<h2 id="安卓四大组件"><a href="#安卓四大组件" class="headerlink" title="安卓四大组件"></a>安卓四大组件</h2><ul><li>Activity。活动，页面的展示载体。<li>Service。可以后台运行。<li>Broadcast Receiver。接收其他程序发出的广播，也能发出广播给其他程序。<li>ContentProvider。应用间共享数据。</ul><div class="post-button text-center"><a class="btn" href="/2020/03/10/Andr学习第1天/#more" rel="contents">阅读全文 &raquo;</a></div></div><footer class="post-footer"><div class="post-eof"></div></footer></div></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/03/flutter状态管理调研/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2020/03/03/flutter状态管理调研/" itemprop="url">flutter状态管理调研</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T18:14:11Z">2020-03-02</time></span></div></header><div class="post-body" itemprop="articleBody"><p>今天主要探讨的是 flutter 中常用的状态管理方案：BLoC 和 Provider，Redux。<h2 id="BLoC-介绍"><a href="#BLoC-介绍" class="headerlink" title="BLoC 介绍"></a>BLoC 介绍</h2><p>关于 bloc，可以详细从<a href="https://bloclibrary.dev/#/zh-cn/architecture" target="_blank" rel="noopener">这里</a>去了解。这里我简单说说。<br><img src="https://bloclibrary.dev/assets/bloc_architecture.png" alt="bloc"><p>从上图中可知，BLoC 有3个核心概念：UI、BLoC、Data。UI 即是页面展现，Bloc 作为业务逻辑单元，Data 作为持久数据层，对比 MVP 其实有挺多相似之处的。MVP中，通过Presenter 来沟通 View 和 Model；BLoC 模式中通过 BloC 模块沟通 UI 和 Data。<br><div class="post-button text-center"><a class="btn" href="/2020/03/03/flutter状态管理调研/#more" rel="contents">阅读全文 &raquo;</a></div><p></div><footer class="post-footer"><div class="post-eof"></div></footer></div></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/02/19/关于跨端方案的调研/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2020/02/19/关于跨端方案的调研/" itemprop="url">关于跨端方案的调研</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-18T18:23:09Z">2020-02-18</time></span></div></header><div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近几年来，跨端方案这个概念很火热，解决方案也不少。熟悉 React 的同学，就算没使用过 RN，也听说过 React Native 吧？同时还有大量的解决方案，比如小程序（包含快应用等轻量级 app）、Weex、Flutter 等。同时字节跳动研发团队出了一个 Lynx 的跨端方案。在开始之前，有几个问题想问大家：<h3 id="传统的-Web-本身就是跨端的，为啥要构思跨端方案？"><a href="#传统的-Web-本身就是跨端的，为啥要构思跨端方案？" class="headerlink" title="传统的 Web 本身就是跨端的，为啥要构思跨端方案？"></a>传统的 Web 本身就是跨端的，为啥要构思跨端方案？</h3><p>说到跨端方案，Web 都流行了十几二十年了，天然的跨端，为何还要考虑跨端方案呢？其实，这个概念不一定是从纯前端的角度来说的，可能是从客户端的角度。比如，需要开发一款 app，是否需要开发 iOS 和 Android 两套代码呢？当然不一定！如果没有跨端方案，当然是 iOS 一套代码，Android 一套代码；如果有跨端方案，写一份中间代码，分别转译成 iOS、Android 代码，这不就极大节省了人力吗？ —- <strong>节省人力</strong><p>问题又来了，都说了 Web 天然的跨端，为什么不直接搞 Web，还要搞 Native？这个就更简单了：Native 拥有对设备的深入控制，只要是开发人员想的到的功能，基本都能实现。但 Web 就不一样了：它只是给你提供了一个展示内容的画板，以及一些符合潮流的 api（W3C 制定的）。如果在 Web 上想搞点什么骚操作，得先问问容器（一般是浏览器）答不答应。 —- <strong>复杂能力支持</strong><p>同时，跨端方案不仅仅局限于如何将一份代码转为不同平台的 Native 代码，甚至还想转译到 Web、小程序、快应用、XXXX 上去。这是所有开发人员的追求，而不仅仅是前端开发！试想，一份代码，能转译成 Web，运行在普通的浏览器；转译成 iOS 程序，运行在 iOS 手机上；转换成 java 程序，运行在安卓手机上；转换成 dmg 程序，运行在 Mac 上。除此之外，还有其他还多平台呢。 —- <strong>跨平台扩展性</strong><p>当然了，由于 Web 的 JS 是解释型语言，避免不了的运行时编译，降低了程序的运行速度。虽然当前 Web 提出了 WebAssembly 的方案，但由于被提出还不久，支持度还不够高，还没引起足够的重视。相比较而言，Objective-C/JAVA 等语言，虽然也是高级语言，但属于编译型语言，最终运行时都是执行的二进制代码，效率比 JS 肯定还是高很多的。因此在考虑到性能表现时，Web 的表现往往不如 Native 来的好。 —- <strong>性能表现</strong><p>其他对比，等待大家的补充。<div class="post-button text-center"><a class="btn" href="/2020/02/19/关于跨端方案的调研/#more" rel="contents">阅读全文 &raquo;</a></div></div><footer class="post-footer"><div class="post-eof"></div></footer></div></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/02/12/flutter-学习线路图/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2020/02/12/flutter-学习线路图/" itemprop="url">flutter 学习线路图</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-12T09:02:17Z">2020-02-12 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><p>前端 flutter 学习线路图：<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><a href="https://dart.dev/guides" target="_blank" rel="noopener">dart 语言学习</a><br><a href="https://flutter.dev/docs/get-started/install" target="_blank" rel="noopener">flutter环境部署</a><br><a href="https://flutter.dev/docs/development/ui/widgets" target="_blank" rel="noopener">flutter常用组件</a><br><a href="https://flutter.dev/docs/cookbook" target="_blank" rel="noopener">flutter 通用场景</a><h2 id="高级"><a href="#高级" class="headerlink" title="高级"></a>高级</h2><p><a href="https://www.youtube.com/watch?v=UUfXWzp0-DU" target="_blank" rel="noopener">Rendering Pipeline</a><br><a href="https://medium.com/@chemamolins/is-flutters-inheritedwidget-a-good-fit-to-hold-app-state-2ec5b33d023e" target="_blank" rel="noopener">Inherited Widget</a><br><a href="https://marcinszalek.pl/flutter/tickets-challenge-parallax" target="_blank" rel="noopener">Parallax Effect</a><br><a href="https://www.yuque.com/xytech/flutter/pfpo68" target="_blank" rel="noopener">flutter外接文理</a><h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><p><a href="https://api.flutter.dev/flutter/widgets/widgets-library.html" target="_blank" rel="noopener">官方组件</a><h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><h3 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h3><p><a href="https://github.com/felangel/bloc" target="_blank" rel="noopener">BLoC</a><br><a href="https://github.com/johnpryan/redux.dart" target="_blank" rel="noopener">Redux.dart</a><h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p><a href="https://github.com/flutter/plugins/tree/master/packages" target="_blank" rel="noopener">官方插件</a><br><a href="https://pub.dev/flutter/packages" target="_blank" rel="noopener">pub 库</a><br><a href="https://github.com/google/inject.dart" target="_blank" rel="noopener">inject</a><h2 id="社区"><a href="#社区" class="headerlink" title="社区"></a>社区</h2><h2 id="借鉴"><a href="#借鉴" class="headerlink" title="借鉴"></a>借鉴</h2><p><a href="https://itsallwidgets.com/" target="_blank" rel="noopener">使用 flutter 的 apps</a><h2 id="跨端"><a href="#跨端" class="headerlink" title="跨端"></a>跨端</h2><p><a href="https://github.com/google/flutter-desktop-embedding" target="_blank" rel="noopener">google桌面端</a><h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><p><a href="https://github.com/Solido/awesome-flutter#frameworks" target="_blank" rel="noopener">awesome-flutter</a><br><a href="https://www.yuque.com/xytech/flutter" target="_blank" rel="noopener">咸鱼 flutter</a></div><footer class="post-footer"><div class="post-eof"></div></footer></div></article></section><nav class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a></nav></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><section class="site-overview-wrap sidebar-panel sidebar-panel-active"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">96</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">23</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">46</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/tzxhy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金"><i class="fa fa-fw fa-globe"></i>掘金</a> </span><span class="links-of-author-item"><a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀"><i class="fa fa-fw fa-globe"></i>语雀</a></span></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/js/src/utils.js?v=5.1.4"></script><script src="/js/src/motion.js?v=5.1.4"></script><script src="/js/src/affix.js?v=5.1.4"></script><script src="/js/src/schemes/pisces.js?v=5.1.4"></script><script src="/js/src/bootstrap.js?v=5.1.4"></script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="CMeUp">
+<meta property="og:url" content="https://tzxhy.github.io/page/2/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMeUp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/page/2/">
+
+
+
+
+
+  <title>CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/11/Andr学习第2天/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/11/Andr学习第2天/" itemprop="url">Andr学习第2天</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T21:02:36Z">
+                2020-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Andr/" itemprop="url" rel="index">
+                    <span itemprop="name">Andr</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>学习范围：第二章-探究 Activity</p>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解活动的生命周期，与活动相关的交互，了解活动提供的能力。</p>
+<h2 id="活动是什么"><a href="#活动是什么" class="headerlink" title="活动是什么"></a>活动是什么</h2><p>活动(Activity)是最容易吸引用户的地方，它是一种可以包含用户界面的组件，主要用于 和用户进行交互。</p>
+<h2 id="活动的基操"><a href="#活动的基操" class="headerlink" title="活动的基操"></a>活动的基操</h2><p>在 Android Studio 中，新建一个 Activity 时，可以勾选是否创建对应的布局文件。同时 AS 会自动把 Activity 注册到 Manifest 中。</p>
+<p>一般在 onCreate 回调中加载布局：setContentView(R.layout.LAYOUT_ID)。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/11/Andr学习第2天/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/10/Andr学习第1天/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/10/Andr学习第1天/" itemprop="url">Andr学习第1天</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T08:55:11Z">
+                2020-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Andr/" itemprop="url" rel="index">
+                    <span itemprop="name">Andr</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>学习范围：第一章-开始启程</p>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>了解安卓项目的基础结构，了解各项配置文件。</p>
+<h2 id="安卓四大组件"><a href="#安卓四大组件" class="headerlink" title="安卓四大组件"></a>安卓四大组件</h2><ul>
+<li>Activity。活动，页面的展示载体。</li>
+<li>Service。可以后台运行。</li>
+<li>Broadcast Receiver。接收其他程序发出的广播，也能发出广播给其他程序。</li>
+<li>ContentProvider。应用间共享数据。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/10/Andr学习第1天/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/03/flutter状态管理调研/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/flutter状态管理调研/" itemprop="url">flutter状态管理调研</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T18:14:11Z">
+                2020-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>今天主要探讨的是 flutter 中常用的状态管理方案：BLoC 和 Provider，Redux。</p>
+<h2 id="BLoC-介绍"><a href="#BLoC-介绍" class="headerlink" title="BLoC 介绍"></a>BLoC 介绍</h2><p>关于 bloc，可以详细从<a href="https://bloclibrary.dev/#/zh-cn/architecture" target="_blank" rel="noopener">这里</a>去了解。这里我简单说说。<br><img src="https://bloclibrary.dev/assets/bloc_architecture.png" alt="bloc"></p>
+<p>从上图中可知，BLoC 有3个核心概念：UI、BLoC、Data。UI 即是页面展现，Bloc 作为业务逻辑单元，Data 作为持久数据层，对比 MVP 其实有挺多相似之处的。MVP中，通过Presenter 来沟通 View 和 Model；BLoC 模式中通过 BloC 模块沟通 UI 和 Data。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/03/flutter状态管理调研/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </p></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/02/19/关于跨端方案的调研/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/19/关于跨端方案的调研/" itemprop="url">关于跨端方案的调研</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-18T18:23:09Z">
+                2020-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近几年来，跨端方案这个概念很火热，解决方案也不少。熟悉 React 的同学，就算没使用过 RN，也听说过 React Native 吧？同时还有大量的解决方案，比如小程序（包含快应用等轻量级 app）、Weex、Flutter 等。同时字节跳动研发团队出了一个 Lynx 的跨端方案。在开始之前，有几个问题想问大家：</p>
+<h3 id="传统的-Web-本身就是跨端的，为啥要构思跨端方案？"><a href="#传统的-Web-本身就是跨端的，为啥要构思跨端方案？" class="headerlink" title="传统的 Web 本身就是跨端的，为啥要构思跨端方案？"></a>传统的 Web 本身就是跨端的，为啥要构思跨端方案？</h3><p>说到跨端方案，Web 都流行了十几二十年了，天然的跨端，为何还要考虑跨端方案呢？其实，这个概念不一定是从纯前端的角度来说的，可能是从客户端的角度。比如，需要开发一款 app，是否需要开发 iOS 和 Android 两套代码呢？当然不一定！如果没有跨端方案，当然是 iOS 一套代码，Android 一套代码；如果有跨端方案，写一份中间代码，分别转译成 iOS、Android 代码，这不就极大节省了人力吗？ —- <strong>节省人力</strong></p>
+<p>问题又来了，都说了 Web 天然的跨端，为什么不直接搞 Web，还要搞 Native？这个就更简单了：Native 拥有对设备的深入控制，只要是开发人员想的到的功能，基本都能实现。但 Web 就不一样了：它只是给你提供了一个展示内容的画板，以及一些符合潮流的 api（W3C 制定的）。如果在 Web 上想搞点什么骚操作，得先问问容器（一般是浏览器）答不答应。 —- <strong>复杂能力支持</strong></p>
+<p>同时，跨端方案不仅仅局限于如何将一份代码转为不同平台的 Native 代码，甚至还想转译到 Web、小程序、快应用、XXXX 上去。这是所有开发人员的追求，而不仅仅是前端开发！试想，一份代码，能转译成 Web，运行在普通的浏览器；转译成 iOS 程序，运行在 iOS 手机上；转换成 java 程序，运行在安卓手机上；转换成 dmg 程序，运行在 Mac 上。除此之外，还有其他还多平台呢。 —- <strong>跨平台扩展性</strong></p>
+<p>当然了，由于 Web 的 JS 是解释型语言，避免不了的运行时编译，降低了程序的运行速度。虽然当前 Web 提出了 WebAssembly 的方案，但由于被提出还不久，支持度还不够高，还没引起足够的重视。相比较而言，Objective-C/JAVA 等语言，虽然也是高级语言，但属于编译型语言，最终运行时都是执行的二进制代码，效率比 JS 肯定还是高很多的。因此在考虑到性能表现时，Web 的表现往往不如 Native 来的好。 —- <strong>性能表现</strong></p>
+<p>其他对比，等待大家的补充。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/19/关于跨端方案的调研/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/02/12/flutter-学习线路图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/12/flutter-学习线路图/" itemprop="url">flutter 学习线路图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-12T09:02:17Z">
+                2020-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前端 flutter 学习线路图：</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p><a href="https://dart.dev/guides" target="_blank" rel="noopener">dart 语言学习</a><br><a href="https://flutter.dev/docs/get-started/install" target="_blank" rel="noopener">flutter环境部署</a><br><a href="https://flutter.dev/docs/development/ui/widgets" target="_blank" rel="noopener">flutter常用组件</a><br><a href="https://flutter.dev/docs/cookbook" target="_blank" rel="noopener">flutter 通用场景</a></p>
+<h2 id="高级"><a href="#高级" class="headerlink" title="高级"></a>高级</h2><p><a href="https://www.youtube.com/watch?v=UUfXWzp0-DU" target="_blank" rel="noopener">Rendering Pipeline</a><br><a href="https://medium.com/@chemamolins/is-flutters-inheritedwidget-a-good-fit-to-hold-app-state-2ec5b33d023e" target="_blank" rel="noopener">Inherited Widget</a><br><a href="https://marcinszalek.pl/flutter/tickets-challenge-parallax" target="_blank" rel="noopener">Parallax Effect</a><br><a href="https://www.yuque.com/xytech/flutter/pfpo68" target="_blank" rel="noopener">flutter外接文理</a></p>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><p><a href="https://api.flutter.dev/flutter/widgets/widgets-library.html" target="_blank" rel="noopener">官方组件</a></p>
+<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><h3 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h3><p><a href="https://github.com/felangel/bloc" target="_blank" rel="noopener">BLoC</a><br><a href="https://github.com/johnpryan/redux.dart" target="_blank" rel="noopener">Redux.dart</a></p>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><p><a href="https://github.com/flutter/plugins/tree/master/packages" target="_blank" rel="noopener">官方插件</a><br><a href="https://pub.dev/flutter/packages" target="_blank" rel="noopener">pub 库</a><br><a href="https://github.com/google/inject.dart" target="_blank" rel="noopener">inject</a></p>
+<h2 id="社区"><a href="#社区" class="headerlink" title="社区"></a>社区</h2><h2 id="借鉴"><a href="#借鉴" class="headerlink" title="借鉴"></a>借鉴</h2><p><a href="https://itsallwidgets.com/" target="_blank" rel="noopener">使用 flutter 的 apps</a></p>
+<h2 id="跨端"><a href="#跨端" class="headerlink" title="跨端"></a>跨端</h2><p><a href="https://github.com/google/flutter-desktop-embedding" target="_blank" rel="noopener">google桌面端</a></p>
+<h2 id="其他参考"><a href="#其他参考" class="headerlink" title="其他参考"></a>其他参考</h2><p><a href="https://github.com/Solido/awesome-flutter#frameworks" target="_blank" rel="noopener">awesome-flutter</a><br><a href="https://www.yuque.com/xytech/flutter" target="_blank" rel="noopener">咸鱼 flutter</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

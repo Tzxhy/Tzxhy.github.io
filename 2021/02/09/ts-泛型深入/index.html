@@ -1,1 +1,868 @@
-<!doctype html><html class="theme-next gemini" lang="zh-Hans"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet"><link href="/css/main.css?v=5.1.4" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="typescript,"><meta name="description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g"><meta name="keywords" content="typescript"><meta property="og:type" content="article"><meta property="og:title" content="ts 泛型深入"><meta property="og:url" content="https://tzxhy.github.io/2021/02/09/ts-泛型深入/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g"><meta property="og:locale" content="zh-Hans"><meta property="og:updated_time" content="2021-02-08T09:05:34.224Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="ts 泛型深入"><meta name="twitter:description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"undefined",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://tzxhy.github.io/2021/02/09/ts-泛型深入/"><title>ts 泛型深入 | CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2021/02/09/ts-泛型深入/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">ts 泛型深入</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-09T00:53:50+08:00">2021-02-08 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/typescript/" itemprop="url" rel="index"><span itemprop="name">typescript</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><p><strong>关键词</strong>：<ul><li>keyof、typeof<li>T extends any ? U : Y<li>infer<li>协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）</ul><h2 id="一来就-show-you-code"><a href="#一来就-show-you-code" class="headerlink" title="一来就 show you code~"></a>一来就 show you code~</h2><p>如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~<br><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致</span></span><br><span class="line"><span class="keyword">type</span> MyPartial&lt;T&gt; = &#123;[U <span class="keyword">in</span> keyof T]?: T[U]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyReadonly&lt;T&gt; = &#123;readonly [U <span class="keyword">in</span> keyof T]: T[U]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyRecord&lt;K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, V&gt; = &#123; [Key <span class="keyword">in</span> K]: V&#125;</span><br><span class="line"><span class="keyword">type</span> MyPick&lt;Type, Keys <span class="keyword">extends</span> keyof Type&gt; = &#123;[K <span class="keyword">in</span> Keys]: Type[K]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyExtract&lt;Type, Union&gt; = Union <span class="keyword">extends</span> Type ? Union : never;</span><br><span class="line"><span class="keyword">type</span> MyNonNullable&lt;Type&gt; = Type <span class="keyword">extends</span> <span class="built_in">void</span> ? never : Type;</span><br><span class="line"><span class="keyword">type</span> MyParameters&lt;Type <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; <span class="built_in">any</span>&gt; = Type <span class="keyword">extends</span> (...args: infer I) =&gt; <span class="built_in">any</span> ? (I) : never;</span><br><span class="line"><span class="keyword">type</span> MyConstructorParameters&lt;Type&gt; = Type <span class="keyword">extends</span> <span class="keyword">new</span> (...args: infer I) =&gt; <span class="built_in">any</span> ? (I) : never;</span><br><span class="line"><span class="keyword">type</span> MyReturnType&lt;Func&gt; = Func <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer R ? R : never;</span><br><span class="line"><span class="comment">// 下面这些是文章 "ts 疑难杂症" 中拷贝过来的</span></span><br><span class="line"><span class="keyword">type</span> PromiseInnerType&lt;T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;<span class="built_in">any</span>&gt;&gt; = T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;infer P&gt;</span><br><span class="line">  ? P</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> Test = PromiseInnerType&lt;<span class="built_in">Promise</span>&lt;<span class="built_in">string</span>&gt;&gt;</span><br><span class="line"><span class="comment">// 联合类型改为交叉类型</span></span><br><span class="line"><span class="keyword">type</span> UnionToIntersection&lt;U&gt; = (U <span class="keyword">extends</span> <span class="built_in">any</span></span><br><span class="line">  ? <span class="function">(<span class="params">k: U</span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">  : never) <span class="keyword">extends</span> (<span class="function">(<span class="params">k: infer I</span>) =&gt;</span> <span class="built_in">void</span>)</span><br><span class="line">  ? I</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// &#123; a: string &#125; | &#123; b: number &#125; =&gt; &#123; a: string &#125; &amp; &#123; b: number &#125;</span></span><br><span class="line"><span class="keyword">type</span> Test = UnionToIntersection&lt;&#123; a: <span class="built_in">string</span> &#125; | &#123; b: <span class="built_in">number</span> &#125;&gt;</span><br><span class="line"><span class="keyword">type</span> Prettify&lt;T&gt; = T <span class="keyword">extends</span> infer U ? &#123; [K <span class="keyword">in</span> keyof U]: U[K] &#125; : never</span><br><span class="line"><span class="comment">// &#123; a: string; b: number; c: boolean &#125;</span></span><br><span class="line"><span class="keyword">type</span> Param = Prettify&lt;&#123; a: <span class="built_in">string</span> &#125; &amp; &#123; b: <span class="built_in">number</span> &#125; &amp; &#123; c: <span class="built_in">boolean</span> &#125;&gt;</span><br></pre></table></figure><p><p>如果有一两个不懂的，那么请点击目录快速进入你想瞅一下的~<hr><a id="more"></a><h2 id="keyof、typeof"><a href="#keyof、typeof" class="headerlink" title="keyof、typeof"></a>keyof、typeof</h2><p>这两个关键字比较基础了，两种姿势简单了解一下：<ol><li><a href="https://www.typescriptlang.org/docs/handbook/2/keyof-types.html#the-keyof-type-operator" target="_blank" rel="noopener">keyof 官网介绍</a>，<a href="https://www.typescriptlang.org/docs/handbook/2/typeof-types.html" target="_blank" rel="noopener">typeof 官网介绍</a><li>听我简单逼逼一下~~</ol><h3 id="keyof"><a href="#keyof" class="headerlink" title="keyof"></a>keyof</h3><p>获取类型 T 的所有 key 的类型<strong>集合</strong>（注意我变重了，返回的是<strong>集合</strong>）。<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Point = &#123; x: <span class="built_in">number</span>; y: <span class="built_in">number</span> &#125;;</span><br><span class="line"><span class="keyword">type</span> P = keyof Point;</span><br><span class="line"><span class="comment">//   ^ x | y  Point 只有两个 key</span></span><br><span class="line"><span class="keyword">type</span> Mapish = &#123; [k: <span class="built_in">string</span>]: <span class="built_in">boolean</span> &#125;;</span><br><span class="line"><span class="keyword">type</span> M = keyof Mapish;</span><br><span class="line"><span class="comment">//   ^number | string   为啥？</span></span><br><span class="line"><span class="keyword">type</span> KeyOfAny = keyof <span class="built_in">any</span>;</span><br><span class="line"><span class="comment">//   ^ string | number | symbol   啊？</span></span><br></pre></table></figure><p>Mapish 中并没有 number，M 为啥是 number | string ？因为 js 中：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"><span class="comment">// 你可以 数 着访问</span></span><br><span class="line">obj[<span class="number">0</span>];</span><br><span class="line"><span class="comment">// 还可以 串 着访问</span></span><br><span class="line">obj[<span class="string">'0'</span>]</span><br></pre></table></figure><p>KeyOfAny 为啥是这个结果？keyof 本身作为获取一个对象的所有 key 类型的关键字，本身是针对对象的。而访问一个对象，自然可以通过这3种 key 来访问。So ，就这样了。也可以参考这个<a href="https://stackoverflow.com/questions/55535598/why-does-keyof-any-have-type-of-string-number-symbol-in-typescript" target="_blank" rel="noopener">问题</a>。<h3 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h3><p>注意需要跟 js 内置的 typeof 区分开。ts 中的 typeof 后跟一个具体值，用于获取这个值的类型：<br><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">"hello"</span>;</span><br><span class="line"><span class="keyword">let</span> n: <span class="keyword">typeof</span> s;</span><br><span class="line"><span class="comment">//  ^string</span></span><br><span class="line"><span class="keyword">let</span> f = <span class="function">(<span class="params">name: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">type</span> TypeF = <span class="keyword">typeof</span> f;</span><br><span class="line"><span class="comment">//   ^(name: string) =&gt; number</span></span><br></pre></table></figure><p><p>比较简单，不多缩~<hr><h2 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h2><p>这里说的 extends 不是 interface、class 的继承，而是泛型相关骚操作中 extends ~<p>最早的泛型 extends 是在 ts1.8 中引入的，<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-8.html#type-parameters-as-constraints" target="_blank" rel="noopener">链接</a>在这。 最开始这个是用来限制泛型类型的。<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">assign</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">U</span>, <span class="title">U</span>&gt;(<span class="params">target: T, source: U</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> id <span class="keyword">in</span> source) &#123;</span><br><span class="line">    target[id] = source[id];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> x = &#123; a: <span class="number">1</span>, b: <span class="number">2</span>, c: <span class="number">3</span>, d: <span class="number">4</span> &#125;;</span><br><span class="line">assign(x, &#123; b: <span class="number">10</span>, d: <span class="number">20</span> &#125;);</span><br><span class="line">assign(x, &#123; e: <span class="number">0</span> &#125;); <span class="comment">// Error</span></span><br></pre></table></figure><p>用于限制泛型类型是比较简单的，但结合其他东西，就有点东西了，往下~<p>在 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#conditional-types" target="_blank" rel="noopener">ts 2.8</a> 中引入了 <strong>Conditional Types</strong> ，这里建议大家还是读一下文档，很重要！我这辅助翻译一下，表喷翻译能力~~：<blockquote><p>条件类型 T extends U ? X : Y 会被直接推导为 X 或者 Y，也可能由于条件依赖更多的类型而被推迟推导。是否直接推导或者延迟推导，取决于：<ol><li>首先，给定类型 T’ 和 U’，他们分别是类型 T 和 U 的实例（如果 T、U 有类型参数，用 any 替换），如果 T’ 不能被分配给 U’，那么有条件类型最终被推导为 Y。直觉上，如果 T 的最大化实例都不能分配给 U 的最大化实例，那么我们会直接推导为 Y。<li>接下来，对于 U 中的推断(infer 关键字)声明引入的每个类型变量，通过从T推断到U（使用与泛型函数的类型推断相同的推断算法）来收集一组候选类型。对于给定的推断类型 V，如果有任意候选类型从协变位置推断出，那么推断类型 V 是这些候选类型的并集；不然，如果有任意候选从抗变位置推断出，推断类型 V 是这些候选类型的交集；否则，类型V 就是 never。<li>然后，给定一个类型 T 的实例 T’’，其中所有推断类型变量都替换为上一步中推断的类型V，如果T’’绝对能分配给U，那么推导为 X。除了没考虑类型变量以外，绝对分配关系与常规的分配关系一致。直觉上来说，当一个类型绝对能分配到另一个类型上时，我们说它能分配到那些类型的所有实例上。<li>最后，条件类型依赖更多的类型变量，那么类型推导被推迟。</ol></blockquote><p>其实不太好理解是不是？还是看栗子比较容易懂。（协变位置、抗变位置这个概念在 infer 一节中说哈，这里先忽略）<p>我们可以先只看第一点，后面的2、3、4都是针对 infer 的（还是拿官网的栗子）：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> TypeName&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">string</span></span><br><span class="line">  ? <span class="string">"string"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">number</span></span><br><span class="line">  ? <span class="string">"number"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">boolean</span></span><br><span class="line">  ? <span class="string">"boolean"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="literal">undefined</span></span><br><span class="line">  ? <span class="string">"undefined"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">Function</span></span><br><span class="line">  ? <span class="string">"function"</span></span><br><span class="line">  : <span class="string">"object"</span>;</span><br><span class="line"><span class="keyword">type</span> T0 = TypeName&lt;<span class="built_in">string</span>&gt;; <span class="comment">// "string"</span></span><br><span class="line"><span class="keyword">type</span> T1 = TypeName&lt;<span class="string">"a"</span>&gt;; <span class="comment">// "string"</span></span><br><span class="line"><span class="keyword">type</span> T2 = TypeName&lt;<span class="literal">true</span>&gt;; <span class="comment">// "boolean"</span></span><br><span class="line"><span class="keyword">type</span> T3 = TypeName&lt;<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span>&gt;; <span class="comment">// "function"</span></span><br><span class="line"><span class="keyword">type</span> T4 = TypeName&lt;<span class="built_in">string</span>[]&gt;; <span class="comment">// "object"</span></span><br></pre></table></figure><ul><li>T0 中，string extends string 为 true，所以返回 ‘string’；<li>T1 中，’a’ 是 string 的一个实例化，就是第一点中说的T’，此时U’是所有字符串的实例化代表，所以 ‘a’ 肯定能婚配给 string，所以返回 ‘string’；<li>T2 中， 同理，true 是 boolean 的实例化，So~<li>T3 - T4，同理 too。</ul><p>可以顺着看一下分布条件类型，再看 infer~<h3 id="Distributive-conditional-types"><a href="#Distributive-conditional-types" class="headerlink" title="Distributive conditional types"></a>Distributive conditional types</h3><p>[文档】(<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types" target="_blank" rel="noopener">https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types</a>)<p>我把这个分布条件类型也放入 extends 小节里。<blockquote><p>被选中的类型为裸类型参数的条件类型称为分布式条件类型（即没有被诸如数组，元组或者函数包裹）。 实例化期间，分布条件类型自动分布在联合类型上。 例如，T extends U ? X : Y，类型参数为 A | B | C ，的 T 解析为(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)</blockquote><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> BoxedValue&lt;T&gt; = &#123; value: T &#125;;</span><br><span class="line"><span class="keyword">type</span> BoxedArray&lt;T&gt; = &#123; array: T[] &#125;;</span><br><span class="line"><span class="keyword">type</span> Boxed&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">any</span>[] ? BoxedArray&lt;T[<span class="built_in">number</span>]&gt; : BoxedValue&lt;T&gt;;</span><br><span class="line"><span class="keyword">type</span> T20 = Boxed&lt;<span class="built_in">string</span>&gt;; <span class="comment">// BoxedValue&lt;string&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T21 = Boxed&lt;<span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedArray&lt;number&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T22 = Boxed&lt;<span class="built_in">string</span> | <span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedValue&lt;string&gt; | BoxedArray&lt;number&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T23 = Boxed&lt;<span class="built_in">string</span>&gt; | Boxed&lt;<span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedValue&lt;string&gt; | BoxedArray&lt;number&gt;;</span></span><br></pre></table></figure><p>T22 联合类型，就等于分开后再联合，就等于 T23。<p>需要注意的是 BoxedArray&lt;T[number]&gt; 这种写法：因为 T 已经有了 any[] 的基类型，说明 T 肯定是一个数组。是数组的话，就可以用 number 类型的索引去访问，比如T[0]、T[1]等，因此也可以写成 BoxedArray&lt;T[0]&gt; 。不过也有差异，写成 T[0] 的形式，就明确只要 0索引的类型；写成 T[number]，就表明需要所有类型的联合类型。这点需要注意。<p>狙一翻三，如果是对象类型的话：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Boxed2&lt;T&gt; = T <span class="keyword">extends</span> Record&lt;<span class="built_in">string</span>, <span class="built_in">number</span>&gt; ? BoxedArray&lt;T[<span class="built_in">string</span>]&gt; : BoxedValue&lt;T&gt;;</span><br><span class="line"><span class="keyword">type</span> T24 = Boxed2&lt;&#123;[key: <span class="built_in">string</span>]: <span class="built_in">number</span>&#125;&gt; <span class="comment">// BoxedArray&lt;number&gt;</span></span><br><span class="line"><span class="keyword">type</span> T25 = Boxed2&lt;&#123;[key: <span class="built_in">string</span>]: <span class="built_in">string</span>&#125;&gt; <span class="comment">// BoxedArray&lt;&#123;[key: string]: string&#125;&gt;</span></span><br></pre></table></figure><h2 id="infer"><a href="#infer" class="headerlink" title="infer"></a>infer</h2><p>同样是 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#type-inference-in-conditional-types" target="_blank" rel="noopener">ts2.8</a> 提出的。<p>infer 关键字只能在 extends 语句中使用，表明一个需要推导的类型。对同一个类型可以进行多次 infer 推导。<p>比如，2.8中新增的 ReturnType:<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> ReturnType&lt;T&gt; = T <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer R ? R : <span class="built_in">any</span>;</span><br></pre></table></figure><p>ReturnType用于获取一个函数的返回类型，上面的意思是：如果 T 可以分配给 (…args: any[]) =&gt; infer R 这种类型的函数的话，那么返回类型 R，否则返回 any。在这里返回用了infer R 代表需要推断类型 R。<p>同样，也能“无限 extends”，比如：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Unpacked&lt;T&gt; = T <span class="keyword">extends</span> (infer U)[]</span><br><span class="line">  ? U</span><br><span class="line">  : T <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer U</span><br><span class="line">  ? U</span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;infer U&gt;</span><br><span class="line">  ? U</span><br><span class="line">  : T;</span><br></pre></table></figure><p><strong>本文高潮</strong> 要来了，大家别叫啊！<h3 id="协变位置推导"><a href="#协变位置推导" class="headerlink" title="协变位置推导"></a>协变位置推导</h3><p>下面的例子阐释了：在<strong>协变位置</strong>对于<strong>同一个类型变量</strong>的<strong>多个候选类型</strong>如何推导出一个<strong>联合类型</strong>。（你丑，这里这么多个 bold 文字，是不是很重要？）看不懂？没关系，后面要说。<p>还是官方的例子：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Foo&lt;T&gt; = T <span class="keyword">extends</span> &#123; a: infer U; b: infer U &#125; ? U : never;</span><br><span class="line"><span class="keyword">type</span> T10 = Foo&lt;&#123; a: <span class="built_in">string</span>; b: <span class="built_in">string</span> &#125;&gt;; <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T11 = Foo&lt;&#123; a: <span class="built_in">string</span>; b: <span class="built_in">number</span> &#125;&gt;; <span class="comment">// string | number</span></span><br></pre></table></figure><p>看这里，Foo 判断 T是否可婚配给 { a: infer U; b: infer U }，这里 U 是 key a 和 b的推导类型。<p>T10 中的 a 和 b 都是 string，哦耶，Foo 就直接是 string，no problem！<p>T11 中的 a 是string 和 b 是 number，哦耶，Foo 就直接是 string 和 number 的联合类型（也就是string | number）！为啥？因为就是ts2.8中的 infer 就这么设计的！！！<p>这里需要先说明一下：<strong>对象型类型都可当做是协变类型</strong>。（具体原因看一下参考文章，有兴趣的看下就 O98K）<h3 id="抗变位置推导"><a href="#抗变位置推导" class="headerlink" title="抗变位置推导"></a>抗变位置推导</h3><p>在<strong>抗变位置</strong>对于<strong>同一个类型变量</strong>的<strong>多个候选类型</strong>如何推导出一个<strong>交集类型</strong>。（注意区别于协变位置的联合类型）<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Bar&lt;T&gt; = T <span class="keyword">extends</span> &#123; a: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span> &#125;</span><br><span class="line">  ? U</span><br><span class="line">  : never;</span><br><span class="line"><span class="keyword">type</span> T20 = Bar&lt;&#123; a: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;; <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T21 = Bar&lt;&#123; a: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: <span class="built_in">number</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;; <span class="comment">// string &amp; number</span></span><br></pre></table></figure><ul><li>T20 中的 a、b的类型都是(x: string) =&gt; void ，所以 Bar 推导 x 的类型时（不是非要与原函数的参数名一致哈，不要误解），U 都是 string，no doubt！<li>T21 中 a 中 x类型是 string，b 的是 number，但是 infer 的参数类型 U都是同一个，那么最终该是啥类型？哦不对，不该问，上面都写了。。。不过为啥是 string &amp; number （其实就等于 never）呢？为啥？因为就是ts2.8中的 infer 就这么设计的！！！</ul><p>这里需要先说明一下：函数型类型都可当做是抗变类型。<p>关于函数的抗变类型，这里有个相关的说明：<p>–strictFunctionTypes 标志位。这个 flag 是 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types" target="_blank" rel="noopener">ts2.6</a> 引入的，通过设置该严格位，将默认的双向协变改为抗协变。即，针对函数类型，不再使用默认的双向协变。但是这里不是说，关了这个标志位，会对上面的结论产生影响，并不会，因为函数默认是双向协变的，因此本身也是抗变的。<p>关于双向协变，也可以通过下面的参考来了解。<p>有了上面协变和抗变的基础理解，UnionToIntersection 介玩意儿就好理解了！<hr><h2 id="UnionToIntersection（墙裂建议瞅一哈）"><a href="#UnionToIntersection（墙裂建议瞅一哈）" class="headerlink" title="UnionToIntersection（墙裂建议瞅一哈）"></a>UnionToIntersection（墙裂建议瞅一哈）</h2><p>有点远，抄一遍代码：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 联合类型改为交叉类型</span></span><br><span class="line"><span class="keyword">type</span> UnionToIntersection&lt;U&gt; = (U <span class="keyword">extends</span> <span class="built_in">any</span></span><br><span class="line">  ? <span class="function">(<span class="params">k: U</span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">  : never) <span class="keyword">extends</span> (<span class="function">(<span class="params">k: infer I</span>) =&gt;</span> <span class="built_in">void</span>)</span><br><span class="line">  ? I</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// &#123; a: string &#125; | &#123; b: number &#125; =&gt; &#123; a: string &#125; &amp; &#123; b: number &#125;</span></span><br><span class="line"><span class="keyword">type</span> Test = UnionToIntersection&lt;&#123; a: <span class="built_in">string</span> &#125; | &#123; b: <span class="built_in">number</span> &#125;&gt;</span><br></pre></table></figure><p>如果是直接跳到这的，而且不知道<strong>分布式条件状态、 infer、协变位置、抗变位置</strong>这几个词，那么请点击目录稍微学习下~<p>// 等待10分钟后……<p>Then，我们都知道了上面几个词的意思，可以来剖析这个工具类了：<ol><li>U extends any ? 那必须滴啊！TS 中啥都可以婚配给 any！所以，现在变成了：(k: U) =&gt; void extends ((k: infer I) =&gt; void) ? I : never<li>返回类型 = I’ =&gt; {a: string} | I’’ =&gt; {b: number} （注意，这里不是分布式条件类型，分布式条件类型需要的是裸类型）<li>此时 I被推导出两个类型！怎么处理？第1步中，我们发现，它把本身是对象类型的类型{ a: string } | { b: number } 转为了一个函数的参数类型，没毛病吧？从一个函数推导类型，是满足抗变位置推导的，对吧？抗变位置推导，最终类型是：没错，你答对了，是交集！所以最终返回类型 = I’ =&gt; {a: string} &amp; I’’ =&gt; {b: number} = {a: string} &amp; {b: number} = {a: string; b: number}</ol><p>上面的分析可以搭配：<a href="https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type/50375286#50375286" target="_blank" rel="noopener">https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type/50375286#50375286</a> 一起看看。<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>神马是协变与抗协变：what-are-covariance-and-contravariance<p>ts 中的协变、抗变、双变，不变是神马：<a href="https://zhuanlan.zhihu.com/p/143054881" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/143054881</a><p>ts 疑难杂症：<a href="https://zhuanlan.zhihu.com/p/82459341" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/82459341</a></div><footer class="post-footer"><div class="post-tags"><a href="/tags/typescript/" rel="tag"># typescript</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2020/03/23/安卓项目中相关基础依赖/" rel="next" title="安卓项目中相关基础依赖"><i class="fa fa-chevron-left"></i> 安卓项目中相关基础依赖</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">文章目录<li class="sidebar-nav-overview" data-target="site-overview-wrap">站点概览</ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">96</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">23</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">46</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/tzxhy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金"><i class="fa fa-fw fa-globe"></i>掘金</a> </span><span class="links-of-author-item"><a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀"><i class="fa fa-fw fa-globe"></i>语雀</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一来就-show-you-code"><span class="nav-number">1.</span> <span class="nav-text">一来就 show you code~</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#keyof、typeof"><span class="nav-number">2.</span> <span class="nav-text">keyof、typeof</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#keyof"><span class="nav-number">2.1.</span> <span class="nav-text">keyof</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof"><span class="nav-number">2.2.</span> <span class="nav-text">typeof</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#extends"><span class="nav-number">3.</span> <span class="nav-text">extends</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Distributive-conditional-types"><span class="nav-number">3.1.</span> <span class="nav-text">Distributive conditional types</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#infer"><span class="nav-number">4.</span> <span class="nav-text">infer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协变位置推导"><span class="nav-number">4.1.</span> <span class="nav-text">协变位置推导</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#抗变位置推导"><span class="nav-number">4.2.</span> <span class="nav-text">抗变位置推导</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#UnionToIntersection（墙裂建议瞅一哈）"><span class="nav-number">5.</span> <span class="nav-text">UnionToIntersection（墙裂建议瞅一哈）</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/js/src/utils.js?v=5.1.4"></script><script src="/js/src/motion.js?v=5.1.4"></script><script src="/js/src/affix.js?v=5.1.4"></script><script src="/js/src/schemes/pisces.js?v=5.1.4"></script><script src="/js/src/scrollspy.js?v=5.1.4"></script><script src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/bootstrap.js?v=5.1.4"></script><script>!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="typescript,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g">
+<meta name="keywords" content="typescript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ts 泛型深入">
+<meta property="og:url" content="https://tzxhy.github.io/2021/02/09/ts-泛型深入/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-02-08T09:05:34.224Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ts 泛型深入">
+<meta name="twitter:description" content="关键词：  keyof、typeof T extends any ? U : Y infer 协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）  一来就 show you code~如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致type MyPartial&amp;lt;T&amp;g">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/2021/02/09/ts-泛型深入/">
+
+
+
+
+
+  <title>ts 泛型深入 | CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2021/02/09/ts-泛型深入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ts 泛型深入</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-09T00:53:50+08:00">
+                2021-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/typescript/" itemprop="url" rel="index">
+                    <span itemprop="name">typescript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>关键词</strong>：</p>
+<ul>
+<li>keyof、typeof</li>
+<li>T extends any ? U : Y</li>
+<li>infer</li>
+<li>协变、抗变、双变、不变（最后一个本文没提到，参考文章中有）</li>
+</ul>
+<h2 id="一来就-show-you-code"><a href="#一来就-show-you-code" class="headerlink" title="一来就 show you code~"></a>一来就 show you code~</h2><p>如果下面这些都能看懂且理解，那么恭喜你，你不用继续看本文了，see you next time 😄 ~~<br><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这几个是根据官网的用例，自己写的，貌似跟官方的基本一致</span></span><br><span class="line"><span class="keyword">type</span> MyPartial&lt;T&gt; = &#123;[U <span class="keyword">in</span> keyof T]?: T[U]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyReadonly&lt;T&gt; = &#123;readonly [U <span class="keyword">in</span> keyof T]: T[U]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyRecord&lt;K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, V&gt; = &#123; [Key <span class="keyword">in</span> K]: V&#125;</span><br><span class="line"><span class="keyword">type</span> MyPick&lt;Type, Keys <span class="keyword">extends</span> keyof Type&gt; = &#123;[K <span class="keyword">in</span> Keys]: Type[K]&#125;;</span><br><span class="line"><span class="keyword">type</span> MyExtract&lt;Type, Union&gt; = Union <span class="keyword">extends</span> Type ? Union : never;</span><br><span class="line"><span class="keyword">type</span> MyNonNullable&lt;Type&gt; = Type <span class="keyword">extends</span> <span class="built_in">void</span> ? never : Type;</span><br><span class="line"><span class="keyword">type</span> MyParameters&lt;Type <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; <span class="built_in">any</span>&gt; = Type <span class="keyword">extends</span> (...args: infer I) =&gt; <span class="built_in">any</span> ? (I) : never;</span><br><span class="line"><span class="keyword">type</span> MyConstructorParameters&lt;Type&gt; = Type <span class="keyword">extends</span> <span class="keyword">new</span> (...args: infer I) =&gt; <span class="built_in">any</span> ? (I) : never;</span><br><span class="line"><span class="keyword">type</span> MyReturnType&lt;Func&gt; = Func <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer R ? R : never;</span><br><span class="line"><span class="comment">// 下面这些是文章 "ts 疑难杂症" 中拷贝过来的</span></span><br><span class="line"><span class="keyword">type</span> PromiseInnerType&lt;T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;<span class="built_in">any</span>&gt;&gt; = T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;infer P&gt;</span><br><span class="line">  ? P</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> Test = PromiseInnerType&lt;<span class="built_in">Promise</span>&lt;<span class="built_in">string</span>&gt;&gt;</span><br><span class="line"><span class="comment">// 联合类型改为交叉类型</span></span><br><span class="line"><span class="keyword">type</span> UnionToIntersection&lt;U&gt; = (U <span class="keyword">extends</span> <span class="built_in">any</span></span><br><span class="line">  ? <span class="function">(<span class="params">k: U</span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">  : never) <span class="keyword">extends</span> (<span class="function">(<span class="params">k: infer I</span>) =&gt;</span> <span class="built_in">void</span>)</span><br><span class="line">  ? I</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// &#123; a: string &#125; | &#123; b: number &#125; =&gt; &#123; a: string &#125; &amp; &#123; b: number &#125;</span></span><br><span class="line"><span class="keyword">type</span> Test = UnionToIntersection&lt;&#123; a: <span class="built_in">string</span> &#125; | &#123; b: <span class="built_in">number</span> &#125;&gt;</span><br><span class="line"><span class="keyword">type</span> Prettify&lt;T&gt; = T <span class="keyword">extends</span> infer U ? &#123; [K <span class="keyword">in</span> keyof U]: U[K] &#125; : never</span><br><span class="line"><span class="comment">// &#123; a: string; b: number; c: boolean &#125;</span></span><br><span class="line"><span class="keyword">type</span> Param = Prettify&lt;&#123; a: <span class="built_in">string</span> &#125; &amp; &#123; b: <span class="built_in">number</span> &#125; &amp; &#123; c: <span class="built_in">boolean</span> &#125;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果有一两个不懂的，那么请点击目录快速进入你想瞅一下的~</p>
+<hr>
+<a id="more"></a>
+<h2 id="keyof、typeof"><a href="#keyof、typeof" class="headerlink" title="keyof、typeof"></a>keyof、typeof</h2><p>这两个关键字比较基础了，两种姿势简单了解一下：</p>
+<ol>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/keyof-types.html#the-keyof-type-operator" target="_blank" rel="noopener">keyof 官网介绍</a>，<a href="https://www.typescriptlang.org/docs/handbook/2/typeof-types.html" target="_blank" rel="noopener">typeof 官网介绍</a></li>
+<li>听我简单逼逼一下~~</li>
+</ol>
+<h3 id="keyof"><a href="#keyof" class="headerlink" title="keyof"></a>keyof</h3><p>获取类型 T 的所有 key 的类型<strong>集合</strong>（注意我变重了，返回的是<strong>集合</strong>）。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Point = &#123; x: <span class="built_in">number</span>; y: <span class="built_in">number</span> &#125;;</span><br><span class="line"><span class="keyword">type</span> P = keyof Point;</span><br><span class="line"><span class="comment">//   ^ x | y  Point 只有两个 key</span></span><br><span class="line"><span class="keyword">type</span> Mapish = &#123; [k: <span class="built_in">string</span>]: <span class="built_in">boolean</span> &#125;;</span><br><span class="line"><span class="keyword">type</span> M = keyof Mapish;</span><br><span class="line"><span class="comment">//   ^number | string   为啥？</span></span><br><span class="line"><span class="keyword">type</span> KeyOfAny = keyof <span class="built_in">any</span>;</span><br><span class="line"><span class="comment">//   ^ string | number | symbol   啊？</span></span><br></pre></td></tr></table></figure>
+<p>Mapish 中并没有 number，M 为啥是 number | string ？因为 js 中：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"><span class="comment">// 你可以 数 着访问</span></span><br><span class="line">obj[<span class="number">0</span>];</span><br><span class="line"><span class="comment">// 还可以 串 着访问</span></span><br><span class="line">obj[<span class="string">'0'</span>]</span><br></pre></td></tr></table></figure>
+<p>KeyOfAny 为啥是这个结果？keyof 本身作为获取一个对象的所有 key 类型的关键字，本身是针对对象的。而访问一个对象，自然可以通过这3种 key 来访问。So ，就这样了。也可以参考这个<a href="https://stackoverflow.com/questions/55535598/why-does-keyof-any-have-type-of-string-number-symbol-in-typescript" target="_blank" rel="noopener">问题</a>。</p>
+<h3 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h3><p>注意需要跟 js 内置的 typeof 区分开。ts 中的 typeof 后跟一个具体值，用于获取这个值的类型：<br><figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> s = <span class="string">"hello"</span>;</span><br><span class="line"><span class="keyword">let</span> n: <span class="keyword">typeof</span> s;</span><br><span class="line"><span class="comment">//  ^string</span></span><br><span class="line"><span class="keyword">let</span> f = <span class="function">(<span class="params">name: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">type</span> TypeF = <span class="keyword">typeof</span> f;</span><br><span class="line"><span class="comment">//   ^(name: string) =&gt; number</span></span><br></pre></td></tr></table></figure></p>
+<p>比较简单，不多缩~</p>
+<hr>
+<h2 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h2><p>这里说的 extends 不是 interface、class 的继承，而是泛型相关骚操作中 extends ~</p>
+<p>最早的泛型 extends 是在 ts1.8 中引入的，<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-8.html#type-parameters-as-constraints" target="_blank" rel="noopener">链接</a>在这。 最开始这个是用来限制泛型类型的。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">assign</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">U</span>, <span class="title">U</span>&gt;(<span class="params">target: T, source: U</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> id <span class="keyword">in</span> source) &#123;</span><br><span class="line">    target[id] = source[id];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> x = &#123; a: <span class="number">1</span>, b: <span class="number">2</span>, c: <span class="number">3</span>, d: <span class="number">4</span> &#125;;</span><br><span class="line">assign(x, &#123; b: <span class="number">10</span>, d: <span class="number">20</span> &#125;);</span><br><span class="line">assign(x, &#123; e: <span class="number">0</span> &#125;); <span class="comment">// Error</span></span><br></pre></td></tr></table></figure>
+<p>用于限制泛型类型是比较简单的，但结合其他东西，就有点东西了，往下~</p>
+<p>在 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#conditional-types" target="_blank" rel="noopener">ts 2.8</a> 中引入了 <strong>Conditional Types</strong> ，这里建议大家还是读一下文档，很重要！我这辅助翻译一下，表喷翻译能力~~：</p>
+<blockquote>
+<p>条件类型 T extends U ? X : Y 会被直接推导为 X 或者 Y，也可能由于条件依赖更多的类型而被推迟推导。是否直接推导或者延迟推导，取决于：</p>
+<ol>
+<li>首先，给定类型 T’ 和 U’，他们分别是类型 T 和 U 的实例（如果 T、U 有类型参数，用 any 替换），如果 T’ 不能被分配给 U’，那么有条件类型最终被推导为 Y。直觉上，如果 T 的最大化实例都不能分配给 U 的最大化实例，那么我们会直接推导为 Y。</li>
+<li>接下来，对于 U 中的推断(infer 关键字)声明引入的每个类型变量，通过从T推断到U（使用与泛型函数的类型推断相同的推断算法）来收集一组候选类型。对于给定的推断类型 V，如果有任意候选类型从协变位置推断出，那么推断类型 V 是这些候选类型的并集；不然，如果有任意候选从抗变位置推断出，推断类型 V 是这些候选类型的交集；否则，类型V 就是 never。</li>
+<li>然后，给定一个类型 T 的实例 T’’，其中所有推断类型变量都替换为上一步中推断的类型V，如果T’’绝对能分配给U，那么推导为 X。除了没考虑类型变量以外，绝对分配关系与常规的分配关系一致。直觉上来说，当一个类型绝对能分配到另一个类型上时，我们说它能分配到那些类型的所有实例上。</li>
+<li>最后，条件类型依赖更多的类型变量，那么类型推导被推迟。</li>
+</ol>
+</blockquote>
+<p>其实不太好理解是不是？还是看栗子比较容易懂。（协变位置、抗变位置这个概念在 infer 一节中说哈，这里先忽略）</p>
+<p>我们可以先只看第一点，后面的2、3、4都是针对 infer 的（还是拿官网的栗子）：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> TypeName&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">string</span></span><br><span class="line">  ? <span class="string">"string"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">number</span></span><br><span class="line">  ? <span class="string">"number"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">boolean</span></span><br><span class="line">  ? <span class="string">"boolean"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="literal">undefined</span></span><br><span class="line">  ? <span class="string">"undefined"</span></span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">Function</span></span><br><span class="line">  ? <span class="string">"function"</span></span><br><span class="line">  : <span class="string">"object"</span>;</span><br><span class="line"><span class="keyword">type</span> T0 = TypeName&lt;<span class="built_in">string</span>&gt;; <span class="comment">// "string"</span></span><br><span class="line"><span class="keyword">type</span> T1 = TypeName&lt;<span class="string">"a"</span>&gt;; <span class="comment">// "string"</span></span><br><span class="line"><span class="keyword">type</span> T2 = TypeName&lt;<span class="literal">true</span>&gt;; <span class="comment">// "boolean"</span></span><br><span class="line"><span class="keyword">type</span> T3 = TypeName&lt;<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">void</span>&gt;; <span class="comment">// "function"</span></span><br><span class="line"><span class="keyword">type</span> T4 = TypeName&lt;<span class="built_in">string</span>[]&gt;; <span class="comment">// "object"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>T0 中，string extends string 为 true，所以返回 ‘string’；</li>
+<li>T1 中，’a’ 是 string 的一个实例化，就是第一点中说的T’，此时U’是所有字符串的实例化代表，所以 ‘a’ 肯定能婚配给 string，所以返回 ‘string’；</li>
+<li>T2 中， 同理，true 是 boolean 的实例化，So~</li>
+<li>T3 - T4，同理 too。</li>
+</ul>
+<p>可以顺着看一下分布条件类型，再看 infer~</p>
+<h3 id="Distributive-conditional-types"><a href="#Distributive-conditional-types" class="headerlink" title="Distributive conditional types"></a>Distributive conditional types</h3><p>[文档】(<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types" target="_blank" rel="noopener">https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types</a>)</p>
+<p>我把这个分布条件类型也放入 extends 小节里。</p>
+<blockquote>
+<p>被选中的类型为裸类型参数的条件类型称为分布式条件类型（即没有被诸如数组，元组或者函数包裹）。 实例化期间，分布条件类型自动分布在联合类型上。 例如，T extends U ? X : Y，类型参数为 A | B | C ，的 T 解析为(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)</p>
+</blockquote>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> BoxedValue&lt;T&gt; = &#123; value: T &#125;;</span><br><span class="line"><span class="keyword">type</span> BoxedArray&lt;T&gt; = &#123; array: T[] &#125;;</span><br><span class="line"><span class="keyword">type</span> Boxed&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">any</span>[] ? BoxedArray&lt;T[<span class="built_in">number</span>]&gt; : BoxedValue&lt;T&gt;;</span><br><span class="line"><span class="keyword">type</span> T20 = Boxed&lt;<span class="built_in">string</span>&gt;; <span class="comment">// BoxedValue&lt;string&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T21 = Boxed&lt;<span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedArray&lt;number&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T22 = Boxed&lt;<span class="built_in">string</span> | <span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedValue&lt;string&gt; | BoxedArray&lt;number&gt;;</span></span><br><span class="line"><span class="keyword">type</span> T23 = Boxed&lt;<span class="built_in">string</span>&gt; | Boxed&lt;<span class="built_in">number</span>[]&gt;; <span class="comment">// BoxedValue&lt;string&gt; | BoxedArray&lt;number&gt;;</span></span><br></pre></td></tr></table></figure>
+<p>T22 联合类型，就等于分开后再联合，就等于 T23。</p>
+<p>需要注意的是 BoxedArray&lt;T[number]&gt; 这种写法：因为 T 已经有了 any[] 的基类型，说明 T 肯定是一个数组。是数组的话，就可以用 number 类型的索引去访问，比如T[0]、T[1]等，因此也可以写成 BoxedArray&lt;T[0]&gt; 。不过也有差异，写成 T[0] 的形式，就明确只要 0索引的类型；写成 T[number]，就表明需要所有类型的联合类型。这点需要注意。</p>
+<p>狙一翻三，如果是对象类型的话：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Boxed2&lt;T&gt; = T <span class="keyword">extends</span> Record&lt;<span class="built_in">string</span>, <span class="built_in">number</span>&gt; ? BoxedArray&lt;T[<span class="built_in">string</span>]&gt; : BoxedValue&lt;T&gt;;</span><br><span class="line"><span class="keyword">type</span> T24 = Boxed2&lt;&#123;[key: <span class="built_in">string</span>]: <span class="built_in">number</span>&#125;&gt; <span class="comment">// BoxedArray&lt;number&gt;</span></span><br><span class="line"><span class="keyword">type</span> T25 = Boxed2&lt;&#123;[key: <span class="built_in">string</span>]: <span class="built_in">string</span>&#125;&gt; <span class="comment">// BoxedArray&lt;&#123;[key: string]: string&#125;&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="infer"><a href="#infer" class="headerlink" title="infer"></a>infer</h2><p>同样是 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#type-inference-in-conditional-types" target="_blank" rel="noopener">ts2.8</a> 提出的。</p>
+<p>infer 关键字只能在 extends 语句中使用，表明一个需要推导的类型。对同一个类型可以进行多次 infer 推导。</p>
+<p>比如，2.8中新增的 ReturnType:</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> ReturnType&lt;T&gt; = T <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer R ? R : <span class="built_in">any</span>;</span><br></pre></td></tr></table></figure>
+<p>ReturnType用于获取一个函数的返回类型，上面的意思是：如果 T 可以分配给 (…args: any[]) =&gt; infer R 这种类型的函数的话，那么返回类型 R，否则返回 any。在这里返回用了infer R 代表需要推断类型 R。</p>
+<p>同样，也能“无限 extends”，比如：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Unpacked&lt;T&gt; = T <span class="keyword">extends</span> (infer U)[]</span><br><span class="line">  ? U</span><br><span class="line">  : T <span class="keyword">extends</span> (...args: <span class="built_in">any</span>[]) =&gt; infer U</span><br><span class="line">  ? U</span><br><span class="line">  : T <span class="keyword">extends</span> <span class="built_in">Promise</span>&lt;infer U&gt;</span><br><span class="line">  ? U</span><br><span class="line">  : T;</span><br></pre></td></tr></table></figure>
+<p><strong>本文高潮</strong> 要来了，大家别叫啊！</p>
+<h3 id="协变位置推导"><a href="#协变位置推导" class="headerlink" title="协变位置推导"></a>协变位置推导</h3><p>下面的例子阐释了：在<strong>协变位置</strong>对于<strong>同一个类型变量</strong>的<strong>多个候选类型</strong>如何推导出一个<strong>联合类型</strong>。（你丑，这里这么多个 bold 文字，是不是很重要？）看不懂？没关系，后面要说。</p>
+<p>还是官方的例子：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Foo&lt;T&gt; = T <span class="keyword">extends</span> &#123; a: infer U; b: infer U &#125; ? U : never;</span><br><span class="line"><span class="keyword">type</span> T10 = Foo&lt;&#123; a: <span class="built_in">string</span>; b: <span class="built_in">string</span> &#125;&gt;; <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T11 = Foo&lt;&#123; a: <span class="built_in">string</span>; b: <span class="built_in">number</span> &#125;&gt;; <span class="comment">// string | number</span></span><br></pre></td></tr></table></figure>
+<p>看这里，Foo 判断 T是否可婚配给 { a: infer U; b: infer U }，这里 U 是 key a 和 b的推导类型。</p>
+<p>T10 中的 a 和 b 都是 string，哦耶，Foo 就直接是 string，no problem！</p>
+<p>T11 中的 a 是string 和 b 是 number，哦耶，Foo 就直接是 string 和 number 的联合类型（也就是string | number）！为啥？因为就是ts2.8中的 infer 就这么设计的！！！</p>
+<p>这里需要先说明一下：<strong>对象型类型都可当做是协变类型</strong>。（具体原因看一下参考文章，有兴趣的看下就 O98K）</p>
+<h3 id="抗变位置推导"><a href="#抗变位置推导" class="headerlink" title="抗变位置推导"></a>抗变位置推导</h3><p>在<strong>抗变位置</strong>对于<strong>同一个类型变量</strong>的<strong>多个候选类型</strong>如何推导出一个<strong>交集类型</strong>。（注意区别于协变位置的联合类型）</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Bar&lt;T&gt; = T <span class="keyword">extends</span> &#123; a: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span> &#125;</span><br><span class="line">  ? U</span><br><span class="line">  : never;</span><br><span class="line"><span class="keyword">type</span> T20 = Bar&lt;&#123; a: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;; <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T21 = Bar&lt;&#123; a: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: <span class="built_in">number</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;; <span class="comment">// string &amp; number</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>T20 中的 a、b的类型都是(x: string) =&gt; void ，所以 Bar 推导 x 的类型时（不是非要与原函数的参数名一致哈，不要误解），U 都是 string，no doubt！</li>
+<li>T21 中 a 中 x类型是 string，b 的是 number，但是 infer 的参数类型 U都是同一个，那么最终该是啥类型？哦不对，不该问，上面都写了。。。不过为啥是 string &amp; number （其实就等于 never）呢？为啥？因为就是ts2.8中的 infer 就这么设计的！！！</li>
+</ul>
+<p>这里需要先说明一下：函数型类型都可当做是抗变类型。</p>
+<p>关于函数的抗变类型，这里有个相关的说明：</p>
+<p>–strictFunctionTypes 标志位。这个 flag 是 <a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types" target="_blank" rel="noopener">ts2.6</a> 引入的，通过设置该严格位，将默认的双向协变改为抗协变。即，针对函数类型，不再使用默认的双向协变。但是这里不是说，关了这个标志位，会对上面的结论产生影响，并不会，因为函数默认是双向协变的，因此本身也是抗变的。</p>
+<p>关于双向协变，也可以通过下面的参考来了解。</p>
+<p>有了上面协变和抗变的基础理解，UnionToIntersection 介玩意儿就好理解了！</p>
+<hr>
+<h2 id="UnionToIntersection（墙裂建议瞅一哈）"><a href="#UnionToIntersection（墙裂建议瞅一哈）" class="headerlink" title="UnionToIntersection（墙裂建议瞅一哈）"></a>UnionToIntersection（墙裂建议瞅一哈）</h2><p>有点远，抄一遍代码：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 联合类型改为交叉类型</span></span><br><span class="line"><span class="keyword">type</span> UnionToIntersection&lt;U&gt; = (U <span class="keyword">extends</span> <span class="built_in">any</span></span><br><span class="line">  ? <span class="function">(<span class="params">k: U</span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">  : never) <span class="keyword">extends</span> (<span class="function">(<span class="params">k: infer I</span>) =&gt;</span> <span class="built_in">void</span>)</span><br><span class="line">  ? I</span><br><span class="line">  : never</span><br><span class="line"><span class="comment">// &#123; a: string &#125; | &#123; b: number &#125; =&gt; &#123; a: string &#125; &amp; &#123; b: number &#125;</span></span><br><span class="line"><span class="keyword">type</span> Test = UnionToIntersection&lt;&#123; a: <span class="built_in">string</span> &#125; | &#123; b: <span class="built_in">number</span> &#125;&gt;</span><br></pre></td></tr></table></figure>
+<p>如果是直接跳到这的，而且不知道<strong>分布式条件状态、 infer、协变位置、抗变位置</strong>这几个词，那么请点击目录稍微学习下~</p>
+<p>// 等待10分钟后……</p>
+<p>Then，我们都知道了上面几个词的意思，可以来剖析这个工具类了：</p>
+<ol>
+<li>U extends any ? 那必须滴啊！TS 中啥都可以婚配给 any！所以，现在变成了：(k: U) =&gt; void extends ((k: infer I) =&gt; void) ? I : never</li>
+<li>返回类型 = I’ =&gt; {a: string} | I’’ =&gt; {b: number} （注意，这里不是分布式条件类型，分布式条件类型需要的是裸类型）</li>
+<li>此时 I被推导出两个类型！怎么处理？第1步中，我们发现，它把本身是对象类型的类型{ a: string } | { b: number } 转为了一个函数的参数类型，没毛病吧？从一个函数推导类型，是满足抗变位置推导的，对吧？抗变位置推导，最终类型是：没错，你答对了，是交集！所以最终返回类型 = I’ =&gt; {a: string} &amp; I’’ =&gt; {b: number} = {a: string} &amp; {b: number} = {a: string; b: number}</li>
+</ol>
+<p>上面的分析可以搭配：<a href="https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type/50375286#50375286" target="_blank" rel="noopener">https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type/50375286#50375286</a> 一起看看。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>神马是协变与抗协变：what-are-covariance-and-contravariance</p>
+<p>ts 中的协变、抗变、双变，不变是神马：<a href="https://zhuanlan.zhihu.com/p/143054881" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/143054881</a></p>
+<p>ts 疑难杂症：<a href="https://zhuanlan.zhihu.com/p/82459341" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/82459341</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/typescript/" rel="tag"># typescript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/23/安卓项目中相关基础依赖/" rel="next" title="安卓项目中相关基础依赖">
+                <i class="fa fa-chevron-left"></i> 安卓项目中相关基础依赖
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一来就-show-you-code"><span class="nav-number">1.</span> <span class="nav-text">一来就 show you code~</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keyof、typeof"><span class="nav-number">2.</span> <span class="nav-text">keyof、typeof</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#keyof"><span class="nav-number">2.1.</span> <span class="nav-text">keyof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof"><span class="nav-number">2.2.</span> <span class="nav-text">typeof</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extends"><span class="nav-number">3.</span> <span class="nav-text">extends</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Distributive-conditional-types"><span class="nav-number">3.1.</span> <span class="nav-text">Distributive conditional types</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infer"><span class="nav-number">4.</span> <span class="nav-text">infer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协变位置推导"><span class="nav-number">4.1.</span> <span class="nav-text">协变位置推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抗变位置推导"><span class="nav-number">4.2.</span> <span class="nav-text">抗变位置推导</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnionToIntersection（墙裂建议瞅一哈）"><span class="nav-number">5.</span> <span class="nav-text">UnionToIntersection（墙裂建议瞅一哈）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

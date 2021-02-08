@@ -1,1 +1,841 @@
-<!doctype html><html class="theme-next gemini" lang="zh-Hans"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet"><link href="/css/main.css?v=5.1.4" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="Hexo, NexT"><meta name="description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW"><meta property="og:type" content="article"><meta property="og:title" content="v11-10-nodejs学习-三"><meta property="og:url" content="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW"><meta property="og:locale" content="zh-Hans"><meta property="og:updated_time" content="2020-08-06T13:12:42.008Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="v11-10-nodejs学习-三"><meta name="twitter:description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"undefined",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/"><title>v11-10-nodejs学习-三 | CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">v11-10-nodejs学习-三</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T22:50:13+08:00">2019-03-14</time></span></div></header><div class="post-body" itemprop="articleBody"><a id="more"></a><h1 id="Globals"><a href="#Globals" class="headerlink" title="Globals"></a>Globals</h1><h3 id="queueMicrotask-callback"><a href="#queueMicrotask-callback" class="headerlink" title="queueMicrotask(callback)"></a>queueMicrotask(callback)</h3><p>v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：<strong>process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行</strong><h3 id="TextDecoder-TextEncoder"><a href="#TextDecoder-TextEncoder" class="headerlink" title="TextDecoder/TextEncoder"></a>TextDecoder/TextEncoder</h3><p>文本的编码、解码<h3 id="URL-URLSearchParams"><a href="#URL-URLSearchParams" class="headerlink" title="URL/URLSearchParams"></a>URL/URLSearchParams</h3><p>WHATWG制定。下文应该会有相关介绍。<hr><h2 id="Inspector"><a href="#Inspector" class="headerlink" title="Inspector"></a>Inspector</h2><p>可通过Inspector与v8的Inspector交互<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inspector = <span class="built_in">require</span>(<span class="string">'inspector'</span>);</span><br></pre></table></figure><p><hr><h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>默认下nodejs会对加载过的module进行缓存。但是，当操作系统为大小写不敏感（比如MacOS）时，require(‘A.js’);require(‘a.js’); 会导致缓存两次。同时，不同代码处的requre(‘a’)可能返回不一样的模块，具体参考nodejs的模块加载机制。<h3 id="require-main-module"><a href="#require-main-module" class="headerlink" title="require.main === module"></a>require.main === module</h3><p>可以用这个来判断当前文件是否是nodejs直接调用的文件。<h3 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h3><p>实际开发中很可能产生循环引用：a.js引用了b.js，b.js也引用了a.js。Nodejs的处理方式是产生循环引用时，先返回一个<strong>未完成的copy</strong>(这里是a.js)给调用者(这里是b.js)，等待调用者加载完毕，再回过来加载调用者。<h3 id="dirname-filename"><a href="#dirname-filename" class="headerlink" title="dirname, filename"></a><strong>dirname, </strong>filename</h3><p>分别表示当前文件的目录和当前文件绝对路径<h3 id="exports-和-module-exports"><a href="#exports-和-module-exports" class="headerlink" title="exports 和 module.exports"></a>exports 和 module.exports</h3><p>exports就是module.exports对象的引用。导出时具体有什么区别就跟js中一样了。可以把exports理解成函数的参数。它能保持对原对象的引用。<h3 id="require-cache"><a href="#require-cache" class="headerlink" title="require.cache"></a>require.cache</h3><p>返回一个对象，键值对是文件模块引用的其他模块。可以删除某个键值对a，在下次require(‘a’)时会重新加载。<h3 id="require-resolve-request-options"><a href="#require-resolve-request-options" class="headerlink" title="require.resolve(request[, options])"></a>require.resolve(request[, options])</h3><p>返回找到的文件模块的path<h3 id="require-resolve-paths-request"><a href="#require-resolve-paths-request" class="headerlink" title="require.resolve.paths(request)"></a>require.resolve.paths(request)</h3><p>返回找到的所有文件模块的path<hr><h2 id="Net"><a href="#Net" class="headerlink" title="Net"></a>Net</h2><hr><h2 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h2><h3 id="Path-resolve"><a href="#Path-resolve" class="headerlink" title="Path.resolve"></a>Path.resolve</h3><p>如果首个参数不是绝对路径，那么会使用process.cwd() （当前工作目录，就是启动node的目录）作为根路径。<h3 id="Path-posix"><a href="#Path-posix" class="headerlink" title="Path.posix"></a>Path.posix</h3><p>返回一个包含平台相关的path对象。比如想在Linux上拼凑windows平台的路径。<hr><h2 id="perf-hooks"><a href="#perf-hooks" class="headerlink" title="perf_hooks"></a>perf_hooks</h2><hr><h2 id="Process"><a href="#Process" class="headerlink" title="Process"></a>Process</h2><p>process 对象，能提供当前Nodejs进程信息以及控制当前进程。<h3 id="Process-Events"><a href="#Process-Events" class="headerlink" title="Process Events"></a>Process Events</h3><p>process 对象也是EventEmitter的对象。有：<ul><li>beforeExit<li>disconnect<li>exit<li>message<li>multipleResolves <strong>V10.12新增</strong> 当一个Promise被多次resolve或者reject或者在resolve后reject或者反过来。该回调为错误捕获。<li>rejectionHandled<li>uncaughtException<li>unhandledRejection<li>warning<li>Signal Events<h4 id="正确使用uncaughtException事件"><a href="#正确使用uncaughtException事件" class="headerlink" title="正确使用uncaughtException事件"></a>正确使用uncaughtException事件</h4>该事件在触发后，进程会退出。应该在该回调中执行一些资源的清理（比如打开的文件）以及记录相关崩溃信息，而不要妄图去修复进城，期待它会再次好起来。详见<a href="https://nodejs.org/api/process.html" target="_blank" rel="noopener">官网</a>关于<strong>Warning: Using <code>&#39;uncaughtException&#39;</code> correctly</strong>一节。<h3 id="process-exit"><a href="#process-exit" class="headerlink" title="process.exit()"></a>process.exit()</h3>会尽快退出进程，而不管是否还有其他异步回调等待完成。优雅的方式是使用process.exitCode。<h3 id="process-abort"><a href="#process-abort" class="headerlink" title="process.abort()"></a>process.abort()</h3>立即结束Node.js进程，生成一个核心文件。不能在Worker threads中调用。<h3 id="process-allowedNodeEnvironmentFlags"><a href="#process-allowedNodeEnvironmentFlags" class="headerlink" title="process.allowedNodeEnvironmentFlags"></a>process.allowedNodeEnvironmentFlags</h3><strong>V10.10新增</strong>返回一个只读Set，包含允许的NODE_OPTIONS环境变量。<h3 id="process-chdir-directory"><a href="#process-chdir-directory" class="headerlink" title="process.chdir(directory)"></a>process.chdir(directory)</h3>更换当前目录<h3 id="process-stderr"><a href="#process-stderr" class="headerlink" title="process.stderr"></a>process.stderr</h3>返回一个链接到stderr（及fd为2）的流。除非fd 2指向一个文件（这时是可写流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdin"><a href="#process-stdin" class="headerlink" title="process.stdin"></a>process.stdin</h3>返回一个链接到stdin（及fd为0）的流。除非fd 0指向一个文件（这时是可读流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdout"><a href="#process-stdout" class="headerlink" title="process.stdout"></a>process.stdout</h3>返回一个链接到stdin（及fd为1）的流。除非fd 1指向一个文件（这时是可写流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdout-and-process-stderr注意点"><a href="#process-stdout-and-process-stderr注意点" class="headerlink" title="process.stdout and process.stderr注意点"></a>process.stdout and process.stderr注意点</h3></ul><ol><li>它们各自被console.log和console.error内部使用；<li>写操作可能是同步的，取决于流链接到的是什么，以及系统是windows还是POSIX<ul><li>文件：在windows和POSIX上都是同步的<li>TTYs：windows上异步，POSIX上同步<li>管道（以及socket）：windwos上同步，POSIX上异步</ul></ol><hr><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><hr><h2 id="Trace-Events"><a href="#Trace-Events" class="headerlink" title="Trace Events"></a>Trace Events</h2><hr><h2 id="TTY"><a href="#TTY" class="headerlink" title="TTY"></a>TTY</h2><p>主要跟终端相关的操作。<hr><h2 id="V8"><a href="#V8" class="headerlink" title="V8"></a>V8</h2><p>V8模块包含内嵌在NodejsV8版本的二进制文件中的API。由引用：<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> v8 = <span class="built_in">require</span>(<span class="string">'v8'</span>);</span><br></pre></table></figure><p><h3 id="v8-cachedDataVersionTag"><a href="#v8-cachedDataVersionTag" class="headerlink" title="v8.cachedDataVersionTag()"></a>v8.cachedDataVersionTag()</h3><p>返回一个由v8版本、命令行标志和CPU特性决定的衍生值，为一个整数。主要用于判断 <strong>vm.Script cachedData buffer</strong> 是否与当前nodejs实例兼容。<h3 id="v8-getHeapSpaceStatistics"><a href="#v8-getHeapSpaceStatistics" class="headerlink" title="v8.getHeapSpaceStatistics()"></a>v8.getHeapSpaceStatistics()</h3><p>返回一个对象数组。代表了V8的堆空间的统计情况。<h3 id="v8-getHeapStatistics"><a href="#v8-getHeapStatistics" class="headerlink" title="v8.getHeapStatistics()"></a>v8.getHeapStatistics()</h3><p>返回堆统计。<h3 id="v8-setFlagsFromString-flags"><a href="#v8-setFlagsFromString-flags" class="headerlink" title="v8.setFlagsFromString(flags)"></a>v8.setFlagsFromString(flags)</h3><p>编程设置v8的命令行flag。使用起来得当心，VM已经启动后再去修改设置，可能引起不可预估的行为，比如崩溃或者数据丢失，或者该设置无效。<h3 id="Serialization-API"><a href="#Serialization-API" class="headerlink" title="Serialization API"></a>Serialization API</h3><p>处于实验阶段。<h4 id="v8-serialize-value"><a href="#v8-serialize-value" class="headerlink" title="v8.serialize(value)"></a>v8.serialize(value)</h4><p>value可为任意值。将value序列化为一个buffer对象。<h4 id="v8-deserialize-buffer"><a href="#v8-deserialize-buffer" class="headerlink" title="v8.deserialize(buffer)"></a>v8.deserialize(buffer)</h4><p>将buffer反序列化。buffer可为Buffer/TypedArray/DataView。<h3 id="v8-Serializer"><a href="#v8-Serializer" class="headerlink" title="v8.Serializer"></a>v8.Serializer</h3><h4 id="new-Serializer"><a href="#new-Serializer" class="headerlink" title="new Serializer()"></a>new Serializer()</h4><p>实例序列。<h4 id="serializer-writeHeader"><a href="#serializer-writeHeader" class="headerlink" title="serializer.writeHeader()"></a>serializer.writeHeader()</h4><p>写入头信息，包含格式版本等。<h4 id="serializer-writeValue-value"><a href="#serializer-writeValue-value" class="headerlink" title="serializer.writeValue(value)"></a>serializer.writeValue(value)</h4><p>写入值。<h4 id="serializer-releaseBuffer"><a href="#serializer-releaseBuffer" class="headerlink" title="serializer.releaseBuffer()"></a>serializer.releaseBuffer()</h4><p>返回Buffer。返回内部存储的buffer。当buffer被释放时，serializer就不能再使用了。如果先前写入失败，调用该方法结果不可知。<h4 id="serializer-transferArrayBuffer-id-arrayBuffer"><a href="#serializer-transferArrayBuffer-id-arrayBuffer" class="headerlink" title="serializer.transferArrayBuffer(id, arrayBuffer)"></a>serializer.transferArrayBuffer(id, arrayBuffer)</h4><h4 id="serializer-writeUint32-等"><a href="#serializer-writeUint32-等" class="headerlink" title="serializer.writeUint32 等"></a>serializer.writeUint32 等</h4><h3 id="v8-Deserializer-略"><a href="#v8-Deserializer-略" class="headerlink" title="v8.Deserializer 略"></a>v8.Deserializer 略</h3><hr><h2 id="VM"><a href="#VM" class="headerlink" title="VM"></a>VM</h2><p>vm模块提供API来编译(javascript本身是解释型语言，不需要传统意义的编译，此处的编译应该是转为可执行代码，理论上任何代码都需这一步)代码及运行在V8虚拟机环境中。vm不提供任何安全机制，不要使用它运行不可信的代码。<br>vm提供了一个类似沙盒的容器，内部的环境与主程序环境隔离。可以传递给vm一个环境对象，这个对象的键值将作为sandbox的global。<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>);</span><br><span class="line"><span class="keyword">const</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> sandbox = &#123; <span class="attr">x</span>: <span class="number">2</span> &#125;;</span><br><span class="line">vm.createContext(sandbox); <span class="comment">// Contextify the sandbox.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> code = <span class="string">'x += 40; var y = 17;'</span>;</span><br><span class="line"><span class="comment">// `x` and `y` are global variables in the sandboxed environment.</span></span><br><span class="line"><span class="comment">// Initially, x has the value 2 because that is the value of sandbox.x.</span></span><br><span class="line">vm.runInContext(code, sandbox);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sandbox.x); <span class="comment">// 42</span></span><br><span class="line"><span class="built_in">console</span>.log(sandbox.y); <span class="comment">// 17</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x); <span class="comment">// 1; y is not defined.</span></span><br></pre></table></figure><p><h3 id="Class-vm-Script"><a href="#Class-vm-Script" class="headerlink" title="Class: vm.Script"></a>Class: vm.Script</h3><p>vm.Script的实例包含了能直接在特定沙盒中运行的预编译代码。<h4 id="Constructor-new-vm-Script-code-options"><a href="#Constructor-new-vm-Script-code-options" class="headerlink" title="Constructor: new vm.Script(code[, options])"></a>Constructor: new vm.Script(code[, options])</h4><ul><li>code: 要预编译的代码<li>options: 对象或者字符串<ul><li>filename: 用于stack追踪。默认’evalmachine.<anonymous>‘</anonymous><li>lineOffset: 指定行数的偏移。默认0<li>columnOffset<li>cachedData:<buffer>|<typedarray>|<dataview></dataview></typedarray></buffer><li>importModuleDynamically: 当import()被调用时回调。<h4 id="script-createCachedData"><a href="#script-createCachedData" class="headerlink" title="script.createCachedData()"></a>script.createCachedData()</h4>v10.6.0增加<br>创建代码的缓存，可用于Script的构造器中cachedData选项。</ul></ul><h4 id="script-runInContext-contextifiedSandbox-options"><a href="#script-runInContext-contextifiedSandbox-options" class="headerlink" title="script.runInContext(contextifiedSandbox[, options])"></a>script.runInContext(contextifiedSandbox[, options])</h4><ul><li>contextifiedSandbox: 一个通过vm.createContext(context)修改过的context对象<li>options:<ul><li>displayErrors:<boolean></boolean><li>timeout: 超时时间。严格大于0的整数<li>breakOnSigint</ul><li>Returns: 返回最后一条语句的结果</ul><h4 id="script-runInNewContext-sandbox-options"><a href="#script-runInNewContext-sandbox-options" class="headerlink" title="script.runInNewContext([sandbox[, options]])"></a>script.runInNewContext([sandbox[, options]])</h4><ul><li>sandbox: 将被contextified的对象。<h4 id="script-runInThisContext-options"><a href="#script-runInThisContext-options" class="headerlink" title="script.runInThisContext([options])"></a>script.runInThisContext([options])</h4>运行在当前环境（主程序中）<h4 id="Timer等相关"><a href="#Timer等相关" class="headerlink" title="Timer等相关"></a>Timer等相关</h4>由于内部机制，process.nextTick、microtask、Promise等异步实现在v8和nodejs内，可能导致在某个环境中的代码逃离timeout。如下：<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loop</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) <span class="built_in">console</span>.log(<span class="built_in">Date</span>.now());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vm.runInNewContext(</span><br><span class="line">  <span class="string">'Promise.resolve().then(loop);'</span>,</span><br><span class="line">  &#123; loop, <span class="built_in">console</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">timeout</span>: <span class="number">5</span> &#125;</span><br><span class="line">);</span><br></pre></table></figure></ul><p>即使设置了timeout，程序也会被无限死循环打印console.log，而不退出。（不存在是否有vm的参与，受timer的具体实现）。<hr><h2 id="Zlib"><a href="#Zlib" class="headerlink" title="Zlib"></a>Zlib</h2><hr><h2 id="Worker-Threads"><a href="#Worker-Threads" class="headerlink" title="Worker Threads"></a>Worker Threads</h2><p>当前为试验阶段。工作线程为Nodejs添加了线程级的API。V10.5以后版本，开启需要加–experimental-worker选项。线程间通过channel通信。<br>Worker线程类似于HTML规范中的Worker，主要用于处理CPU密集型计算。不适合用作IO工作。<br>比起子进程、集群，worker线程能共享内存。能通过传递ArrayBuffer实例或者SharedArrayBuffer实例来共享数据。<h3 id="Worker-isMainThread"><a href="#Worker-isMainThread" class="headerlink" title="Worker.isMainThread"></a>Worker.isMainThread</h3><p><strong>v10.5.0新增</strong>，表示当前代码是否运行在Worker线程里。<h3 id="Worker-parentPort"><a href="#Worker-parentPort" class="headerlink" title="Worker.parentPort"></a>Worker.parentPort</h3><p><strong>v10.5.0新增</strong>，如果当前线程是worker线程，它指向父线程。<h3 id="Worker-threadId"><a href="#Worker-threadId" class="headerlink" title="Worker.threadId"></a>Worker.threadId</h3><p>当前线程ID。<h3 id="省略"><a href="#省略" class="headerlink" title="省略"></a>省略</h3><p>其它操作类似浏览器的worker。比如发送数据、监听事件等。</div><footer class="post-footer"><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2019/03/07/service-worker/" rel="next" title="service worker"><i class="fa fa-chevron-left"></i> service worker</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/2019/03/27/GraphQL入门-二/" rel="prev" title="GraphQL入门(1)">GraphQL入门(1) <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">文章目录<li class="sidebar-nav-overview" data-target="site-overview-wrap">站点概览</ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">96</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">23</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">46</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/tzxhy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金"><i class="fa fa-fw fa-globe"></i>掘金</a> </span><span class="links-of-author-item"><a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀"><i class="fa fa-fw fa-globe"></i>语雀</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Globals"><span class="nav-number">1.</span> <span class="nav-text">Globals</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#queueMicrotask-callback"><span class="nav-number">1.0.1.</span> <span class="nav-text">queueMicrotask(callback)</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#TextDecoder-TextEncoder"><span class="nav-number">1.0.2.</span> <span class="nav-text">TextDecoder/TextEncoder</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-URLSearchParams"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL/URLSearchParams</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Inspector"><span class="nav-number">1.1.</span> <span class="nav-text">Inspector</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#Modules"><span class="nav-number">1.2.</span> <span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.2.1.</span> <span class="nav-text">缓存</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#require-main-module"><span class="nav-number">1.2.2.</span> <span class="nav-text">require.main === module</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#循环引用"><span class="nav-number">1.2.3.</span> <span class="nav-text">循环引用</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#dirname-filename"><span class="nav-number">1.2.4.</span> <span class="nav-text">dirname, filename</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#exports-和-module-exports"><span class="nav-number">1.2.5.</span> <span class="nav-text">exports 和 module.exports</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#require-cache"><span class="nav-number">1.2.6.</span> <span class="nav-text">require.cache</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#require-resolve-request-options"><span class="nav-number">1.2.7.</span> <span class="nav-text">require.resolve(request[, options])</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#require-resolve-paths-request"><span class="nav-number">1.2.8.</span> <span class="nav-text">require.resolve.paths(request)</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Net"><span class="nav-number">1.3.</span> <span class="nav-text">Net</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#Path"><span class="nav-number">1.4.</span> <span class="nav-text">Path</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Path-resolve"><span class="nav-number">1.4.1.</span> <span class="nav-text">Path.resolve</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#Path-posix"><span class="nav-number">1.4.2.</span> <span class="nav-text">Path.posix</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#perf-hooks"><span class="nav-number">1.5.</span> <span class="nav-text">perf_hooks</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#Process"><span class="nav-number">1.6.</span> <span class="nav-text">Process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-Events"><span class="nav-number">1.6.1.</span> <span class="nav-text">Process Events</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正确使用uncaughtException事件"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">正确使用uncaughtException事件</span></a></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#process-exit"><span class="nav-number">1.6.2.</span> <span class="nav-text">process.exit()</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-abort"><span class="nav-number">1.6.3.</span> <span class="nav-text">process.abort()</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-allowedNodeEnvironmentFlags"><span class="nav-number">1.6.4.</span> <span class="nav-text">process.allowedNodeEnvironmentFlags</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-chdir-directory"><span class="nav-number">1.6.5.</span> <span class="nav-text">process.chdir(directory)</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stderr"><span class="nav-number">1.6.6.</span> <span class="nav-text">process.stderr</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdin"><span class="nav-number">1.6.7.</span> <span class="nav-text">process.stdin</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdout"><span class="nav-number">1.6.8.</span> <span class="nav-text">process.stdout</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdout-and-process-stderr注意点"><span class="nav-number">1.6.9.</span> <span class="nav-text">process.stdout and process.stderr注意点</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">1.7.</span> <span class="nav-text">Stream</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#Trace-Events"><span class="nav-number">1.8.</span> <span class="nav-text">Trace Events</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#TTY"><span class="nav-number">1.9.</span> <span class="nav-text">TTY</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#V8"><span class="nav-number">1.10.</span> <span class="nav-text">V8</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-cachedDataVersionTag"><span class="nav-number">1.10.1.</span> <span class="nav-text">v8.cachedDataVersionTag()</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-getHeapSpaceStatistics"><span class="nav-number">1.10.2.</span> <span class="nav-text">v8.getHeapSpaceStatistics()</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-getHeapStatistics"><span class="nav-number">1.10.3.</span> <span class="nav-text">v8.getHeapStatistics()</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-setFlagsFromString-flags"><span class="nav-number">1.10.4.</span> <span class="nav-text">v8.setFlagsFromString(flags)</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#Serialization-API"><span class="nav-number">1.10.5.</span> <span class="nav-text">Serialization API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v8-serialize-value"><span class="nav-number">1.10.5.1.</span> <span class="nav-text">v8.serialize(value)</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#v8-deserialize-buffer"><span class="nav-number">1.10.5.2.</span> <span class="nav-text">v8.deserialize(buffer)</span></a></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-Serializer"><span class="nav-number">1.10.6.</span> <span class="nav-text">v8.Serializer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#new-Serializer"><span class="nav-number">1.10.6.1.</span> <span class="nav-text">new Serializer()</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeHeader"><span class="nav-number">1.10.6.2.</span> <span class="nav-text">serializer.writeHeader()</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeValue-value"><span class="nav-number">1.10.6.3.</span> <span class="nav-text">serializer.writeValue(value)</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-releaseBuffer"><span class="nav-number">1.10.6.4.</span> <span class="nav-text">serializer.releaseBuffer()</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-transferArrayBuffer-id-arrayBuffer"><span class="nav-number">1.10.6.5.</span> <span class="nav-text">serializer.transferArrayBuffer(id, arrayBuffer)</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeUint32-等"><span class="nav-number">1.10.6.6.</span> <span class="nav-text">serializer.writeUint32 等</span></a></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-Deserializer-略"><span class="nav-number">1.10.7.</span> <span class="nav-text">v8.Deserializer 略</span></a></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#VM"><span class="nav-number">1.11.</span> <span class="nav-text">VM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-vm-Script"><span class="nav-number">1.11.1.</span> <span class="nav-text">Class: vm.Script</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Constructor-new-vm-Script-code-options"><span class="nav-number">1.11.1.1.</span> <span class="nav-text">Constructor: new vm.Script(code[, options])</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#script-createCachedData"><span class="nav-number">1.11.1.2.</span> <span class="nav-text">script.createCachedData()</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInContext-contextifiedSandbox-options"><span class="nav-number">1.11.1.3.</span> <span class="nav-text">script.runInContext(contextifiedSandbox[, options])</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInNewContext-sandbox-options"><span class="nav-number">1.11.1.4.</span> <span class="nav-text">script.runInNewContext([sandbox[, options]])</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInThisContext-options"><span class="nav-number">1.11.1.5.</span> <span class="nav-text">script.runInThisContext([options])</span></a><li class="nav-item nav-level-4"><a class="nav-link" href="#Timer等相关"><span class="nav-number">1.11.1.6.</span> <span class="nav-text">Timer等相关</span></a></ol></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Zlib"><span class="nav-number">1.12.</span> <span class="nav-text">Zlib</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker-Threads"><span class="nav-number">1.13.</span> <span class="nav-text">Worker Threads</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-isMainThread"><span class="nav-number">1.13.1.</span> <span class="nav-text">Worker.isMainThread</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-parentPort"><span class="nav-number">1.13.2.</span> <span class="nav-text">Worker.parentPort</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-threadId"><span class="nav-number">1.13.3.</span> <span class="nav-text">Worker.threadId</span></a><li class="nav-item nav-level-3"><a class="nav-link" href="#省略"><span class="nav-number">1.13.4.</span> <span class="nav-text">省略</span></a></ol></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/js/src/utils.js?v=5.1.4"></script><script src="/js/src/motion.js?v=5.1.4"></script><script src="/js/src/affix.js?v=5.1.4"></script><script src="/js/src/schemes/pisces.js?v=5.1.4"></script><script src="/js/src/scrollspy.js?v=5.1.4"></script><script src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/bootstrap.js?v=5.1.4"></script><script>!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="v11-10-nodejs学习-三">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-06T13:12:42.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="v11-10-nodejs学习-三">
+<meta name="twitter:description" content="GlobalsqueueMicrotask(callback)v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行 TextDecoder/TextEncoder文本的编码、解码 URL/URLSearchParamsWHATW">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/">
+
+
+
+
+
+  <title>v11-10-nodejs学习-三 | CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/14/v11-10-nodejs学习-三/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">v11-10-nodejs学习-三</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T22:50:13+08:00">
+                2019-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h1 id="Globals"><a href="#Globals" class="headerlink" title="Globals"></a>Globals</h1><h3 id="queueMicrotask-callback"><a href="#queueMicrotask-callback" class="headerlink" title="queueMicrotask(callback)"></a>queueMicrotask(callback)</h3><p>v11新增的API。用于将callback加入到当前phase的microtask队列里。需要注意的是：<strong>process.nextTick在Nodejs的每次循环每个phase中总是会比microtask queue优先执行</strong></p>
+<h3 id="TextDecoder-TextEncoder"><a href="#TextDecoder-TextEncoder" class="headerlink" title="TextDecoder/TextEncoder"></a>TextDecoder/TextEncoder</h3><p>文本的编码、解码</p>
+<h3 id="URL-URLSearchParams"><a href="#URL-URLSearchParams" class="headerlink" title="URL/URLSearchParams"></a>URL/URLSearchParams</h3><p>WHATWG制定。下文应该会有相关介绍。</p>
+<hr>
+<h2 id="Inspector"><a href="#Inspector" class="headerlink" title="Inspector"></a>Inspector</h2><p>可通过Inspector与v8的Inspector交互<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inspector = <span class="built_in">require</span>(<span class="string">'inspector'</span>);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>默认下nodejs会对加载过的module进行缓存。但是，当操作系统为大小写不敏感（比如MacOS）时，require(‘A.js’);require(‘a.js’); 会导致缓存两次。同时，不同代码处的requre(‘a’)可能返回不一样的模块，具体参考nodejs的模块加载机制。</p>
+<h3 id="require-main-module"><a href="#require-main-module" class="headerlink" title="require.main === module"></a>require.main === module</h3><p>可以用这个来判断当前文件是否是nodejs直接调用的文件。</p>
+<h3 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h3><p>实际开发中很可能产生循环引用：a.js引用了b.js，b.js也引用了a.js。Nodejs的处理方式是产生循环引用时，先返回一个<strong>未完成的copy</strong>(这里是a.js)给调用者(这里是b.js)，等待调用者加载完毕，再回过来加载调用者。</p>
+<h3 id="dirname-filename"><a href="#dirname-filename" class="headerlink" title="dirname, filename"></a><strong>dirname, </strong>filename</h3><p>分别表示当前文件的目录和当前文件绝对路径</p>
+<h3 id="exports-和-module-exports"><a href="#exports-和-module-exports" class="headerlink" title="exports 和 module.exports"></a>exports 和 module.exports</h3><p>exports就是module.exports对象的引用。导出时具体有什么区别就跟js中一样了。可以把exports理解成函数的参数。它能保持对原对象的引用。</p>
+<h3 id="require-cache"><a href="#require-cache" class="headerlink" title="require.cache"></a>require.cache</h3><p>返回一个对象，键值对是文件模块引用的其他模块。可以删除某个键值对a，在下次require(‘a’)时会重新加载。</p>
+<h3 id="require-resolve-request-options"><a href="#require-resolve-request-options" class="headerlink" title="require.resolve(request[, options])"></a>require.resolve(request[, options])</h3><p>返回找到的文件模块的path</p>
+<h3 id="require-resolve-paths-request"><a href="#require-resolve-paths-request" class="headerlink" title="require.resolve.paths(request)"></a>require.resolve.paths(request)</h3><p>返回找到的所有文件模块的path</p>
+<hr>
+<h2 id="Net"><a href="#Net" class="headerlink" title="Net"></a>Net</h2><hr>
+<h2 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h2><h3 id="Path-resolve"><a href="#Path-resolve" class="headerlink" title="Path.resolve"></a>Path.resolve</h3><p>如果首个参数不是绝对路径，那么会使用process.cwd()  （当前工作目录，就是启动node的目录）作为根路径。</p>
+<h3 id="Path-posix"><a href="#Path-posix" class="headerlink" title="Path.posix"></a>Path.posix</h3><p>返回一个包含平台相关的path对象。比如想在Linux上拼凑windows平台的路径。</p>
+<hr>
+<h2 id="perf-hooks"><a href="#perf-hooks" class="headerlink" title="perf_hooks"></a>perf_hooks</h2><hr>
+<h2 id="Process"><a href="#Process" class="headerlink" title="Process"></a>Process</h2><p>process 对象，能提供当前Nodejs进程信息以及控制当前进程。</p>
+<h3 id="Process-Events"><a href="#Process-Events" class="headerlink" title="Process Events"></a>Process Events</h3><p>process 对象也是EventEmitter的对象。有：</p>
+<ul>
+<li>beforeExit</li>
+<li>disconnect</li>
+<li>exit</li>
+<li>message</li>
+<li>multipleResolves <strong>V10.12新增</strong> 当一个Promise被多次resolve或者reject或者在resolve后reject或者反过来。该回调为错误捕获。</li>
+<li>rejectionHandled</li>
+<li>uncaughtException</li>
+<li>unhandledRejection</li>
+<li>warning</li>
+<li>Signal Events<h4 id="正确使用uncaughtException事件"><a href="#正确使用uncaughtException事件" class="headerlink" title="正确使用uncaughtException事件"></a>正确使用uncaughtException事件</h4>该事件在触发后，进程会退出。应该在该回调中执行一些资源的清理（比如打开的文件）以及记录相关崩溃信息，而不要妄图去修复进城，期待它会再次好起来。详见<a href="https://nodejs.org/api/process.html" target="_blank" rel="noopener">官网</a>关于<strong>Warning: Using <code>&#39;uncaughtException&#39;</code> correctly</strong>一节。<h3 id="process-exit"><a href="#process-exit" class="headerlink" title="process.exit()"></a>process.exit()</h3>会尽快退出进程，而不管是否还有其他异步回调等待完成。优雅的方式是使用process.exitCode。<h3 id="process-abort"><a href="#process-abort" class="headerlink" title="process.abort()"></a>process.abort()</h3>立即结束Node.js进程，生成一个核心文件。不能在Worker threads中调用。<h3 id="process-allowedNodeEnvironmentFlags"><a href="#process-allowedNodeEnvironmentFlags" class="headerlink" title="process.allowedNodeEnvironmentFlags"></a>process.allowedNodeEnvironmentFlags</h3><strong>V10.10新增</strong>返回一个只读Set，包含允许的NODE_OPTIONS环境变量。<h3 id="process-chdir-directory"><a href="#process-chdir-directory" class="headerlink" title="process.chdir(directory)"></a>process.chdir(directory)</h3>更换当前目录<h3 id="process-stderr"><a href="#process-stderr" class="headerlink" title="process.stderr"></a>process.stderr</h3>返回一个链接到stderr（及fd为2）的流。除非fd 2指向一个文件（这时是可写流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdin"><a href="#process-stdin" class="headerlink" title="process.stdin"></a>process.stdin</h3>返回一个链接到stdin（及fd为0）的流。除非fd 0指向一个文件（这时是可读流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdout"><a href="#process-stdout" class="headerlink" title="process.stdout"></a>process.stdout</h3>返回一个链接到stdin（及fd为1）的流。除非fd 1指向一个文件（这时是可写流），否则它都是一个net.Socket（可读可写流）。<h3 id="process-stdout-and-process-stderr注意点"><a href="#process-stdout-and-process-stderr注意点" class="headerlink" title="process.stdout and process.stderr注意点"></a>process.stdout and process.stderr注意点</h3></li>
+</ul>
+<ol>
+<li>它们各自被console.log和console.error内部使用；</li>
+<li>写操作可能是同步的，取决于流链接到的是什么，以及系统是windows还是POSIX<ul>
+<li>文件：在windows和POSIX上都是同步的</li>
+<li>TTYs：windows上异步，POSIX上同步</li>
+<li>管道（以及socket）：windwos上同步，POSIX上异步</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><hr>
+<h2 id="Trace-Events"><a href="#Trace-Events" class="headerlink" title="Trace Events"></a>Trace Events</h2><hr>
+<h2 id="TTY"><a href="#TTY" class="headerlink" title="TTY"></a>TTY</h2><p>主要跟终端相关的操作。</p>
+<hr>
+<h2 id="V8"><a href="#V8" class="headerlink" title="V8"></a>V8</h2><p>V8模块包含内嵌在NodejsV8版本的二进制文件中的API。由引用：<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> v8 = <span class="built_in">require</span>(<span class="string">'v8'</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="v8-cachedDataVersionTag"><a href="#v8-cachedDataVersionTag" class="headerlink" title="v8.cachedDataVersionTag()"></a>v8.cachedDataVersionTag()</h3><p>返回一个由v8版本、命令行标志和CPU特性决定的衍生值，为一个整数。主要用于判断 <strong>vm.Script cachedData buffer</strong> 是否与当前nodejs实例兼容。</p>
+<h3 id="v8-getHeapSpaceStatistics"><a href="#v8-getHeapSpaceStatistics" class="headerlink" title="v8.getHeapSpaceStatistics()"></a>v8.getHeapSpaceStatistics()</h3><p>返回一个对象数组。代表了V8的堆空间的统计情况。</p>
+<h3 id="v8-getHeapStatistics"><a href="#v8-getHeapStatistics" class="headerlink" title="v8.getHeapStatistics()"></a>v8.getHeapStatistics()</h3><p>返回堆统计。</p>
+<h3 id="v8-setFlagsFromString-flags"><a href="#v8-setFlagsFromString-flags" class="headerlink" title="v8.setFlagsFromString(flags)"></a>v8.setFlagsFromString(flags)</h3><p>编程设置v8的命令行flag。使用起来得当心，VM已经启动后再去修改设置，可能引起不可预估的行为，比如崩溃或者数据丢失，或者该设置无效。</p>
+<h3 id="Serialization-API"><a href="#Serialization-API" class="headerlink" title="Serialization API"></a>Serialization API</h3><p>处于实验阶段。</p>
+<h4 id="v8-serialize-value"><a href="#v8-serialize-value" class="headerlink" title="v8.serialize(value)"></a>v8.serialize(value)</h4><p>value可为任意值。将value序列化为一个buffer对象。</p>
+<h4 id="v8-deserialize-buffer"><a href="#v8-deserialize-buffer" class="headerlink" title="v8.deserialize(buffer)"></a>v8.deserialize(buffer)</h4><p>将buffer反序列化。buffer可为Buffer/TypedArray/DataView。</p>
+<h3 id="v8-Serializer"><a href="#v8-Serializer" class="headerlink" title="v8.Serializer"></a>v8.Serializer</h3><h4 id="new-Serializer"><a href="#new-Serializer" class="headerlink" title="new Serializer()"></a>new Serializer()</h4><p>实例序列。</p>
+<h4 id="serializer-writeHeader"><a href="#serializer-writeHeader" class="headerlink" title="serializer.writeHeader()"></a>serializer.writeHeader()</h4><p>写入头信息，包含格式版本等。</p>
+<h4 id="serializer-writeValue-value"><a href="#serializer-writeValue-value" class="headerlink" title="serializer.writeValue(value)"></a>serializer.writeValue(value)</h4><p>写入值。</p>
+<h4 id="serializer-releaseBuffer"><a href="#serializer-releaseBuffer" class="headerlink" title="serializer.releaseBuffer()"></a>serializer.releaseBuffer()</h4><p>返回Buffer。返回内部存储的buffer。当buffer被释放时，serializer就不能再使用了。如果先前写入失败，调用该方法结果不可知。</p>
+<h4 id="serializer-transferArrayBuffer-id-arrayBuffer"><a href="#serializer-transferArrayBuffer-id-arrayBuffer" class="headerlink" title="serializer.transferArrayBuffer(id, arrayBuffer)"></a>serializer.transferArrayBuffer(id, arrayBuffer)</h4><h4 id="serializer-writeUint32-等"><a href="#serializer-writeUint32-等" class="headerlink" title="serializer.writeUint32 等"></a>serializer.writeUint32 等</h4><h3 id="v8-Deserializer-略"><a href="#v8-Deserializer-略" class="headerlink" title="v8.Deserializer 略"></a>v8.Deserializer 略</h3><hr>
+<h2 id="VM"><a href="#VM" class="headerlink" title="VM"></a>VM</h2><p>vm模块提供API来编译(javascript本身是解释型语言，不需要传统意义的编译，此处的编译应该是转为可执行代码，理论上任何代码都需这一步)代码及运行在V8虚拟机环境中。vm不提供任何安全机制，不要使用它运行不可信的代码。<br>vm提供了一个类似沙盒的容器，内部的环境与主程序环境隔离。可以传递给vm一个环境对象，这个对象的键值将作为sandbox的global。<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>);</span><br><span class="line"><span class="keyword">const</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> sandbox = &#123; <span class="attr">x</span>: <span class="number">2</span> &#125;;</span><br><span class="line">vm.createContext(sandbox); <span class="comment">// Contextify the sandbox.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> code = <span class="string">'x += 40; var y = 17;'</span>;</span><br><span class="line"><span class="comment">// `x` and `y` are global variables in the sandboxed environment.</span></span><br><span class="line"><span class="comment">// Initially, x has the value 2 because that is the value of sandbox.x.</span></span><br><span class="line">vm.runInContext(code, sandbox);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sandbox.x); <span class="comment">// 42</span></span><br><span class="line"><span class="built_in">console</span>.log(sandbox.y); <span class="comment">// 17</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x); <span class="comment">// 1; y is not defined.</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Class-vm-Script"><a href="#Class-vm-Script" class="headerlink" title="Class: vm.Script"></a>Class: vm.Script</h3><p>vm.Script的实例包含了能直接在特定沙盒中运行的预编译代码。</p>
+<h4 id="Constructor-new-vm-Script-code-options"><a href="#Constructor-new-vm-Script-code-options" class="headerlink" title="Constructor: new vm.Script(code[, options])"></a>Constructor: new vm.Script(code[, options])</h4><ul>
+<li>code: 要预编译的代码</li>
+<li>options: 对象或者字符串<ul>
+<li>filename: 用于stack追踪。默认’evalmachine.<anonymous>‘</anonymous></li>
+<li>lineOffset: 指定行数的偏移。默认0</li>
+<li>columnOffset</li>
+<li>cachedData: <buffer>|<typedarray>|<dataview> </dataview></typedarray></buffer></li>
+<li>importModuleDynamically: 当import()被调用时回调。<h4 id="script-createCachedData"><a href="#script-createCachedData" class="headerlink" title="script.createCachedData()"></a>script.createCachedData()</h4>v10.6.0增加<br>创建代码的缓存，可用于Script的构造器中cachedData选项。</li>
+</ul>
+</li>
+</ul>
+<h4 id="script-runInContext-contextifiedSandbox-options"><a href="#script-runInContext-contextifiedSandbox-options" class="headerlink" title="script.runInContext(contextifiedSandbox[, options])"></a>script.runInContext(contextifiedSandbox[, options])</h4><ul>
+<li>contextifiedSandbox: 一个通过vm.createContext(context)修改过的context对象</li>
+<li>options: <ul>
+<li>displayErrors: <boolean></boolean></li>
+<li>timeout: 超时时间。严格大于0的整数</li>
+<li>breakOnSigint</li>
+</ul>
+</li>
+<li>Returns: 返回最后一条语句的结果</li>
+</ul>
+<h4 id="script-runInNewContext-sandbox-options"><a href="#script-runInNewContext-sandbox-options" class="headerlink" title="script.runInNewContext([sandbox[, options]])"></a>script.runInNewContext([sandbox[, options]])</h4><ul>
+<li>sandbox: 将被contextified的对象。<h4 id="script-runInThisContext-options"><a href="#script-runInThisContext-options" class="headerlink" title="script.runInThisContext([options])"></a>script.runInThisContext([options])</h4>运行在当前环境（主程序中）<h4 id="Timer等相关"><a href="#Timer等相关" class="headerlink" title="Timer等相关"></a>Timer等相关</h4>由于内部机制，process.nextTick、microtask、Promise等异步实现在v8和nodejs内，可能导致在某个环境中的代码逃离timeout。如下：<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">'vm'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loop</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) <span class="built_in">console</span>.log(<span class="built_in">Date</span>.now());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vm.runInNewContext(</span><br><span class="line">  <span class="string">'Promise.resolve().then(loop);'</span>,</span><br><span class="line">  &#123; loop, <span class="built_in">console</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">timeout</span>: <span class="number">5</span> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>即使设置了timeout，程序也会被无限死循环打印console.log，而不退出。（不存在是否有vm的参与，受timer的具体实现）。</p>
+<hr>
+<h2 id="Zlib"><a href="#Zlib" class="headerlink" title="Zlib"></a>Zlib</h2><hr>
+<h2 id="Worker-Threads"><a href="#Worker-Threads" class="headerlink" title="Worker Threads"></a>Worker Threads</h2><p>当前为试验阶段。工作线程为Nodejs添加了线程级的API。V10.5以后版本，开启需要加–experimental-worker选项。线程间通过channel通信。<br>Worker线程类似于HTML规范中的Worker，主要用于处理CPU密集型计算。不适合用作IO工作。<br>比起子进程、集群，worker线程能共享内存。能通过传递ArrayBuffer实例或者SharedArrayBuffer实例来共享数据。</p>
+<h3 id="Worker-isMainThread"><a href="#Worker-isMainThread" class="headerlink" title="Worker.isMainThread"></a>Worker.isMainThread</h3><p><strong>v10.5.0新增</strong>，表示当前代码是否运行在Worker线程里。</p>
+<h3 id="Worker-parentPort"><a href="#Worker-parentPort" class="headerlink" title="Worker.parentPort"></a>Worker.parentPort</h3><p><strong>v10.5.0新增</strong>，如果当前线程是worker线程，它指向父线程。</p>
+<h3 id="Worker-threadId"><a href="#Worker-threadId" class="headerlink" title="Worker.threadId"></a>Worker.threadId</h3><p>当前线程ID。</p>
+<h3 id="省略"><a href="#省略" class="headerlink" title="省略"></a>省略</h3><p>其它操作类似浏览器的worker。比如发送数据、监听事件等。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/07/service-worker/" rel="next" title="service worker">
+                <i class="fa fa-chevron-left"></i> service worker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/GraphQL入门-二/" rel="prev" title="GraphQL入门(1)">
+                GraphQL入门(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Globals"><span class="nav-number">1.</span> <span class="nav-text">Globals</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#queueMicrotask-callback"><span class="nav-number">1.0.1.</span> <span class="nav-text">queueMicrotask(callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TextDecoder-TextEncoder"><span class="nav-number">1.0.2.</span> <span class="nav-text">TextDecoder/TextEncoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-URLSearchParams"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL/URLSearchParams</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inspector"><span class="nav-number">1.1.</span> <span class="nav-text">Inspector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Modules"><span class="nav-number">1.2.</span> <span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.2.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-main-module"><span class="nav-number">1.2.2.</span> <span class="nav-text">require.main === module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环引用"><span class="nav-number">1.2.3.</span> <span class="nav-text">循环引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dirname-filename"><span class="nav-number">1.2.4.</span> <span class="nav-text">dirname, filename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exports-和-module-exports"><span class="nav-number">1.2.5.</span> <span class="nav-text">exports 和 module.exports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-cache"><span class="nav-number">1.2.6.</span> <span class="nav-text">require.cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-resolve-request-options"><span class="nav-number">1.2.7.</span> <span class="nav-text">require.resolve(request[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-resolve-paths-request"><span class="nav-number">1.2.8.</span> <span class="nav-text">require.resolve.paths(request)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Net"><span class="nav-number">1.3.</span> <span class="nav-text">Net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Path"><span class="nav-number">1.4.</span> <span class="nav-text">Path</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Path-resolve"><span class="nav-number">1.4.1.</span> <span class="nav-text">Path.resolve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Path-posix"><span class="nav-number">1.4.2.</span> <span class="nav-text">Path.posix</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#perf-hooks"><span class="nav-number">1.5.</span> <span class="nav-text">perf_hooks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process"><span class="nav-number">1.6.</span> <span class="nav-text">Process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-Events"><span class="nav-number">1.6.1.</span> <span class="nav-text">Process Events</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正确使用uncaughtException事件"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">正确使用uncaughtException事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-exit"><span class="nav-number">1.6.2.</span> <span class="nav-text">process.exit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-abort"><span class="nav-number">1.6.3.</span> <span class="nav-text">process.abort()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-allowedNodeEnvironmentFlags"><span class="nav-number">1.6.4.</span> <span class="nav-text">process.allowedNodeEnvironmentFlags</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-chdir-directory"><span class="nav-number">1.6.5.</span> <span class="nav-text">process.chdir(directory)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stderr"><span class="nav-number">1.6.6.</span> <span class="nav-text">process.stderr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdin"><span class="nav-number">1.6.7.</span> <span class="nav-text">process.stdin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdout"><span class="nav-number">1.6.8.</span> <span class="nav-text">process.stdout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdout-and-process-stderr注意点"><span class="nav-number">1.6.9.</span> <span class="nav-text">process.stdout and process.stderr注意点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">1.7.</span> <span class="nav-text">Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trace-Events"><span class="nav-number">1.8.</span> <span class="nav-text">Trace Events</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TTY"><span class="nav-number">1.9.</span> <span class="nav-text">TTY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V8"><span class="nav-number">1.10.</span> <span class="nav-text">V8</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-cachedDataVersionTag"><span class="nav-number">1.10.1.</span> <span class="nav-text">v8.cachedDataVersionTag()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-getHeapSpaceStatistics"><span class="nav-number">1.10.2.</span> <span class="nav-text">v8.getHeapSpaceStatistics()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-getHeapStatistics"><span class="nav-number">1.10.3.</span> <span class="nav-text">v8.getHeapStatistics()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-setFlagsFromString-flags"><span class="nav-number">1.10.4.</span> <span class="nav-text">v8.setFlagsFromString(flags)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Serialization-API"><span class="nav-number">1.10.5.</span> <span class="nav-text">Serialization API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v8-serialize-value"><span class="nav-number">1.10.5.1.</span> <span class="nav-text">v8.serialize(value)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v8-deserialize-buffer"><span class="nav-number">1.10.5.2.</span> <span class="nav-text">v8.deserialize(buffer)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-Serializer"><span class="nav-number">1.10.6.</span> <span class="nav-text">v8.Serializer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#new-Serializer"><span class="nav-number">1.10.6.1.</span> <span class="nav-text">new Serializer()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeHeader"><span class="nav-number">1.10.6.2.</span> <span class="nav-text">serializer.writeHeader()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeValue-value"><span class="nav-number">1.10.6.3.</span> <span class="nav-text">serializer.writeValue(value)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-releaseBuffer"><span class="nav-number">1.10.6.4.</span> <span class="nav-text">serializer.releaseBuffer()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-transferArrayBuffer-id-arrayBuffer"><span class="nav-number">1.10.6.5.</span> <span class="nav-text">serializer.transferArrayBuffer(id, arrayBuffer)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializer-writeUint32-等"><span class="nav-number">1.10.6.6.</span> <span class="nav-text">serializer.writeUint32 等</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v8-Deserializer-略"><span class="nav-number">1.10.7.</span> <span class="nav-text">v8.Deserializer 略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VM"><span class="nav-number">1.11.</span> <span class="nav-text">VM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-vm-Script"><span class="nav-number">1.11.1.</span> <span class="nav-text">Class: vm.Script</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Constructor-new-vm-Script-code-options"><span class="nav-number">1.11.1.1.</span> <span class="nav-text">Constructor: new vm.Script(code[, options])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#script-createCachedData"><span class="nav-number">1.11.1.2.</span> <span class="nav-text">script.createCachedData()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInContext-contextifiedSandbox-options"><span class="nav-number">1.11.1.3.</span> <span class="nav-text">script.runInContext(contextifiedSandbox[, options])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInNewContext-sandbox-options"><span class="nav-number">1.11.1.4.</span> <span class="nav-text">script.runInNewContext([sandbox[, options]])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#script-runInThisContext-options"><span class="nav-number">1.11.1.5.</span> <span class="nav-text">script.runInThisContext([options])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Timer等相关"><span class="nav-number">1.11.1.6.</span> <span class="nav-text">Timer等相关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zlib"><span class="nav-number">1.12.</span> <span class="nav-text">Zlib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker-Threads"><span class="nav-number">1.13.</span> <span class="nav-text">Worker Threads</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-isMainThread"><span class="nav-number">1.13.1.</span> <span class="nav-text">Worker.isMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-parentPort"><span class="nav-number">1.13.2.</span> <span class="nav-text">Worker.parentPort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Worker-threadId"><span class="nav-number">1.13.3.</span> <span class="nav-text">Worker.threadId</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#省略"><span class="nav-number">1.13.4.</span> <span class="nav-text">省略</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
