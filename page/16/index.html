@@ -86,7 +86,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="CMeUp">
-<meta property="og:url" content="http://yoursite.com/page/16/index.html">
+<meta property="og:url" content="https://tzxhy.github.io/page/16/index.html">
 <meta property="og:site_name" content="CMeUp">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -116,16 +116,6 @@
   
 
 
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -299,7 +289,7 @@
 <li>返回的数据类型一定要符合定义的数据类型。即如果你定义的 dataType 是 json 类型的，那么返回来的数据一定是 json 才可以，不然就会执行 error 。</li>
 <li>需要特别的注意返回的JSON数据是否是严格的JSON格式.</li>
 <li>也应该严重关切当后台返回的是一个List 数据（List当中的数据是Json格式）时，有没脏数据即不是严格的JSON格式。<br> 很隐蔽的可能是数据某一个字段中在开始或末尾含有特殊字符，以”回车键”、”Tab键”等</li>
-<li>原因是ajax请求跨域了，解决方法参见上一篇日志，<a href="https://tzxhy.github.io/2017/06/04/ajax%E8%B7%A8%E5%9F%9F%E6%96%B9%E5%BC%8F/" target="_blank" rel="noopener">ajax跨域</a></li>
+<li>原因是ajax请求跨域了，解决方法参见上一篇日志，<a href="https://tzxhy.github.io/2017/06/04/ajax%E8%B7%A8%E5%9F%9F%E6%96%B9%E5%BC%8F/">ajax跨域</a></li>
 <li>也有可能是跨域时请求头的问题，比如请求头如下：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Accept:*/*</span><br><span class="line">Accept-Encoding:gzip, deflate, sdch</span><br><span class="line">Accept-Language:zh-CN,zh;q=0.8,en;q=0.6</span><br><span class="line">Access-Control-Request-Headers:x-requested-with</span><br><span class="line">Access-Control-Request-Method:GET</span><br><span class="line">Connection:keep-alive</span><br><span class="line">Host:10.108.226.92:9999</span><br><span class="line">Origin:null</span><br><span class="line">User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36</span><br></pre></td></tr></table></figure>
 </li>
 </ol>

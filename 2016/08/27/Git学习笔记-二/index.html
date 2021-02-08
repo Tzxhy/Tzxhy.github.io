@@ -88,43 +88,43 @@
 <meta name="keywords" content="Git 笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git学习笔记(二)">
-<meta property="og:url" content="http://yoursite.com/2016/08/27/Git学习笔记-二/index.html">
+<meta property="og:url" content="https://tzxhy.github.io/2016/08/27/Git学习笔记-二/index.html">
 <meta property="og:site_name" content="CMeUp">
 <meta property="og:description" content="Git 分支何谓分支为了理解 Git 分支的实现方式，我们需要回顾一下 Git 是如何储存数据的。或许你还记得第一章的内容，Git 保存的不是文件差异或者变化量，而只是一系列文件快照。 在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/3_1.png">
-<meta property="og:image" content="http://yoursite.com/images/3_2.png">
-<meta property="og:image" content="http://yoursite.com/images/3_3.png">
-<meta property="og:image" content="http://yoursite.com/images/3_4.png">
-<meta property="og:image" content="http://yoursite.com/images/3_5.png">
-<meta property="og:image" content="http://yoursite.com/images/3_6.png">
-<meta property="og:image" content="http://yoursite.com/images/3_7.png">
-<meta property="og:image" content="http://yoursite.com/images/3_8.png">
-<meta property="og:image" content="http://yoursite.com/images/3_9.png">
-<meta property="og:image" content="http://yoursite.com/images/3_10.png">
-<meta property="og:image" content="http://yoursite.com/images/3_11.png">
-<meta property="og:image" content="http://yoursite.com/images/3_18.png">
-<meta property="og:image" content="http://yoursite.com/images/3_20.png">
-<meta property="og:image" content="http://yoursite.com/images/3_21.png">
-<meta property="og:image" content="http://yoursite.com/images/3_22.png">
-<meta property="og:image" content="http://yoursite.com/images/3_23.png">
-<meta property="og:image" content="http://yoursite.com/images/3_24.png">
-<meta property="og:image" content="http://yoursite.com/images/3_25.png">
-<meta property="og:image" content="http://yoursite.com/images/3_26.png">
-<meta property="og:image" content="http://yoursite.com/images/3_27.png">
-<meta property="og:image" content="http://yoursite.com/images/3_28.png">
-<meta property="og:image" content="http://yoursite.com/images/3_30.png">
-<meta property="og:image" content="http://yoursite.com/images/3_31.png">
-<meta property="og:image" content="http://yoursite.com/images/3_32.png">
-<meta property="og:image" content="http://yoursite.com/images/3_36.png">
-<meta property="og:image" content="http://yoursite.com/images/3_37.png">
-<meta property="og:image" content="http://yoursite.com/images/3_38.png">
-<meta property="og:image" content="http://yoursite.com/images/3_39.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_1.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_2.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_3.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_4.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_5.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_6.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_7.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_8.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_9.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_10.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_11.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_18.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_20.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_21.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_22.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_23.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_24.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_25.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_26.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_27.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_28.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_30.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_31.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_32.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_36.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_37.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_38.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/3_39.png">
 <meta property="og:updated_time" content="2020-08-06T13:12:41.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git学习笔记(二)">
 <meta name="twitter:description" content="Git 分支何谓分支为了理解 Git 分支的实现方式，我们需要回顾一下 Git 是如何储存数据的。或许你还记得第一章的内容，Git 保存的不是文件差异或者变化量，而只是一系列文件快照。 在 Git 中提交时，会保存一个提交（commit）对象，该对象包含一个指向暂存内容快照的指针，包含本次提交的作者等相关附属信息，包含零个或多个指向该提交对象的父对象指针：首次提交是没有直接祖先的，普通提交有一个祖">
-<meta name="twitter:image" content="http://yoursite.com/images/3_1.png">
+<meta name="twitter:image" content="https://tzxhy.github.io/images/3_1.png">
 
 
 
@@ -150,16 +150,6 @@
   
 
 
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 

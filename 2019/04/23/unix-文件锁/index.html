@@ -87,7 +87,7 @@
 <meta name="description" content="最近遇到一个 case：nodejs 还没写完文件时（标志位为’w’，会重写文件），去读取文件时，可能读到的是空文件。unix 系统允许多进程同时读写文件，不提供原生的文件锁机制。查询了下，有 flock 命令用于文件劝告锁。涨一波知识。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="unix 文件锁">
-<meta property="og:url" content="http://yoursite.com/2019/04/23/unix-文件锁/index.html">
+<meta property="og:url" content="https://tzxhy.github.io/2019/04/23/unix-文件锁/index.html">
 <meta property="og:site_name" content="CMeUp">
 <meta property="og:description" content="最近遇到一个 case：nodejs 还没写完文件时（标志位为’w’，会重写文件），去读取文件时，可能读到的是空文件。unix 系统允许多进程同时读写文件，不提供原生的文件锁机制。查询了下，有 flock 命令用于文件劝告锁。涨一波知识。">
 <meta property="og:locale" content="zh-Hans">
@@ -120,16 +120,6 @@
   
 
 
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?93e7437418d71c769278ecc4f708b80a";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
