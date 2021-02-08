@@ -1,1 +1,1250 @@
-<!doctype html><html class="theme-next pisces use-motion"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/VEN/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet"><link href="/VEN/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet"><link href="/css/main.css?v=5.0.1" rel="stylesheet"><meta name="keywords" content="Hello"><link rel="shortcut icon" type="image/x-icon" href="/1.png?v=5.0.1"><meta property="og:type" content="website"><meta property="og:title" content="CMeUp"><meta property="og:url" content="https://tzxhy.github.io/page/12/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:locale" content="zh-Hans"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="CMeUp"><script id="hexo.configuration">var NexT=window.NexT||{},CONFIG={scheme:"Pisces",sidebar:{position:"left",display:"post"},fancybox:!0,motion:!0,duoshuo:{userId:0,author:"TanZhiXuan"}}</script><title>CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container one-collumn sidebar-position-left page-home"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-categories"><a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a><li class="menu-item menu-item-tags"><a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><section id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2019/03/05/es5拾漏/" itemprop="url">es5拾漏</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time itemprop="dateCreated" datetime="2019-03-04T18:57:53Z" content="2019-03-04">2019-03-04 </time></span><span class="post-category">&nbsp; | &nbsp; <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="es5中被我遗忘的点"><a href="#es5中被我遗忘的点" class="headerlink" title="es5中被我遗忘的点"></a>es5中被我遗忘的点</h1><h3 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES5中使用Object.defineProperty/defineProperties定义属性时，可以使用value/writable/configurable/enumerable或者get/set/configurable/enumerable</span></span><br><span class="line"><span class="comment">// 使用ES5的方式来定义属性时，默认writable/enumerable/configurable都是false，分别表明不能被等号=改写值、不能被for in枚举、不能被重新配置(配置和删除)</span></span><br><span class="line"><span class="comment">// ES3的字面量或者obj.property定义的所有描述符默认为true。</span></span><br></pre></table></figure><h3 id="Object-freeze方法"><a href="#Object-freeze方法" class="headerlink" title="Object.freeze方法"></a>Object.freeze方法</h3><p>冻结一个对象，不能向其添加新的属性，不能修改其已有属性的值，不能删除已有的属性，不能修改已有属性的enumerable/configurable/writable属性；isFrozen返回是否是冻结对象。<h3 id="Object-seal方法"><a href="#Object-seal方法" class="headerlink" title="Object.seal方法"></a>Object.seal方法</h3><p>密封一个对象，不能添加新属性，已有属性不可配置，但已有属性的值可以修改。isSealed判断是否被密封。<h3 id="Object-preventExtensions"><a href="#Object-preventExtensions" class="headerlink" title="Object.preventExtensions"></a>Object.preventExtensions</h3><p>使一个对象不能再添加新的属性（仅阻止添加自身的属性。但属性仍然可以添加到对象原型）。<h3 id="关于try-catch-finally"><a href="#关于try-catch-finally" class="headerlink" title="关于try/catch/finally"></a>关于try/catch/finally</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">123</span>;</span><br><span class="line">	&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'finally'</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a()); <span class="comment">// 打印什么内容？</span></span><br></pre></table></figure><p>首先看一下es5中对try/finally的定义：<blockquote><p>The production TryStatement : try Block Finally is evaluated as follows:<ol><li>Let B be the result of evaluating Block.<li>Let F be the result of evaluating Finally.<li>If F.type is normal, return B.<li>Return F.</ol></blockquote><p>由上定义，可知，try和finally中的代码都会执行。只是看返回哪一个的问题了。因此，上面的会打印：finally 123.</div><div></div><div></div><footer class="post-footer"><div class="post-eof"></div></footer></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2019/03/05/移动端bugfix/" itemprop="url">移动端bugfix</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time itemprop="dateCreated" datetime="2019-03-04T18:56:22Z" content="2019-03-04">2019-03-04</time></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="移动端bugfix"><a href="#移动端bugfix" class="headerlink" title="移动端bugfix"></a>移动端bugfix</h1><ol><li>子元素滚动到顶、底后，父元素继续滚。这通常不是我们期望的结果。怎么让子元素滚到顶/底了后，父元素不参乎呢？overscroll-behavior 这个c3属性是个好东西。<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior</a> 这里我只简单说说属性值contain和none的区别（默认值是auto，相信你要用这个属性，你就不会用这个属性值）：contain保留了默认的scroll overflow效果，比如chrome浏览器中在页面顶部继续下拉（貌似只有body元素上）会出现bounce效果（同样，对于body元素上，下拉刷新功能也被禁止），同时取消了默认的滚动链（就是儿子滚完了，爸爸继续滚）；none的话，就是取消bounce效果和下拉刷新，并且禁止滚动链。讲道理，我认为他们的差别只会体现在对body元素应用该值。其他情况下contain=none. （我理解的前提下是body元素是页面下拉刷新的触发元素，至少chrome是的）。</ol></div><div></div><div></div><footer class="post-footer"><div class="post-eof"></div></footer></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2019/03/05/background-position/" itemprop="url">background-position</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time itemprop="dateCreated" datetime="2019-03-04T18:43:43Z" content="2019-03-04">2019-03-04</time></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="关于background-position"><a href="#关于background-position" class="headerlink" title="关于background-position"></a>关于background-position</h1><p>以前吧，一直觉得这个具体值和百分比值的作用是一样的。其实是不一样的。画几个图来说明。<br><a href="/images/p1-position.png">关于background-position</a><br>意思即是：具体值（如10px 0）是指背景到容器左边缘（没考虑其他文档流的影响）的距离。为正是在左边缘的右边，反之。<p>百分比是指背景的百分比值处与容器的百分比值处对齐（正值的时候）。负值的时候，使用下面的公式计算（正值也可以计算）：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(容器宽度 - 背景宽度) * 百分比X = 像素值X</span><br><span class="line">(容器高度 - 背景高度) * 百分比Y = 像素值Y</span><br><span class="line">这里得到的X 和 Y就是背景的起始位置。正代表在容器左边缘的右边，反之。</span><br></pre></table></figure><p></div><div></div><div></div><footer class="post-footer"><div class="post-eof"></div></footer></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2019/03/05/css媒体查询/" itemprop="url">css媒体查询</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time itemprop="dateCreated" datetime="2019-03-04T17:53:01Z" content="2019-03-04">2019-03-04</time></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="css媒体查询"><a href="#css媒体查询" class="headerlink" title="css媒体查询"></a>css媒体查询</h1><p>在写媒体查询的时候，顺序很重要。<ul><li>min相关的，必须从上到下的值依次递增。<li>max相关的，必须从上到下的值依次递减。</ul><p>原因：相同的权重，最后一条被选中。比如现在宽度750px，能匹配到第一条和第三条，最小值700px–最大值800px<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> screen and (min-width: <span class="number">700px</span>) &#123; <span class="comment">/* 依次递增 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: yellow;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">media</span> screen and (min-width: <span class="number">800px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: white;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">800px</span>) &#123; <span class="comment">/* 依次递减 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">700px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">background-color</span>: pink;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></table></figure></div><div></div><div></div><footer class="post-footer"><div class="post-eof"></div></footer></article><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><header class="post-header"><h1 class="post-title" itemprop="name headline"><a class="post-title-link" href="/2019/03/04/css3动画/" itemprop="url">css3动画</a></h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time itemprop="dateCreated" datetime="2019-03-04T15:57:24Z" content="2019-03-04">2019-03-04 </time></span><span class="post-category">&nbsp; | &nbsp; <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span> </a></span>， <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a href="/categories/css/css3/" itemprop="url" rel="index"><span itemprop="name">css3</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="css3动画"><a href="#css3动画" class="headerlink" title="css3动画"></a>css3动画</h1><p>首先要说的是animation-timing-function。这个东西经常被放在定义animation的类中，如：<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">256px</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">    <span class="attribute">background-color</span>: red;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">animation</span>: bar <span class="number">5s</span> infinite <span class="built_in">steps</span>(1, end);</span><br><span class="line">&#125;</span><br></pre></table></figure><p>根据MDN:<blockquote><p>Timing functions may be specified on individual keyframes in a @keyframes rule. If no animation-timing-function is specified on a keyframe, the corresponding value of animation-timing-function from the element to which the animation is applied is used for that keyframe. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function</a></blockquote><p>就是说这个东西本来应该是定义在单独的帧中的，表示这个帧开始到下一个帧开始这段时间的时间函数。如果帧中没定义这个timing-function，那么就会用类中定义animation时候的函数，如上面就是steps(1, end)。只能说，咱们中国人翻译外文时，都不仔细啊，搞得自己在中文各大网站上都没看到过在帧中使用时间函数的例子。直到看到了Animate.css(<a href="https://github.com/daneden/animate.css/blob/master/animate.css)。" target="_blank" rel="noopener">https://github.com/daneden/animate.css/blob/master/animate.css)。</a> 今天说一下css3的animate吧。这两天的学习还是小有所得。将根据几个例子来讲解。准备把animation的东西都讲一遍哈。<br><div class="post-more-link text-center"><a class="btn" href="/2019/03/04/css3动画/#more" rel="contents">阅读全文 &raquo;</a></div><p></div><div></div><div></div><footer class="post-footer"><div class="post-eof"></div></footer></article></section><nav class="pagination"><a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a></nav></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><section class="site-overview sidebar-panel sidebar-panel-active"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives"><span class="site-state-item-count">96</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories"><span class="site-state-item-count">23</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags"><span class="site-state-item-count">46</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="powered-by">由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动</div><div class="theme-info">主题 - <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/VEN/jquery/index.js?v=2.1.3"></script><script src="/VEN/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/VEN/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/VEN/velocity/velocity.min.js?v=1.2.1"></script><script src="/VEN/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/VEN/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/js/src/utils.js?v=5.0.1"></script><script src="/js/src/motion.js?v=5.0.1"></script><script src="/js/src/affix.js?v=5.0.1"></script><script src="/js/src/schemes/pisces.js?v=5.0.1"></script><script src="/js/src/bootstrap.js?v=5.0.1"></script><script async src="//push.zhanzhang.baidu.com/push.js"></script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="CMeUp">
+<meta property="og:url" content="https://tzxhy.github.io/page/12/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMeUp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/page/12/">
+
+
+
+
+
+  <title>CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/05/es5拾漏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/05/es5拾漏/" itemprop="url">es5拾漏</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T18:57:53Z">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="es5中被我遗忘的点"><a href="#es5中被我遗忘的点" class="headerlink" title="es5中被我遗忘的点"></a>es5中被我遗忘的点</h1><h3 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES5中使用Object.defineProperty/defineProperties定义属性时，可以使用value/writable/configurable/enumerable或者get/set/configurable/enumerable</span></span><br><span class="line"><span class="comment">// 使用ES5的方式来定义属性时，默认writable/enumerable/configurable都是false，分别表明不能被等号=改写值、不能被for in枚举、不能被重新配置(配置和删除)</span></span><br><span class="line"><span class="comment">// ES3的字面量或者obj.property定义的所有描述符默认为true。</span></span><br></pre></td></tr></table></figure>
+<h3 id="Object-freeze方法"><a href="#Object-freeze方法" class="headerlink" title="Object.freeze方法"></a>Object.freeze方法</h3><p>冻结一个对象，不能向其添加新的属性，不能修改其已有属性的值，不能删除已有的属性，不能修改已有属性的enumerable/configurable/writable属性；isFrozen返回是否是冻结对象。</p>
+<h3 id="Object-seal方法"><a href="#Object-seal方法" class="headerlink" title="Object.seal方法"></a>Object.seal方法</h3><p>密封一个对象，不能添加新属性，已有属性不可配置，但已有属性的值可以修改。isSealed判断是否被密封。</p>
+<h3 id="Object-preventExtensions"><a href="#Object-preventExtensions" class="headerlink" title="Object.preventExtensions"></a>Object.preventExtensions</h3><p>使一个对象不能再添加新的属性（仅阻止添加自身的属性。但属性仍然可以添加到对象原型）。</p>
+<h3 id="关于try-catch-finally"><a href="#关于try-catch-finally" class="headerlink" title="关于try/catch/finally"></a>关于try/catch/finally</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">123</span>;</span><br><span class="line">	&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'finally'</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a()); <span class="comment">// 打印什么内容？</span></span><br></pre></td></tr></table></figure>
+<p>首先看一下es5中对try/finally的定义：</p>
+<blockquote>
+<p>The production TryStatement : try Block Finally is evaluated as follows:</p>
+<ol>
+<li>Let B be the result of evaluating Block.</li>
+<li>Let F be the result of evaluating Finally.</li>
+<li>If F.type is normal, return B.</li>
+<li>Return F.</li>
+</ol>
+</blockquote>
+<p>由上定义，可知，try和finally中的代码都会执行。只是看返回哪一个的问题了。因此，上面的会打印：finally 123.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/05/移动端bugfix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/05/移动端bugfix/" itemprop="url">移动端bugfix</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T18:56:22Z">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="移动端bugfix"><a href="#移动端bugfix" class="headerlink" title="移动端bugfix"></a>移动端bugfix</h1><ol>
+<li>子元素滚动到顶、底后，父元素继续滚。这通常不是我们期望的结果。怎么让子元素滚到顶/底了后，父元素不参乎呢？overscroll-behavior  这个c3属性是个好东西。<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior</a>  这里我只简单说说属性值contain和none的区别（默认值是auto，相信你要用这个属性，你就不会用这个属性值）：contain保留了默认的scroll overflow效果，比如chrome浏览器中在页面顶部继续下拉（貌似只有body元素上）会出现bounce效果（同样，对于body元素上，下拉刷新功能也被禁止），同时取消了默认的滚动链（就是儿子滚完了，爸爸继续滚）；none的话，就是取消bounce效果和下拉刷新，并且禁止滚动链。讲道理，我认为他们的差别只会体现在对body元素应用该值。其他情况下contain=none. （我理解的前提下是body元素是页面下拉刷新的触发元素，至少chrome是的）。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/05/background-position/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/05/background-position/" itemprop="url">background-position</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T18:43:43Z">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="关于background-position"><a href="#关于background-position" class="headerlink" title="关于background-position"></a>关于background-position</h1><p>以前吧，一直觉得这个具体值和百分比值的作用是一样的。其实是不一样的。画几个图来说明。<br><a href="/images/p1-position.png">关于background-position</a><br>意思即是：具体值（如10px 0）是指背景到容器左边缘（没考虑其他文档流的影响）的距离。为正是在左边缘的右边，反之。</p>
+<p>百分比是指背景的百分比值处与容器的百分比值处对齐（正值的时候）。负值的时候，使用下面的公式计算（正值也可以计算）：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(容器宽度 - 背景宽度) * 百分比X = 像素值X</span><br><span class="line">(容器高度 - 背景高度) * 百分比Y = 像素值Y</span><br><span class="line">这里得到的X 和 Y就是背景的起始位置。正代表在容器左边缘的右边，反之。</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/05/css媒体查询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/05/css媒体查询/" itemprop="url">css媒体查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T17:53:01Z">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="css媒体查询"><a href="#css媒体查询" class="headerlink" title="css媒体查询"></a>css媒体查询</h1><p>在写媒体查询的时候，顺序很重要。</p>
+<ul>
+<li>min相关的，必须从上到下的值依次递增。</li>
+<li>max相关的，必须从上到下的值依次递减。</li>
+</ul>
+<p>原因：相同的权重，最后一条被选中。比如现在宽度750px，能匹配到第一条和第三条，最小值700px–最大值800px</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> screen and (min-width: <span class="number">700px</span>) &#123; <span class="comment">/* 依次递增 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: yellow;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">media</span> screen and (min-width: <span class="number">800px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: white;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">800px</span>) &#123; <span class="comment">/* 依次递减 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">700px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">background-color</span>: pink;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/04/css3动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/04/css3动画/" itemprop="url">css3动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-04T15:57:24Z">
+                2019-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/css3/" itemprop="url" rel="index">
+                    <span itemprop="name">css3</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="css3动画"><a href="#css3动画" class="headerlink" title="css3动画"></a>css3动画</h1><p>首先要说的是animation-timing-function。这个东西经常被放在定义animation的类中，如：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">256px</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">    <span class="attribute">background-color</span>: red;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">animation</span>: bar <span class="number">5s</span> infinite <span class="built_in">steps</span>(1, end);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据MDN:</p>
+<blockquote>
+<p>Timing functions may be specified on individual keyframes in a @keyframes rule. If no animation-timing-function is specified on a keyframe, the corresponding value of animation-timing-function from the element to which the animation is applied is used for that keyframe.  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function</a></p>
+</blockquote>
+<p>就是说这个东西本来应该是定义在单独的帧中的，表示这个帧开始到下一个帧开始这段时间的时间函数。如果帧中没定义这个timing-function，那么就会用类中定义animation时候的函数，如上面就是steps(1, end)。只能说，咱们中国人翻译外文时，都不仔细啊，搞得自己在中文各大网站上都没看到过在帧中使用时间函数的例子。直到看到了Animate.css(<a href="https://github.com/daneden/animate.css/blob/master/animate.css)。" target="_blank" rel="noopener">https://github.com/daneden/animate.css/blob/master/animate.css)。</a> 今天说一下css3的animate吧。这两天的学习还是小有所得。将根据几个例子来讲解。准备把animation的东西都讲一遍哈。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/04/css3动画/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </p></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">96</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
