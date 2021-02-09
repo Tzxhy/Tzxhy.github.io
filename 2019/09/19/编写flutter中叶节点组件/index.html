@@ -1,1 +1,795 @@
-<!doctype html><html class="theme-next gemini" lang="zh-Hans"><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet"><link href="/css/main.css?v=5.1.4" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="flutter,叶节点,"><meta name="description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架"><meta name="keywords" content="flutter,叶节点"><meta property="og:type" content="article"><meta property="og:title" content="编写flutter中叶节点组件"><meta property="og:url" content="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/index.html"><meta property="og:site_name" content="CMeUp"><meta property="og:description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架"><meta property="og:locale" content="zh-Hans"><meta property="og:updated_time" content="2021-02-09T03:53:37.598Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="编写flutter中叶节点组件"><meta name="twitter:description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架"><script id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"undefined",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/"><title>编写flutter中叶节点组件 | CMeUp</title><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">CMeUp</span> <span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">记录一些学习心得，QQ:1139723651.</div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>标签</a><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>分类</a><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>归档</a></ul></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="谭智轩"><meta itemprop="description" content><meta itemprop="image" content="/uploads/avator.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="CMeUp"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">编写flutter中叶节点组件</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-19T04:30:11+08:00">2019-09-18 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="第n篇"><a href="#第n篇" class="headerlink" title="第n篇"></a>第n篇</h1><p>这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。<p>进入正题……<p>本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。<h1 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h1><p>虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架各种继承~），但这里会简单提一下 flutter 中组件的基本分类：<ul><li>单 child 组件。及该组件有且只有一个 child。以 <strong>SingleChildRenderObjectWidget</strong> 为底层抽象类。需要子类实现：<ul><li>createRenderObject(BuildContext context) 创建一个 RenderObject<li>updateRenderObject(BuildContext context, RenderObject renderObject) 更新旧的 RenderObject<li>didUnmountRenderObject 可选，当与该 Widget 关联的 RenderObject 从树中移除时的回调</ul><li>多 child 组件。以 <strong>MultiChildRenderObjectWidget</strong> 为底层抽象类。同样需要子类实现上述函数。<li>无 child 组件。以 <strong>LeafRenderObjectWidget</strong> 为底层抽象类。同样需要子类实现上述函数。</ul><p>其实从上面来看，都需要实现 createRenderObject 方法。换而言之，即是要实现对应的 RenderObject 类。今天我们就以叶节点组件来实现一个自定义渲染组件。<br><a id="more"></a><h1 id="前置概念"><a href="#前置概念" class="headerlink" title="前置概念"></a>前置概念</h1><p>既然是叶节点（无子组件），那么理所应当的不需要 layout 的相关操作（整体流程介绍放在下一篇文章）。我们只需要操作相关 paint 的方法，即绘制。<h1 id="进入场景"><a href="#进入场景" class="headerlink" title="进入场景"></a>进入场景</h1><p>这里假设我们要实现一个类似 flutter 原生 RangeSlider 组件（当时我们公司用的 flutter 分支是1.5.4的，还没有这个 RangeSlider 组件，直接拷贝不太好，索性学习着手写一个）TODO(补充图片)。开始动手吧。<h1 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h1><h2 id="外层"><a href="#外层" class="headerlink" title="外层"></a>外层</h2><p>这里省去了外层的 StatefulWidget -&gt; State 的包裹，直接开始最关键的内容。<br><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_SliderRenderObjectWidget</span> <span class="keyword">extends</span> <span class="title">LeafRenderObjectWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _RenderSlider createRenderObject(BuildContext context) &#123;</span><br><span class="line">    <span class="comment">// 返回一个 RenderObject</span></span><br><span class="line">    <span class="keyword">return</span> _RenderSlider(</span><br><span class="line">      divisions: divisions,</span><br><span class="line">      rangeValue: startRange,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> updateRenderObject(BuildContext context, _RenderSlider renderObject) &#123;</span><br><span class="line">    <span class="comment">// 更新一个 RenderObject</span></span><br><span class="line">    renderObject</span><br><span class="line">      ..rangeValue = startRange</span><br><span class="line">      ..divisions = divisions;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></table></figure><p><p>createRenderObject 调用实际（TODO）<h2 id="RenderObject-类实现"><a href="#RenderObject-类实现" class="headerlink" title="RenderObject 类实现"></a>RenderObject 类实现</h2><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_RenderSlider</span> <span class="keyword">extends</span> <span class="title">RenderBox</span> </span>&#123;</span><br><span class="line">  _RenderSlider(&#123;</span><br><span class="line">    <span class="meta">@required</span> BdRangeSliderValue rangeValue,</span><br><span class="line">    </span><br><span class="line">  &#125;) &#123;</span><br><span class="line">    <span class="keyword">final</span> GestureArenaTeam team = GestureArenaTeam();</span><br><span class="line">    <span class="comment">// 定义一个 darg 手势识别器</span></span><br><span class="line">    _drag = HorizontalDragGestureRecognizer()</span><br><span class="line">      ..team = team</span><br><span class="line">      ..onStart = _handleDragStart</span><br><span class="line">      ..onUpdate = _handleDragUpdate</span><br><span class="line">      ..onEnd = _handleDragEnd</span><br><span class="line">      ..onCancel = _endInteraction;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在 attach 的时候，增加动画的回调  </span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> attach(PipelineOwner owner) &#123;</span><br><span class="line">    <span class="keyword">super</span>.attach(owner);</span><br><span class="line">    _overlayAnimation.addListener(markNeedsPaint);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 在 detach 的时候，去掉动画的回调</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> detach() &#123;</span><br><span class="line">    _overlayAnimation.removeListener(markNeedsPaint);</span><br><span class="line">    <span class="keyword">super</span>.detach();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">bool</span> hitTestSelf(Offset position) =&gt; <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理事件。叶节点组件中，如果是交互型的，一般会重写该方法。否则不能识别任何操作。</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> handleEvent(PointerEvent event, BoxHitTestEntry entry) &#123;</span><br><span class="line">    <span class="keyword">assert</span>(debugHandleEvent(event, entry));</span><br><span class="line">    <span class="keyword">if</span> (event <span class="keyword">is</span> PointerDownEvent &amp;&amp; isInteractive) &#123;</span><br><span class="line">      <span class="comment">// We need to add the drag first so that it has priority.</span></span><br><span class="line">      _drag.addPointer(event);</span><br><span class="line">      _tap.addPointer(event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMinIntrinsicWidth(<span class="built_in">double</span> height) =&gt; _minPreferredTrackWidth + _maxSliderPartWidth;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMaxIntrinsicWidth(<span class="built_in">double</span> height) =&gt; _minPreferredTrackWidth + _maxSliderPartWidth;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMinIntrinsicHeight(<span class="built_in">double</span> width) =&gt; max(_minPreferredTrackHeight, _maxSliderPartHeight);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMaxIntrinsicHeight(<span class="built_in">double</span> width) =&gt; max(_minPreferredTrackHeight, _maxSliderPartHeight);</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">bool</span> <span class="keyword">get</span> sizedByParent =&gt; <span class="keyword">true</span>;</span><br><span class="line">  <span class="comment">// 当 sizedByParent 为 true 时，必须重写 performResize 方法，返回该组件占据的大小</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> performResize() &#123;</span><br><span class="line">    size = Size(</span><br><span class="line">      constraints.hasBoundedWidth ? constraints.maxWidth : _minPreferredTrackWidth + _maxSliderPartWidth,</span><br><span class="line">      constraints.hasBoundedHeight ? constraints.maxHeight : max(_minPreferredTrackHeight, _maxSliderPartHeight),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 关键方法。在此使用 canvas 绘制图形。</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> paint(PaintingContext context, Offset offset) &#123;</span><br><span class="line">    <span class="comment">// ……</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></table></figure></div><footer class="post-footer"><div class="post-tags"><a href="/tags/flutter/" rel="tag"># flutter</a> <a href="/tags/叶节点/" rel="tag"># 叶节点</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2019/07/04/makefile/" rel="next" title="makefile"><i class="fa fa-chevron-left"></i> makefile</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/2019/09/19/flutter架构及框架结构/" rel="prev" title="flutter架构及框架结构(一)">flutter架构及框架结构(一) <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">文章目录<li class="sidebar-nav-overview" data-target="site-overview-wrap">站点概览</ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩"><p class="site-author-name" itemprop="name">谭智轩<p class="site-description motion-element" itemprop="description"></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">80</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">49</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">104</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/tzxhy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金"><i class="fa fa-fw fa-globe"></i>掘金</a> </span><span class="links-of-author-item"><a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀"><i class="fa fa-fw fa-globe"></i>语雀</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第n篇"><span class="nav-number">1.</span> <span class="nav-text">第n篇</span></a><li class="nav-item nav-level-1"><a class="nav-link" href="#节点分类"><span class="nav-number">2.</span> <span class="nav-text">节点分类</span></a><li class="nav-item nav-level-1"><a class="nav-link" href="#前置概念"><span class="nav-number">3.</span> <span class="nav-text">前置概念</span></a><li class="nav-item nav-level-1"><a class="nav-link" href="#进入场景"><span class="nav-number">4.</span> <span class="nav-text">进入场景</span></a><li class="nav-item nav-level-1"><a class="nav-link" href="#Main"><span class="nav-number">5.</span> <span class="nav-text">Main</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#外层"><span class="nav-number">5.1.</span> <span class="nav-text">外层</span></a><li class="nav-item nav-level-2"><a class="nav-link" href="#RenderObject-类实现"><span class="nav-number">5.2.</span> <span class="nav-text">RenderObject 类实现</span></a></ol></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">谭智轩</span></div><div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script>"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script src="/lib/jquery/index.js?v=2.1.3"></script><script src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script src="/lib/canvas-nest/canvas-nest.min.js"></script><script src="/js/src/utils.js?v=5.1.4"></script><script src="/js/src/motion.js?v=5.1.4"></script><script src="/js/src/affix.js?v=5.1.4"></script><script src="/js/src/schemes/pisces.js?v=5.1.4"></script><script src="/js/src/scrollspy.js?v=5.1.4"></script><script src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/bootstrap.js?v=5.1.4"></script><script>!function(e,t){var n,c=e.getElementsByTagName(t)[0];"function"!=typeof LivereTower&&((n=e.createElement(t)).src="https://cdn-city.livere.com/js/embed.dist.js",n.async=!0,c.parentNode.insertBefore(n,c))}(document,"script")</script>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flutter,叶节点,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架">
+<meta name="keywords" content="flutter,叶节点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编写flutter中叶节点组件">
+<meta property="og:url" content="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-02-09T03:53:37.598Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编写flutter中叶节点组件">
+<meta name="twitter:description" content="第n篇这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。 进入正题…… 本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。 节点分类虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/">
+
+
+
+
+
+  <title>编写flutter中叶节点组件 | CMeUp</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CMeUp</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一些学习心得，QQ:1139723651.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/09/19/编写flutter中叶节点组件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/uploads/avator.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">编写flutter中叶节点组件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-19T04:30:11+08:00">
+                2019-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/flutter/" itemprop="url" rel="index">
+                    <span itemprop="name">flutter</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第n篇"><a href="#第n篇" class="headerlink" title="第n篇"></a>第n篇</h1><p>这里假设读者已经看完了前面几篇，或者本身对 flutter 的设计、框架等比较熟悉。如果不熟悉，可以先看看前几篇文章。</p>
+<p>进入正题……</p>
+<p>本篇主要讲解 flutter 中，如何实现一个叶节点（没有任何子节点的节点）。flutter 代码结构本篇先不讲，下一篇会从顶层讲解到底层，方便大家学习（后续会调整文章顺序）。</p>
+<h1 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h1><p>虽然不说 flutter 中的各种继承关系（这真的是 OOP 编程，通框架各种继承~），但这里会简单提一下 flutter 中组件的基本分类：</p>
+<ul>
+<li>单 child 组件。及该组件有且只有一个 child。以 <strong>SingleChildRenderObjectWidget</strong> 为底层抽象类。需要子类实现：<ul>
+<li>createRenderObject(BuildContext context) 创建一个 RenderObject</li>
+<li>updateRenderObject(BuildContext context, RenderObject renderObject) 更新旧的 RenderObject</li>
+<li>didUnmountRenderObject 可选，当与该 Widget 关联的 RenderObject 从树中移除时的回调</li>
+</ul>
+</li>
+<li>多 child 组件。以 <strong>MultiChildRenderObjectWidget</strong> 为底层抽象类。同样需要子类实现上述函数。</li>
+<li>无 child 组件。以 <strong>LeafRenderObjectWidget</strong> 为底层抽象类。同样需要子类实现上述函数。</li>
+</ul>
+<p>其实从上面来看，都需要实现 createRenderObject 方法。换而言之，即是要实现对应的 RenderObject 类。今天我们就以叶节点组件来实现一个自定义渲染组件。<br><a id="more"></a></p>
+<h1 id="前置概念"><a href="#前置概念" class="headerlink" title="前置概念"></a>前置概念</h1><p>既然是叶节点（无子组件），那么理所应当的不需要 layout 的相关操作（整体流程介绍放在下一篇文章）。我们只需要操作相关 paint 的方法，即绘制。</p>
+<h1 id="进入场景"><a href="#进入场景" class="headerlink" title="进入场景"></a>进入场景</h1><p>这里假设我们要实现一个类似 flutter 原生 RangeSlider 组件（当时我们公司用的 flutter 分支是1.5.4的，还没有这个 RangeSlider 组件，直接拷贝不太好，索性学习着手写一个）TODO(补充图片)。开始动手吧。</p>
+<h1 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h1><h2 id="外层"><a href="#外层" class="headerlink" title="外层"></a>外层</h2><p>这里省去了外层的 StatefulWidget -&gt; State 的包裹，直接开始最关键的内容。<br><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_SliderRenderObjectWidget</span> <span class="keyword">extends</span> <span class="title">LeafRenderObjectWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  _RenderSlider createRenderObject(BuildContext context) &#123;</span><br><span class="line">    <span class="comment">// 返回一个 RenderObject</span></span><br><span class="line">    <span class="keyword">return</span> _RenderSlider(</span><br><span class="line">      divisions: divisions,</span><br><span class="line">      rangeValue: startRange,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> updateRenderObject(BuildContext context, _RenderSlider renderObject) &#123;</span><br><span class="line">    <span class="comment">// 更新一个 RenderObject</span></span><br><span class="line">    renderObject</span><br><span class="line">      ..rangeValue = startRange</span><br><span class="line">      ..divisions = divisions;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>createRenderObject 调用实际（TODO）</p>
+<h2 id="RenderObject-类实现"><a href="#RenderObject-类实现" class="headerlink" title="RenderObject 类实现"></a>RenderObject 类实现</h2><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_RenderSlider</span> <span class="keyword">extends</span> <span class="title">RenderBox</span> </span>&#123;</span><br><span class="line">  _RenderSlider(&#123;</span><br><span class="line">    <span class="meta">@required</span> BdRangeSliderValue rangeValue,</span><br><span class="line">    </span><br><span class="line">  &#125;) &#123;</span><br><span class="line">    <span class="keyword">final</span> GestureArenaTeam team = GestureArenaTeam();</span><br><span class="line">    <span class="comment">// 定义一个 darg 手势识别器</span></span><br><span class="line">    _drag = HorizontalDragGestureRecognizer()</span><br><span class="line">      ..team = team</span><br><span class="line">      ..onStart = _handleDragStart</span><br><span class="line">      ..onUpdate = _handleDragUpdate</span><br><span class="line">      ..onEnd = _handleDragEnd</span><br><span class="line">      ..onCancel = _endInteraction;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在 attach 的时候，增加动画的回调  </span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> attach(PipelineOwner owner) &#123;</span><br><span class="line">    <span class="keyword">super</span>.attach(owner);</span><br><span class="line">    _overlayAnimation.addListener(markNeedsPaint);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 在 detach 的时候，去掉动画的回调</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> detach() &#123;</span><br><span class="line">    _overlayAnimation.removeListener(markNeedsPaint);</span><br><span class="line">    <span class="keyword">super</span>.detach();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">bool</span> hitTestSelf(Offset position) =&gt; <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 处理事件。叶节点组件中，如果是交互型的，一般会重写该方法。否则不能识别任何操作。</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> handleEvent(PointerEvent event, BoxHitTestEntry entry) &#123;</span><br><span class="line">    <span class="keyword">assert</span>(debugHandleEvent(event, entry));</span><br><span class="line">    <span class="keyword">if</span> (event <span class="keyword">is</span> PointerDownEvent &amp;&amp; isInteractive) &#123;</span><br><span class="line">      <span class="comment">// We need to add the drag first so that it has priority.</span></span><br><span class="line">      _drag.addPointer(event);</span><br><span class="line">      _tap.addPointer(event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMinIntrinsicWidth(<span class="built_in">double</span> height) =&gt; _minPreferredTrackWidth + _maxSliderPartWidth;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMaxIntrinsicWidth(<span class="built_in">double</span> height) =&gt; _minPreferredTrackWidth + _maxSliderPartWidth;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMinIntrinsicHeight(<span class="built_in">double</span> width) =&gt; max(_minPreferredTrackHeight, _maxSliderPartHeight);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">double</span> computeMaxIntrinsicHeight(<span class="built_in">double</span> width) =&gt; max(_minPreferredTrackHeight, _maxSliderPartHeight);</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">bool</span> <span class="keyword">get</span> sizedByParent =&gt; <span class="keyword">true</span>;</span><br><span class="line">  <span class="comment">// 当 sizedByParent 为 true 时，必须重写 performResize 方法，返回该组件占据的大小</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> performResize() &#123;</span><br><span class="line">    size = Size(</span><br><span class="line">      constraints.hasBoundedWidth ? constraints.maxWidth : _minPreferredTrackWidth + _maxSliderPartWidth,</span><br><span class="line">      constraints.hasBoundedHeight ? constraints.maxHeight : max(_minPreferredTrackHeight, _maxSliderPartHeight),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 关键方法。在此使用 canvas 绘制图形。</span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> paint(PaintingContext context, Offset offset) &#123;</span><br><span class="line">    <span class="comment">// ……</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+            <a href="/tags/叶节点/" rel="tag"># 叶节点</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/04/makefile/" rel="next" title="makefile">
+                <i class="fa fa-chevron-left"></i> makefile
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/19/flutter架构及框架结构/" rel="prev" title="flutter架构及框架结构(一)">
+                flutter架构及框架结构(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avator.png" alt="谭智轩">
+            
+              <p class="site-author-name" itemprop="name">谭智轩</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tzxhy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.cn/user/1820446984508072" target="_blank" title="掘金">
+                      
+                        <i class="fa fa-fw fa-globe"></i>掘金</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.yuque.com/tanzhixuan-zebzs" target="_blank" title="语雀">
+                      
+                        <i class="fa fa-fw fa-globe"></i>语雀</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第n篇"><span class="nav-number">1.</span> <span class="nav-text">第n篇</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#节点分类"><span class="nav-number">2.</span> <span class="nav-text">节点分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前置概念"><span class="nav-number">3.</span> <span class="nav-text">前置概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进入场景"><span class="nav-number">4.</span> <span class="nav-text">进入场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Main"><span class="nav-number">5.</span> <span class="nav-text">Main</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#外层"><span class="nav-number">5.1.</span> <span class="nav-text">外层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RenderObject-类实现"><span class="nav-number">5.2.</span> <span class="nav-text">RenderObject 类实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a href="http://beian.miit.gov.cn/">京ICP备19023836号-2</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
