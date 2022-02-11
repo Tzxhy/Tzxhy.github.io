@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="学而时更之，不亦乐乎 版本：V11.10 LTS Note: 内容主要以个人基础为起点，只记录了个人认为需要的东西。官网 Async Hooksv8新增。用于监测所有异步操作。目前处于实验阶段。 async_hooks.executionAsyncId()返回当前环境上下文的ID。 async_hooks.triggerAsyncId()返回触发当前代码执行的环境上下文ID。比如，在一个Tick（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="v11.10 nodejs学习(一)">
+<meta property="og:url" content="https://tzxhy.github.io/2019/02/22/v11-10-nodejs%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="学而时更之，不亦乐乎 版本：V11.10 LTS Note: 内容主要以个人基础为起点，只记录了个人认为需要的东西。官网 Async Hooksv8新增。用于监测所有异步操作。目前处于实验阶段。 async_hooks.executionAsyncId()返回当前环境上下文的ID。 async_hooks.triggerAsyncId()返回触发当前代码执行的环境上下文ID。比如，在一个Tick（">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-21T18:30:39.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.421Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="Nodejs">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/02/22/v11-10-nodejs%E5%AD%A6%E4%B9%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;02&#x2F;22&#x2F;v11-10-nodejs%E5%AD%A6%E4%B9%A0&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;02&#x2F;22&#x2F;v11-10-nodejs学习&#x2F;&quot;,&quot;title&quot;:&quot;v11.10 nodejs学习(一)&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>v11.10 nodejs学习(一) | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Async-Hooks"><span class="nav-number">1.</span> <span class="nav-text">Async Hooks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#async-hooks-executionAsyncId"><span class="nav-number">1.1.</span> <span class="nav-text">async_hooks.executionAsyncId()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async-hooks-triggerAsyncId"><span class="nav-number">1.2.</span> <span class="nav-text">async_hooks.triggerAsyncId()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async-hooks-createHook-callbacks"><span class="nav-number">1.3.</span> <span class="nav-text">async_hooks.createHook(callbacks)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook-enable-disable"><span class="nav-number">1.4.</span> <span class="nav-text">hook.enable() &#x2F; disable()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E8%B0%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.</span> <span class="nav-text">回调配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#before-async"><span class="nav-number">1.5.1.</span> <span class="nav-text">before(async)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#after-asyncId"><span class="nav-number">1.5.2.</span> <span class="nav-text">after(asyncId)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#destroy-asyncId"><span class="nav-number">1.5.3.</span> <span class="nav-text">destroy(asyncId)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#promiseResolve-asyncId"><span class="nav-number">1.5.4.</span> <span class="nav-text">promiseResolve(asyncId)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer"><span class="nav-number">2.</span> <span class="nav-text">Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">关于构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zero-fill-buffers"><span class="nav-number">2.2.</span> <span class="nav-text">--zero-fill-buffers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EBuffer-from%E6%98%AFcopy%E8%BF%98%E6%98%AFshare"><span class="nav-number">2.3.</span> <span class="nav-text">关于Buffer.from是copy还是share</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86"><span class="nav-number">2.4.</span> <span class="nav-text">遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-Buffer"><span class="nav-number">2.5.</span> <span class="nav-text">Class: Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#new-Buffer"><span class="nav-number">2.5.1.</span> <span class="nav-text">new Buffer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Class-Method-Buffer-alloc-size-fill-encoding"><span class="nav-number">2.5.2.</span> <span class="nav-text">Class Method: Buffer.alloc(size[, fill[, encoding]])</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Class-Method-Buffer-allocUnsafe-size"><span class="nav-number">2.5.3.</span> <span class="nav-text">Class Method: Buffer.allocUnsafe(size)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Class-Method-Buffer-allocUnsafeSlow-size"><span class="nav-number">2.5.4.</span> <span class="nav-text">Class Method: Buffer.allocUnsafeSlow(size)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Child-Processes"><span class="nav-number">3.</span> <span class="nav-text">Child Processes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows%E4%B8%8A%E8%A1%8D%E7%94%9F-bat-cmd%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">windows上衍生.bat .cmd文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exec-command-options-callback"><span class="nav-number">3.2.</span> <span class="nav-text">exec(command[, options][, callback])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#child-process-execFile-file-args-options-callback"><span class="nav-number">3.3.</span> <span class="nav-text">child_process.execFile(file[, args][, options][, callback])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#child-process-fork-modulePath-args-options"><span class="nav-number">3.4.</span> <span class="nav-text">child_process.fork(modulePath[, args][, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#child-process-spawn-command-args-options"><span class="nav-number">3.5.</span> <span class="nav-text">child_process.spawn(command[, args][, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options-detached"><span class="nav-number">3.6.</span> <span class="nav-text">options.detached</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options-stdio"><span class="nav-number">3.7.</span> <span class="nav-text">options.stdio</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/02/22/v11-10-nodejs%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          v11.10 nodejs学习(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-02-21 18:30:39" itemprop="dateCreated datePublished" datetime="2019-02-21T18:30:39Z">2019-02-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nodejs/" itemprop="url" rel="index"><span itemprop="name">Nodejs</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>学而时更之，不亦乐乎</strong></p>
+<p>版本：V11.10 LTS</p>
+<p><strong>Note</strong>: 内容主要以个人基础为起点，只记录了个人认为需要的东西。<a target="_blank" rel="noopener" href="https://nodejs.org/api/">官网</a></p>
+<h2 id="Async-Hooks"><a href="#Async-Hooks" class="headerlink" title="Async Hooks"></a>Async Hooks</h2><p><strong>v8新增</strong>。用于监测所有异步操作。目前处于实验阶段。</p>
+<h3 id="async-hooks-executionAsyncId"><a href="#async-hooks-executionAsyncId" class="headerlink" title="async_hooks.executionAsyncId()"></a>async_hooks.executionAsyncId()</h3><p>返回当前环境上下文的ID。</p>
+<h3 id="async-hooks-triggerAsyncId"><a href="#async-hooks-triggerAsyncId" class="headerlink" title="async_hooks.triggerAsyncId()"></a>async_hooks.triggerAsyncId()</h3><p>返回触发当前代码执行的环境上下文ID。比如，在一个Tick（环境ID假设为1）中执行了异步操作A，那么A的triggerId就是1。</p>
+<h3 id="async-hooks-createHook-callbacks"><a href="#async-hooks-createHook-callbacks" class="headerlink" title="async_hooks.createHook(callbacks)"></a>async_hooks.createHook(callbacks)</h3><ul>
+<li>callback: &lt;对象&gt;</li>
+</ul>
+<p>创建一个Hook实例hook，callback是个回调对象，可包含init/before/after/destroy/promiseResolve。__NOTE__：由于console.log在Nodejs中也是异步操作，因此不能在各个回调中使用log来打印信息，会无限循环。常见的采用写文件方式。关于console.log是异步的验证，如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> asyncHooks = <span class="built_in">require</span>(<span class="string">&#x27;async_hooks&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(process.stdout.isTTY);</span><br><span class="line"></span><br><span class="line">asyncHooks.createHook(&#123;</span><br><span class="line">    <span class="function"><span class="title">init</span>(<span class="params">asyncId, type, triggerAsyncId, resource</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> eid = asyncHooks.executionAsyncId();</span><br><span class="line">      <span class="keyword">debugger</span>;</span><br><span class="line">      fs.writeSync(</span><br><span class="line">        <span class="number">1</span>, <span class="string">`init: <span class="subst">$&#123;type&#125;</span>(<span class="subst">$&#123;asyncId&#125;</span>): trigger: <span class="subst">$&#123;triggerAsyncId&#125;</span> execution: <span class="subst">$&#123;eid&#125;</span>\n`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).enable();</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;net&#x27;</span>).createServer(<span class="function">(<span class="params">conn</span>) =&gt;</span> &#123;&#125;).listen(<span class="number">8080</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;log1&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;log2&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">init: TCPSERVERWRAP(5): trigger: 1 execution: 1</span><br><span class="line">init: TickObject(6): trigger: 5 execution: 1</span><br><span class="line">log1</span><br><span class="line">init: TickObject(7): trigger: 1 execution: 1</span><br><span class="line">log2</span><br><span class="line">init: TickObject(8): trigger: 1 execution: 1</span><br></pre></td></tr></table></figure>
+<p>然后代码中去掉最后两行log，输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">init: TCPSERVERWRAP(5): trigger: 1 execution: 1</span><br><span class="line">init: TickObject(6): trigger: 5 execution: 1</span><br></pre></td></tr></table></figure>
+<p>发现，console.log的调用过程存在异步的调用（关于process.stdout是异步还是同步，process一节有说明，但我觉得不能解释这个console.log是异步 TODO）</p>
+<p>根据文档及我的理解，executionAsyncId为0，是C/C++环境上的上下文；1，是主程序的环境（及全局）；之后递增的，便是走event loop的异步环境。triggerAsyncId是触发这次异步操作的executionAsyncId。</p>
+<h3 id="hook-enable-disable"><a href="#hook-enable-disable" class="headerlink" title="hook.enable() / disable()"></a>hook.enable() / disable()</h3><p>开启或者关闭（在create后默认是关闭的）。</p>
+<h3 id="回调配置"><a href="#回调配置" class="headerlink" title="回调配置"></a>回调配置</h3><h4 id="before-async"><a href="#before-async" class="headerlink" title="before(async)"></a>before(async)</h4><ul>
+<li>asyncId: 数字</li>
+</ul>
+<p>当异步操作初始化后或者完成时，将调用回调来通知用户。before回调在所述回调执行前执行。before回调可能被执行0次或N次。当异步操作被取消时，before不会被调用；类似TCP服务器会调用before多次；像fs.open只会调用一次。</p>
+<h4 id="after-asyncId"><a href="#after-asyncId" class="headerlink" title="after(asyncId)"></a>after(asyncId)</h4><ul>
+<li>asyncId: 数字</li>
+</ul>
+<p>当通知用户的回调执行完成后立即执行。</p>
+<h4 id="destroy-asyncId"><a href="#destroy-asyncId" class="headerlink" title="destroy(asyncId)"></a>destroy(asyncId)</h4><p>当与asyncId相关的资源销毁时（依赖于gc）被调用。它也会被内嵌的API __emitDestroy()__调用。</p>
+<h4 id="promiseResolve-asyncId"><a href="#promiseResolve-asyncId" class="headerlink" title="promiseResolve(asyncId)"></a>promiseResolve(asyncId)</h4><p>当Promise的resolve调用时被调用。</p>
+<span id="more"></span>
+<hr>
+<h2 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h2><p>Buffer为Nodejs提供了对二进制文件的操作。</p>
+<h3 id="关于构造函数"><a href="#关于构造函数" class="headerlink" title="关于构造函数"></a>关于构造函数</h3><p>由于安全、易用性等，现已废除<strong>new Buffer</strong>构造器。使用Buffer.alloc/from/allocUnsafe等代替。</p>
+<h3 id="zero-fill-buffers"><a href="#zero-fill-buffers" class="headerlink" title="--zero-fill-buffers"></a><code>--zero-fill-buffers</code></h3><p>开启每次生成buffer都清空数据。</p>
+<h3 id="关于Buffer-from是copy还是share"><a href="#关于Buffer-from是copy还是share" class="headerlink" title="关于Buffer.from是copy还是share"></a>关于Buffer.from是copy还是share</h3><p>当Buffer.from传入一个TypedArray时，会复制该typedArray的content；当传入typedArray.buffer属性时，会share该buffer。</p>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>可以只用for…of，buf.keys(), buf.values(), buf.entries()</p>
+<h3 id="Class-Buffer"><a href="#Class-Buffer" class="headerlink" title="Class: Buffer"></a>Class: Buffer</h3><h4 id="new-Buffer"><a href="#new-Buffer" class="headerlink" title="new Buffer"></a>new Buffer</h4><p>所有参数形式的构造函数均废弃。采用<strong>Buffer.from</strong>替代。</p>
+<h4 id="Class-Method-Buffer-alloc-size-fill-encoding"><a href="#Class-Method-Buffer-alloc-size-fill-encoding" class="headerlink" title="Class Method: Buffer.alloc(size[, fill[, encoding]])"></a>Class Method: Buffer.alloc(size[, fill[, encoding]])</h4><ul>
+<li>size: buffer大小</li>
+<li>fill：string|buffer|integer，默认为0</li>
+<li>encoding：默认utf8<br>如果指定了fill和encoding，会在初始化后调用buf.fill(fill, encoding)来重置内存。<h4 id="Class-Method-Buffer-allocUnsafe-size"><a href="#Class-Method-Buffer-allocUnsafe-size" class="headerlink" title="Class Method: Buffer.allocUnsafe(size)"></a>Class Method: Buffer.allocUnsafe(size)</h4>基本跟上面那个一样，但是不会用buf.fill(fill, encoding)来重置内存。Buffer内部有个预分配的内部Buffer实例，用于快速分配新的Buffer实例，前提是通过Buffer.allowUnsafe来创建。当大小小于4k时，会使用这个pool。<h4 id="Class-Method-Buffer-allocUnsafeSlow-size"><a href="#Class-Method-Buffer-allocUnsafeSlow-size" class="headerlink" title="Class Method: Buffer.allocUnsafeSlow(size)"></a>Class Method: Buffer.allocUnsafeSlow(size)</h4>不采用内部的pool，可以长久保存（需要注意内存泄露的问题）。</li>
+</ul>
+<hr>
+<h2 id="Child-Processes"><a href="#Child-Processes" class="headerlink" title="Child Processes"></a>Child Processes</h2><p>默认上，stdin/stdout/stderr的管道建立在Nodejs进程和衍生进程间。这些管道都是有限制的（通常还与平台有关），当子进程输出到stdout上超过了被消费的内容，子进程就会阻塞管道缓冲区接收更多数据。这与shell的管道行为一致。如果不消费输入，可以设置 **{stdio: ‘ignore’}**。</p>
+<p>child_process.spawn()会异步的产生子进程，不会阻塞event loop；child_process.spawnSync()同步的产生子进程，阻塞，直到进程退出或者被干掉。</p>
+<p>Nodejs提供了为数不多的同步和异步方法来代替spawn/spawnSync。但是，其他API都是以spawn/spawnSync为基础实现的。</p>
+<ul>
+<li>child_process.exec: 产生一个shell，并在这个shell中运行命令，当结束后将stdout和stderr传给回调函数。</li>
+<li>child_process.execFile: 与上者类似，但它直接执行命令而不是先生成一个shell。</li>
+<li>child_process.fork: 产生一个新的Nodejs进程，调用指定的模块建立IPC通信通道，允许在父和子之间发送消息。</li>
+<li>child_process.execSync: 同步</li>
+<li>child_process.execFileSync: 同步</li>
+</ul>
+<p>虽然同步看着很棒，但会极大地影响event loop的速度。</p>
+<p>所有异步的API，都会返回一个ChildProcess实例，该类实现了EventEmitter，所以只需对实例监听事件即可。exec和execFile额外支持一个可选的<strong>callback</strong>参数，当子进程终结时会回调。</p>
+<h3 id="windows上衍生-bat-cmd文件"><a href="#windows上衍生-bat-cmd文件" class="headerlink" title="windows上衍生.bat .cmd文件"></a>windows上衍生.bat .cmd文件</h3><p>在类Unix平台（Unix、Linux、MacOS等）上，execFile更高效，因为它不会产生一个shell。在windows上，.bat和.cmd文件不能在没有终端的情况下靠它自己运行起来，因此windows上不能调用exeFile。在Windows上需要使用exec或者spawn（例子见官网）。</p>
+<h3 id="exec-command-options-callback"><a href="#exec-command-options-callback" class="headerlink" title="exec(command[, options][, callback])"></a>exec(command[, options][, callback])</h3><ul>
+<li>command: 字符串。参数以空格区分。</li>
+<li>options: 对象<ul>
+<li>cwd: 工作目录。default: null</li>
+<li>env: 环境键值对。default: null</li>
+<li>encoding: 默认’utf8’</li>
+<li>shell: 字符串，执行命令的shell。UNIX上默认’/bin/sh’，windows： process.env.ComSpec</li>
+<li>timeout: 超时时间，默认0</li>
+<li>maxBuffer: 在stdout或stderr上最大的数据量（字节），如果超出，子进程会被干掉，输出也会被截断。</li>
+<li>killSignal: 字符串或者数字。默认’SIGTERM’</li>
+<li>uid: 数字</li>
+<li>gid: 数字</li>
+<li>windowsHide: 布尔。隐藏windows子进程的输出框。默认：false</li>
+</ul>
+</li>
+<li>callback: 当进城拉闸时调用<ul>
+<li>error</li>
+<li>stdout</li>
+<li>stderr</li>
+</ul>
+</li>
+<li>Returns: ChildProcess实例</li>
+</ul>
+<p>在生成的shell中运行 <strong>command</strong> 命令，传递给exec的命令由shell直接处理，以及一些特殊字符需要相应处理。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exec(<span class="string">&#x27;&quot;/path/to/test file/test.sh&quot; arg1 arg2&#x27;</span>);</span><br><span class="line"><span class="comment">// path中包含空格的，需要包起来</span></span><br></pre></td></tr></table></figure>
+<p>如果传递了callback参数，它在子进程结束时会调用被（error, stdout, stderr）。成功时，error为null；有错误时，error为Error实例。error.code为退出状态码，error.signal为被干掉时的信号。stdout/stderr可能为字符串或者buffer，取决于options中encoding的值。</p>
+<p>如果运行超过timeout，父进程会发送SIGTERM（默认终结信号，可通过killSignal改变）来终结子进程。</p>
+<h3 id="child-process-execFile-file-args-options-callback"><a href="#child-process-execFile-file-args-options-callback" class="headerlink" title="child_process.execFile(file[, args][, options][, callback])"></a>child_process.execFile(file[, args][, options][, callback])</h3><ul>
+<li>file: path to file</li>
+<li>args: &lt;string[]&gt;</li>
+</ul>
+<p>execFile和exec很类似，但不会产生一个shell。也因为如此，IO的重定向、文件通配符等不支持。</p>
+<h3 id="child-process-fork-modulePath-args-options"><a href="#child-process-fork-modulePath-args-options" class="headerlink" title="child_process.fork(modulePath[, args][, options])"></a>child_process.fork(modulePath[, args][, options])</h3><ul>
+<li>modulePath: 子进程中需要运行的模块的路径</li>
+<li>args: &lt;string[]&gt;</li>
+<li>options:<ul>
+<li>cwd</li>
+<li>detached: 布尔。子进程独立于父进程运行。详见下文。</li>
+<li>env</li>
+<li>execPath: 用于创建子进程的可执行文件路径</li>
+<li>execArgv: 字符串数组。default：process.execArgv</li>
+<li>silent: 布尔。如果true，子进程的stdin、stdout、stderr都会pipe到父进程，否则会继承父进程。</li>
+<li>stdio: 当传递了该项，会覆盖silent选项。见下文</li>
+<li>windowsVerbatimArguments</li>
+<li>uid</li>
+<li>gid</li>
+</ul>
+</li>
+<li>Returns: ChildProcess实例</li>
+</ul>
+<p>fork的子进程实例有一些父子间进程内建的通信信道。fork默认会使用父进程的process.execPath来产生新的Node.js实例。</p>
+<h3 id="child-process-spawn-command-args-options"><a href="#child-process-spawn-command-args-options" class="headerlink" title="child_process.spawn(command[, args][, options])"></a>child_process.spawn(command[, args][, options])</h3><ul>
+<li>command: 要执行的命令</li>
+<li>args: 字符串数组，</li>
+<li>options:<ul>
+<li>cwd:</li>
+<li>env</li>
+<li>argv0: 设置argv[0]。</li>
+<li>stdio：见下文</li>
+<li>detached</li>
+<li>uid</li>
+<li>gid</li>
+<li>shell</li>
+<li>windowsVerbatimArguments</li>
+<li>windowsHide</li>
+</ul>
+</li>
+<li>Returns: ChildProcess实例</li>
+</ul>
+<h3 id="options-detached"><a href="#options-detached" class="headerlink" title="options.detached"></a>options.detached</h3><p>在windows上，设为true，能够让子进程在父进程拉闸后继续运行。子进程有它自己的console窗口。一旦对一个子进程开启分离选项，就不能再关闭了。</p>
+<p>在非Windows平台上，如果设为true，子进程会成为一个新的进程组和会话的先导者。注意，父进程退出后，子进程可能会继续运行，而不管它们是否已分离。</p>
+<p>默认情况下，父进程会等待分离的子进程退出。为了避免父进程等待子进程退出这种情况，可以在父进程中使用subProcess.unref() (subProcess是ChildProcess实例)方法。原理是这样会让父进程的event loop排除子进程。能让父进程独立于子进程退出， <strong>前提是父子进程间没有建立的IPC信道</strong>。</p>
+<p>当使用这个选项来开启长期运行的进程，当父进程退出后，子进程不会保持在后台继续运行，除非提供了未连接到父进程的stdio配置。如果继承了父进程的stdio，子进程将保持链接到控制终端。</p>
+<h3 id="options-stdio"><a href="#options-stdio" class="headerlink" title="options.stdio"></a>options.stdio</h3><p>该选项用于配置建立在父子进程间的管道。默认情况下，子进程的stdin、stdout、stderr都重定向到相应的subprocess.stdin、stdout、stderr流上。这等于设置options.stdio为[‘pipe’, ‘pipe’, ‘pipe’]。</p>
+<p>stdio可能为以下值：</p>
+<ul>
+<li>‘pipe’: 等于[‘pipe’, ‘pipe’, ‘pipe’]，为默认值。</li>
+<li>‘ignore’: 等于[‘ignore’, ‘ignore’, ‘ignore’]</li>
+<li>‘inherit’: 等于[‘inherit’, ‘inherit’, ‘inherit’]或者[0, 1, 2]</li>
+</ul>
+<p>否则options.stdio就是一个数组。在0，1，2位置上可以为以下值：</p>
+<ol>
+<li>‘pipe’ - 在父子进程间建立一个管道。管道的父端作为子进程对象的属性 <strong>subprocess.stdio[fd]</strong> 暴露到父进程。fds0-2 分别代表着subprocess.stdin/stdout/stderr。</li>
+<li>‘ipc’ - 在父子进程间建立传递信息、文件描述符的IPC通道。一个ChildProcess实例最多有一个IPCstdio文件描述符。设置为此项，会开启subprocess.send()方法。如果子进程是Node.js进程，IPC通道的存在将启用process.send()和process.disconnect()方法，在子进程中也有disconnect、message事件产生。<br>不支持不使用process.send()来获取IPC 通道fd或者对不是Node.js实例的子进程使用IPC通道。</li>
+<li>‘ignore’ - 子进程会忽略fd。由于Node.js会对子进程始终打开fds[0-2]，设为该值会让Node.js打开 /dev/null 并且链接到子进程fd上。</li>
+<li>‘inherit’ - 传递到父进程，类似与父进程共用控制终端的输入、输出。</li>
+<li>&lt;Stream&gt; - 共享一个可读或可写的流，比如一个文本终端、文件、socket或者一个到子进程的管道。</li>
+<li>正整数 - 被作为fd解释。</li>
+<li>null, undefined - 使用默认值。在0-2，使用’pipe’，3及以上，使用’ignore’</li>
+</ol>
+<p>需要注意的是，当IPC通道建立在父子进程间，并且子进程是Node.js进程，子进程以未引用的IPC通道启动，直到子进程对’disconnect’或者’message’事件注册了回调。这允许子进程在没有被开放的IPC通道保持开启时正常退出。</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/02/17/nodejs%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="prev" title="nodejs事件循环">
+                  <i class="fa fa-chevron-left"></i> nodejs事件循环
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/02/24/v11-10-nodejs%E5%AD%A6%E4%B9%A0-%E4%BA%8C/" rel="next" title="v11.10 nodejs学习(二)">
+                  v11.10 nodejs学习(二) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

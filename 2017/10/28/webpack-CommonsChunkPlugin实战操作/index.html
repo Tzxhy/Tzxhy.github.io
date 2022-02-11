@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="近来学习webpack了，有了解到CommonsChunkPlugin插件用来解决长效缓存的问题。那么问题来了，怎么用？怎么用好？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack-CommonsChunkPlugin实战操作">
+<meta property="og:url" content="https://tzxhy.github.io/2017/10/28/webpack-CommonsChunkPlugin%E5%AE%9E%E6%88%98%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="近来学习webpack了，有了解到CommonsChunkPlugin插件用来解决长效缓存的问题。那么问题来了，怎么用？怎么用好？">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-10-27T19:02:46.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.422Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="Webpack">
+<meta property="article:tag" content="CommonsChunkPlugin">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2017/10/28/webpack-CommonsChunkPlugin%E5%AE%9E%E6%88%98%E6%93%8D%E4%BD%9C/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2017&#x2F;10&#x2F;28&#x2F;webpack-CommonsChunkPlugin%E5%AE%9E%E6%88%98%E6%93%8D%E4%BD%9C&#x2F;&quot;,&quot;path&quot;:&quot;2017&#x2F;10&#x2F;28&#x2F;webpack-CommonsChunkPlugin实战操作&#x2F;&quot;,&quot;title&quot;:&quot;webpack-CommonsChunkPlugin实战操作&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>webpack-CommonsChunkPlugin实战操作 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%98%E7%BD%91%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">官网学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Commons-chunk-for-entries"><span class="nav-number">1.1.</span> <span class="nav-text">1. Commons chunk for entries</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Explicit-vendor-chunks"><span class="nav-number">1.2.</span> <span class="nav-text">2.Explicit vendor chunks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Extract-out-common-modules-and-runtime-module"><span class="nav-number">1.3.</span> <span class="nav-text">3.Extract out common modules and runtime module</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2017/10/28/webpack-CommonsChunkPlugin%E5%AE%9E%E6%88%98%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          webpack-CommonsChunkPlugin实战操作
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-10-27 19:02:46" itemprop="dateCreated datePublished" datetime="2017-10-27T19:02:46Z">2017-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">构建工具</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>近来学习webpack了，有了解到CommonsChunkPlugin插件用来解决长效缓存的问题。那么问题来了，怎么用？怎么用好？</p>
+<span id="more"></span>
+<h1 id="官网学习"><a href="#官网学习" class="headerlink" title="官网学习"></a>官网学习</h1><p>webpack1的<a target="_blank" rel="noopener" href="http://webpack.github.io/docs/using-plugins.html">官网地址</a>，没事看看。<br>其中关于插件CommonsChunkPlugin，<a target="_blank" rel="noopener" href="http://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin">这</a>有详细介绍。具体api我不介绍，个人自己看。我就按它的几个例子来说。</p>
+<h2 id="1-Commons-chunk-for-entries"><a href="#1-Commons-chunk-for-entries" class="headerlink" title="1. Commons chunk for entries"></a>1. Commons chunk for entries</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> CommonsChunkPlugin(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;commons&quot;</span>, <span class="comment">//此为非入口块的名称</span></span><br><span class="line">  <span class="comment">// (the commons chunk name)</span></span><br><span class="line">  <span class="attr">filename</span>: <span class="string">&quot;commons.js&quot;</span>,<span class="comment">//可以重新指定</span></span><br><span class="line">  <span class="comment">// (the filename of the commons chunk)</span></span><br><span class="line">  <span class="comment">// minChunks: 3,//默认是块的数量（不含本commons块）</span></span><br><span class="line">  <span class="comment">// (Modules must be shared between 3 entries)</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// chunks: [&quot;pageA&quot;, &quot;pageB&quot;],//可以自定义块的范围，默认所有块</span></span><br><span class="line">  <span class="comment">// (Only use these entries)</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这样会将所有入口块的公共部分打到commons.js中，包含runtime部分和公共部分（多为第三方库，如jquery、react等）。同时需要先加载commons.js，然后才是应用代码。</p>
+<h2 id="2-Explicit-vendor-chunks"><a href="#2-Explicit-vendor-chunks" class="headerlink" title="2.Explicit vendor chunks"></a>2.Explicit vendor chunks</h2><p>假设我们有如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">entry: &#123;</span><br><span class="line">  <span class="attr">vendor</span>: [<span class="string">&quot;jquery&quot;</span>, <span class="string">&quot;other-lib&quot;</span>], <span class="comment">// 多为第三方库</span></span><br><span class="line">  <span class="attr">app</span>: <span class="string">&quot;./entry&quot;</span> <span class="comment">// 应用入口代码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> CommonsChunkPlugin(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;vendor&quot;</span>, <span class="comment">// 将入口块设为操作块</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// filename: &quot;vendor.js&quot; // 可以另外设置，如果不设置，文件名则为[name].js，同时会覆盖原vendor块</span></span><br><span class="line">  <span class="comment">// (Give the chunk a different name)</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">minChunks</span>: <span class="literal">Infinity</span>, <span class="comment">//当当前操作块为入口块时，Infinity会提取出runtime代码和公共代码（三方库）</span></span><br><span class="line">  <span class="comment">// (with more entries, this ensures that no other module</span></span><br><span class="line">  <span class="comment">//  goes into the vendor chunk)</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>效果和1.基本一致，只是在入口块添加了一个三方库的入口，提取公共块时指定三方块为操作块即可。</p>
+<h2 id="3-Extract-out-common-modules-and-runtime-module"><a href="#3-Extract-out-common-modules-and-runtime-module" class="headerlink" title="3.Extract out common modules and runtime module"></a>3.Extract out common modules and runtime module</h2><p>这个是自己多次实验发现的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">entry: &#123;</span><br><span class="line">  	<span class="attr">main1</span>: <span class="string">&#x27;./main1.js&#x27;</span>,<span class="comment">//引用了vendor中两个库</span></span><br><span class="line">  	<span class="attr">main2</span>: <span class="string">&#x27;./main2.js&#x27;</span>,<span class="comment">//引用了vendor中两个库</span></span><br><span class="line">    <span class="attr">vendor</span>: [<span class="string">&#x27;jquery&#x27;</span>,<span class="string">&#x27;underscore&#x27;</span>]<span class="comment">//一般如果入口写了vendor，则提取</span></span><br><span class="line">    <span class="comment">//公共块时name需要设置为vendor</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&#x27;[name].[chunkhash].js&#x27;</span>,</span><br><span class="line">    <span class="attr">path</span>: path.resolve(__dirname, <span class="string">&#x27;./dist&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">  	<span class="comment">// new webpack.BannerPlugin(`built on $&#123;new Date().toLocaleString()&#125;`),</span></span><br><span class="line">    <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</span><br><span class="line">      <span class="comment">//指定块的名称。可以是自己写的，</span></span><br><span class="line">      <span class="comment">//也可以是入口块的名称（entry里面的）</span></span><br><span class="line">      <span class="comment">// 如果是自己写的，则会新建一个块，以filename为文件名</span></span><br><span class="line">      <span class="comment">// 如果是现有块，则以现有块重写现有块内容（无filename选项时，有filename时，新建文件，并删除原来的块文件）</span></span><br><span class="line">      <span class="comment">// 现有块， 多指定第三方库，可以直接覆盖原现有块</span></span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;init&#x27;</span>,</span><br><span class="line">      <span class="attr">minChunks</span>: <span class="literal">Infinity</span>, <span class="comment">// init为非入口块，则只移动所有模块的runtime代码到init块中</span></span><br><span class="line">      <span class="attr">filename</span>: <span class="string">&#x27;init.[chunkhash].js&#x27;</span> <span class="comment">//文件名称</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;vendor&#x27;</span>,<span class="comment">//如果name指定的块不是入口块，则会自动添加runtime头，如果是，则不会添加了。棒棒哒！！这里是入口块，而且</span></span><br><span class="line">      <span class="comment">// main1,main2块此时以已经无runtime代码</span></span><br><span class="line">      <span class="attr">chunks</span>: [<span class="string">&#x27;main1&#x27;</span>, <span class="string">&#x27;main2&#x27;</span>]</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// new webpack.optimize.CommonsChunkPlugin(&#123;</span></span><br><span class="line">    <span class="comment">//   name: &#x27;test&#x27;,//如果name指定的块不是入口块，则会自动添加runtime头，并且可能导致代码重复；如果是，则不会添加runtime了。</span></span><br><span class="line">    <span class="comment">// &#125;),</span></span><br><span class="line">    <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;vendor&#x27;</span>,<span class="comment">//如果name指定的块不是入口块，则会自动添加runtime头，如果是，则不会添加了。棒棒哒！！</span></span><br><span class="line">      <span class="attr">minChunks</span>: <span class="literal">Infinity</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      <span class="attr">title</span>: <span class="string">&#x27;test&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// new ChunkManifestPlugin(&#123;</span></span><br><span class="line">    <span class="comment">//   filename: &#x27;manifest.json&#x27;,</span></span><br><span class="line">    <span class="comment">//   manifestVariable: &#x27;webpackManifest&#x27;,</span></span><br><span class="line">    <span class="comment">//   inlineManifest: false</span></span><br><span class="line">    <span class="comment">// &#125;)</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Webpack/" rel="tag"># Webpack</a>
+              <a href="/tags/CommonsChunkPlugin/" rel="tag"># CommonsChunkPlugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/25/vue%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B9%8B%E7%BB%84%E4%BB%B6slot-%E5%8C%85%E5%90%ABscopeSlot/" rel="prev" title="vue组件开发之组件slot(包含scopeSlot)">
+                  <i class="fa fa-chevron-left"></i> vue组件开发之组件slot(包含scopeSlot)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/02/17/nodejs%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="next" title="nodejs事件循环">
+                  nodejs事件循环 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

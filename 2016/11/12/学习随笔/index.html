@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="bootstrap的js文件中函数面前‘+’号是什么意思？相当于 (function($) {…})($)，意思就是把当前这个闭包立即执行。注意这个函数末尾有 ($)，千万不要以为函数前面加个 + 就会执行。如果不写 + 直接写 function() {…}()，这会造成 js 语法错误，这是因为 function() {…} 是函数声明，它不是表达式，它必须有一个名字。但就算有了名字，它也不会返">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习随笔">
+<meta property="og:url" content="https://tzxhy.github.io/2016/11/12/%E5%AD%A6%E4%B9%A0%E9%9A%8F%E7%AC%94/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="bootstrap的js文件中函数面前‘+’号是什么意思？相当于 (function($) {…})($)，意思就是把当前这个闭包立即执行。注意这个函数末尾有 ($)，千万不要以为函数前面加个 + 就会执行。如果不写 + 直接写 function() {…}()，这会造成 js 语法错误，这是因为 function() {…} 是函数声明，它不是表达式，它必须有一个名字。但就算有了名字，它也不会返">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-11-12T12:13:34.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.424Z">
+<meta property="article:author" content="谭智轩">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2016/11/12/%E5%AD%A6%E4%B9%A0%E9%9A%8F%E7%AC%94/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2016&#x2F;11&#x2F;12&#x2F;%E5%AD%A6%E4%B9%A0%E9%9A%8F%E7%AC%94&#x2F;&quot;,&quot;path&quot;:&quot;2016&#x2F;11&#x2F;12&#x2F;学习随笔&#x2F;&quot;,&quot;title&quot;:&quot;学习随笔&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>学习随笔 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2016/11/12/%E5%AD%A6%E4%B9%A0%E9%9A%8F%E7%AC%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习随笔
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2016-11-12 12:13:34" itemprop="dateCreated datePublished" datetime="2016-11-12T12:13:34Z">2016-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>bootstrap的js文件中函数面前‘+’号是什么意思？<br>相当于 (function($) {…})($)，意思就是把当前这个闭包立即执行。注意这个函数末尾有 ($)，千万不要以为函数前面加个 + 就会执行。<br>如果不写 + 直接写 function() {…}()，这会造成 js 语法错误，这是因为 function() {…} 是函数声明，它不是表达式，它必须有一个名字。但就算有了名字，它也不会返回函数，在后面加 () 并不会变成函数调用，而是变成简单的括号表达式。<br>而前面写了个 + 之后 +function() {…}() 变成一个表达式，末尾的 ()由于运算优先级高会先执行，于是就把刚定义的函数执行了一遍。<br>现在流行这样写大概是因为比加括号的写法少一个字符吧</p>
+<hr>
+<p>无论在标签中class属性里类的顺序如何，最终相同的属性值取css文件中权重最大或者权重一样但声明位置最后的那个。</p>
+<span id="more"></span>
+
+<hr>
+<p>Mac中设置在当前目录中打开Terminal：System Preferences -&gt; Keyboard -&gt; Shortcuts -&gt; Services -&gt; New Terminal at Folders/New Terminal Tab at Folder 这二项都勾上。在目录上的菜单里就有。</p>
+<hr>
+<p>CSS中,列表项若display不为list-item,则前面的列表项符号消失.</p>
+<hr>
+<p>对于两栏布局右栏自适应,左栏左浮动,右栏块级元素会从浮动处向行末自动填满,再设置合适的margin-left即可实现左栏定宽右栏自适应.使用两栏布局时,有几点特别需要注意:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">.secondary &#123;</span><br><span class="line">	overflow: auto;</span><br><span class="line">	width: auto;</span><br><span class="line">	margin-left: 220px;</span><br><span class="line">	margin-right: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.secondary .content-wrap &#123;</span><br><span class="line">	width: 100%;</span><br><span class="line">	<span class="built_in">float</span>: left; /* 这一步很关键 */</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">.content &#123;</span><br><span class="line">	margin-right: 140px;</span><br><span class="line">	min-height: 200px;</span><br><span class="line">	background-color: white;</span><br><span class="line">	padding: 20px;</span><br><span class="line">	min-width: 200px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=<span class="string">&quot;secondary&quot;</span>&gt;</span><br><span class="line">	&lt;div class=<span class="string">&quot;content-wrap&quot;</span>&gt;</span><br><span class="line">		&lt;div class=<span class="string">&quot;content&quot;</span>&gt;sfdefsfefes&lt;/div&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">	&lt;div class=<span class="string">&quot;secondary&quot;</span>&gt;</span><br><span class="line">		&lt;div class=<span class="string">&quot;self-logo1&quot;</span>&gt;个人logo&lt;/div&gt;</span><br><span class="line">		&lt;div class=<span class="string">&quot;self-logo2&quot;</span>&gt;个人logo&lt;/div&gt;</span><br><span class="line">		&lt;div class=<span class="string">&quot;self-logo3&quot;</span>&gt;个人logo&lt;/div&gt;</span><br><span class="line">		&lt;div class=<span class="string">&quot;self-logo4&quot;</span>&gt;个人logo&lt;/div&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>以上摘自本人写的浮动+负margin三栏布局片段. secondary为右两栏,左栏左浮不再贴出来. 需要注意的是, 用负margin使顶宽栏移动到上一行时, 内容区需要一个包裹层, 并将此包裹层设置为float:left(float无继承性, 内容层不用float:none), width: 100%, 对于内容层, 将右侧margin设为顶宽右栏的宽度即可. 其中, 内容区的包裹层起到一个接收的作用, 若没有这一层的float, 则不能将下层元素通过负margin移动到上一行.</p>
+<hr>
+<p>border-radius使用:这个为css3的属性, 可以为框的四个角添加圆角. 可以设置1到4个值, 值复制情况与padding,margin一致. 第一个值为左上角,第二个为右上角,顺时针转动. 可以设置两组值, 用 / 分开, 此时第一组值表示水平距离, 后一组表示垂直距离. 应用举例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 4分之1 圆</span></span><br><span class="line">background-color: orange;</span><br><span class="line">width: 50px;</span><br><span class="line">height: 50px;</span><br><span class="line">border-radius: 50px 0 0 0;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 吃豆人</span></span><br><span class="line">width:0;</span><br><span class="line">height:0;</span><br><span class="line">border:100px solid gray;</span><br><span class="line">border-radius:100px;</span><br><span class="line">border-right-color:<span class="comment">#fff;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>使元素居中的一点总结:<br>水平居中: 对于有块级父元素的内联元素或inline-*, 可以在父元素上使用text-align: center; 对于块级元素的居中, 可以设置宽度后使用margin: 0 auto.<br>垂直居中: 对于单行inline或inline-*元素, 可以加上下相同的padding,或者使用line-height使之等于height; 多行文本可以使用vertical-align: middle; 对块级定宽元素, 使用相对定位+决定定位 top:50%; margin-top: -width/2;  若不定宽, 则不用负margin, 使用transform: translate(-50%, -50%).这个属性是基于当前元素的宽高.</p>
+<p>js中什么时候, new对来的对象,使用严格相等运算法返回true?<br>比如, var g1 = new A();如果A返回为一个似有静态成员, 则为true;即, 使用闭包保存似有静态成员,并返回这个成员, 则所有new出来的对象都是同一个引用.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2016/10/31/npm%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="npm常用命令">
+                  <i class="fa fa-chevron-left"></i> npm常用命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/11/14/flex%E5%B8%83%E5%B1%80/" rel="next" title="flex布局">
+                  flex布局 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

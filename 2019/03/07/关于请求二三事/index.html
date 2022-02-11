@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="关于请求二三事请求的方式：  get请求，又有几种细分的方式： post请求，细分方式： 表单请求（先不管分类依据是否正确）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于请求二三事">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8E%E8%AF%B7%E6%B1%82%E4%BA%8C%E4%B8%89%E4%BA%8B/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="关于请求二三事请求的方式：  get请求，又有几种细分的方式： post请求，细分方式： 表单请求（先不管分类依据是否正确）">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-07T14:44:13.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.423Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="网络请求">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8E%E8%AF%B7%E6%B1%82%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;07&#x2F;%E5%85%B3%E4%BA%8E%E8%AF%B7%E6%B1%82%E4%BA%8C%E4%B8%89%E4%BA%8B&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;07&#x2F;关于请求二三事&#x2F;&quot;,&quot;title&quot;:&quot;关于请求二三事&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>关于请求二三事 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%AF%B7%E6%B1%82%E4%BA%8C%E4%B8%89%E4%BA%8B"><span class="nav-number">1.</span> <span class="nav-text">关于请求二三事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%BC%96%E7%A0%81%E8%A6%81%E8%80%83%E8%99%91%E7%9A%84"><span class="nav-number">1.0.1.</span> <span class="nav-text">关于编码要考虑的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E6%98%AF"><span class="nav-number">1.0.2.</span> <span class="nav-text">首先需要知道的是</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E5%B7%B2%E7%9F%A5%E5%9D%91"><span class="nav-number">1.0.3.</span> <span class="nav-text">补充已知坑</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8E%E8%AF%B7%E6%B1%82%E4%BA%8C%E4%B8%89%E4%BA%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于请求二三事
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-07 14:44:13" itemprop="dateCreated datePublished" datetime="2019-03-07T14:44:13Z">2019-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" itemprop="url" rel="index"><span itemprop="name">网络请求</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="关于请求二三事"><a href="#关于请求二三事" class="headerlink" title="关于请求二三事"></a>关于请求二三事</h1><p>请求的方式：</p>
+<ol>
+<li>get请求，又有几种细分的方式：</li>
+<li>post请求，细分方式：</li>
+<li>表单请求（先不管分类依据是否正确）</li>
+</ol>
+<span id="more"></span>
+
+<p>下面分点来说：</p>
+<ol>
+<li>会刷新页面的有：手动输入一个URL到地址栏，按回车；也可以是FORM表单提交的GET请求。不会刷新的：ajax（fetch）方式的get（需要考虑跨域的问题）。一般来说，get请求没有请求体，所有参数都在url中能看到，并且讲道理是有长度限制的（各个浏览器限制不一样，chrome就可以好几大千字符，其他浏览器没测试）。在长请求地址时，考虑到兼容性，不要使用get的方式。使用post。</li>
+<li>post也可以ajax（fetch），或者表单的POST方式（刷新页面）。对于获取数据渲染页面，使用异步获取。对于页面间传参可以使用FORM提交后刷新页面。长度任意。</li>
+</ol>
+<p>关于请求要考虑的东西：</p>
+<ol>
+<li>请求的method，即是GET、还是POST（获取数据中常用到的请求主要是这两类），这关系到后台的数据解析方式；</li>
+<li>请求体的编码问题。</li>
+</ol>
+<ul>
+<li>1就不详细说了，只要知道GET一般是从url中获取数据，没有所谓的请求体（我使用XMLHttpRequest发请求，send中加一个对象，在请求详情中并没有出现我发送的数据）。</li>
+<li>对于2，在发送请求时，不同浏览器、不同操作系统，在发送包含中文等非ANSI编码的文字时，会存在对URL的编码问题。具体可看<a target="_blank" rel="noopener" href="https://blog.csdn.net/liaozhongping/article/details/48543147%E8%BF%99%E9%87%8C%E3%80%82%E5%A4%A7%E8%87%B4%E5%B0%B1%E6%98%AF%E8%AF%B4%EF%BC%8C%E6%9C%80%E5%A5%BD%E5%AF%B9%E5%AD%98%E5%9C%A8%E4%B8%AD%E6%96%87%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%8B%E5%8A%A8%E8%BF%9B%E8%A1%8C%E4%B8%80%E6%AC%A1urlencode%EF%BC%8C%E4%BB%A5%E8%A7%A3%E5%86%B3%E5%90%84%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%96%E7%A0%81%E4%B8%8D%E4%B8%80%E8%87%B4%E9%97%AE%E9%A2%98%E3%80%82">https://blog.csdn.net/liaozhongping/article/details/48543147这里。大致就是说，最好对存在中文的查询手动进行一次urlencode，以解决各浏览器编码不一致问题。</a></li>
+</ul>
+<p>PS: 题外话，对于编码，js提供了三种，escape, encodeURI, encodeURIComponent。区别见：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qiantuwuliang/archive/2009/07/19/1526687.html">https://www.cnblogs.com/qiantuwuliang/archive/2009/07/19/1526687.html</a> 。简而言之，escape针对 <strong>非</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">英文字母，数字，- _ . ! ~ * &#x27; ( )</span><br></pre></td></tr></table></figure>
+<p>进行转码，encodeURI在escape的基础上，<strong>增加</strong>了对URI敏感的 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;/?:@&amp;=+$,#</span><br></pre></td></tr></table></figure>
+<p>，这几个字符不参与转码。encodeURIComponent会转码URI敏感的那几个字符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;/?:@&amp;=+$,#</span><br></pre></td></tr></table></figure>
+<p> 它相当于转码一个字符串，这个字符串是一个完整URI的某一部分，放在URL来说可以表达一个协议头或者某一级path或者是查询的参数等。</p>
+<h3 id="关于编码要考虑的"><a href="#关于编码要考虑的" class="headerlink" title="关于编码要考虑的"></a>关于编码要考虑的</h3><p>前端的编码正确与否，直接关系到后端的解码是否正确。比如，前端编码了两次，后端只解码了一次，能correct吗？当然不能。</p>
+<h3 id="首先需要知道的是"><a href="#首先需要知道的是" class="headerlink" title="首先需要知道的是"></a>首先需要知道的是</h3><p>不管你的URL中有没有非asic字符，浏览器默认都会对URL进行编码一次，只是说，如果你的URL中只有asic字符了，比如：<a target="_blank" rel="noopener" href="http://www.qunar.com,不管再怎么被浏览器转码都还是www.qunar.com.所以说,在存在中文参数的,可以先encodeuricomponent一遍,再被浏览器自己转码一遍.发到后端的请求地址或者参数,会被后端正确地用一次解码或者两次解码来正确接收(视后端框架是否会主动解码一次url地址,一般来说是会的)./">www.qunar.com，不管再怎么被浏览器转码都还是www.qunar.com。所以说，在存在中文参数的，可以先encodeURIComponent一遍，再被浏览器自己转码一遍。发到后端的请求地址或者参数，会被后端正确地用一次解码或者两次解码来正确接收（视后端框架是否会主动解码一次URL地址，一般来说是会的）。</a></p>
+<h3 id="补充已知坑"><a href="#补充已知坑" class="headerlink" title="补充已知坑"></a>补充已知坑</h3><p>java中URLEncode.encode，会把空格变成+号，得注意。</p>
+<p>注意好了编码的问题，让我们愉快的发送请求吧！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" rel="tag"># 网络请求</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/07/CSP%E7%AE%80%E4%BB%8B/" rel="prev" title="CSP简介">
+                  <i class="fa fa-chevron-left"></i> CSP简介
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/07/grep%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8C%97/" rel="next" title="grep命令指北">
+                  grep命令指北 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

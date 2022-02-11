@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="今天主要探讨的是 flutter 中常用的状态管理方案：BLoC 和 Provider，Redux。 BLoC 介绍关于 bloc，可以详细从这里去了解。这里我简单说说。 从上图中可知，BLoC 有3个核心概念：UI、BLoC、Data。UI 即是页面展现，Bloc 作为业务逻辑单元，Data 作为持久数据层，对比 MVP 其实有挺多相似之处的。MVP中，通过Presenter 来沟通 View">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flutter状态管理调研">
+<meta property="og:url" content="https://tzxhy.github.io/2020/03/03/flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="今天主要探讨的是 flutter 中常用的状态管理方案：BLoC 和 Provider，Redux。 BLoC 介绍关于 bloc，可以详细从这里去了解。这里我简单说说。 从上图中可知，BLoC 有3个核心概念：UI、BLoC、Data。UI 即是页面展现，Bloc 作为业务逻辑单元，Data 作为持久数据层，对比 MVP 其实有挺多相似之处的。MVP中，通过Presenter 来沟通 View">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://bloclibrary.dev/assets/bloc_architecture.png">
+<meta property="article:published_time" content="2020-03-02T18:14:11.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.411Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="状态管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bloclibrary.dev/assets/bloc_architecture.png">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2020/03/03/flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B0%83%E7%A0%94/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2020&#x2F;03&#x2F;03&#x2F;flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B0%83%E7%A0%94&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;03&#x2F;03&#x2F;flutter状态管理调研&#x2F;&quot;,&quot;title&quot;:&quot;flutter状态管理调研&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>flutter状态管理调研 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BLoC-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">BLoC 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-BLoC-%E9%80%BB%E8%BE%91%E5%9D%97"><span class="nav-number">1.1.1.</span> <span class="nav-text">定义一个 BLoC 逻辑块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-UI"><span class="nav-number">1.1.2.</span> <span class="nav-text">定义 UI</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provider"><span class="nav-number">2.</span> <span class="nav-text">Provider</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E6%95%B0%E6%8D%AE%E7%B1%BB"><span class="nav-number">2.2.1.</span> <span class="nav-text">构造数据类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E4%BE%9B%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.2.</span> <span class="nav-text">提供数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.3.</span> <span class="nav-text">获取数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BLoC-%E5%AF%B9%E6%AF%94-Provider"><span class="nav-number">3.</span> <span class="nav-text">BLoC 对比 Provider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux"><span class="nav-number">4.</span> <span class="nav-text">redux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flutter-redux"><span class="nav-number">4.1.</span> <span class="nav-text">flutter_redux</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#StoreProvider-lt-Store-gt"><span class="nav-number">4.1.1.</span> <span class="nav-text">StoreProvider&lt;Store&gt;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StoreConnector-lt-Store-Data-gt"><span class="nav-number">4.1.2.</span> <span class="nav-text">StoreConnector&lt;Store, Data&gt;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StoreBuilder-lt-Store-gt"><span class="nav-number">4.1.3.</span> <span class="nav-text">StoreBuilder&lt;Store&gt;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-flutter-redux"><span class="nav-number">4.2.</span> <span class="nav-text">使用 flutter_redux</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.2.1.</span> <span class="nav-text">构建数据对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E4%BE%9B%E6%95%B0%E6%8D%AE-amp-amp-%E8%8E%B7%E5%8F%96"><span class="nav-number">4.2.2.</span> <span class="nav-text">提供数据 &amp;&amp; 获取</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%96%B9%E5%AF%B9%E6%AF%94"><span class="nav-number">5.</span> <span class="nav-text">多方对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">5.2.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0UI"><span class="nav-number">5.3.</span> <span class="nav-text">更新UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E6%88%90%E6%9C%AC"><span class="nav-number">5.4.</span> <span class="nav-text">学习成本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/03/03/flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          flutter状态管理调研
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-02 18:14:11" itemprop="dateCreated datePublished" datetime="2020-03-02T18:14:11Z">2020-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>今天主要探讨的是 flutter 中常用的状态管理方案：BLoC 和 Provider，Redux。</p>
+<h2 id="BLoC-介绍"><a href="#BLoC-介绍" class="headerlink" title="BLoC 介绍"></a>BLoC 介绍</h2><p>关于 bloc，可以详细从<a target="_blank" rel="noopener" href="https://bloclibrary.dev/#/zh-cn/architecture">这里</a>去了解。这里我简单说说。<br><img src="https://bloclibrary.dev/assets/bloc_architecture.png" alt="bloc"></p>
+<p>从上图中可知，BLoC 有3个核心概念：UI、BLoC、Data。UI 即是页面展现，Bloc 作为业务逻辑单元，Data 作为持久数据层，对比 MVP 其实有挺多相似之处的。MVP中，通过Presenter 来沟通 View 和 Model；BLoC 模式中通过 BloC 模块沟通 UI 和 Data。</p>
+<span id="more"></span>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><p>组件显示往往与业务逻辑是相关的。通常我们会在一个组件中定义很多方法，比如 clickRecharge、hanglePay 等业务逻辑，但这样的结构，导致很难复用这些通用的业务逻辑。BLoC 的方式即是：UI 组件只绘制 UI，事件处理都交由 BLoC 对象，这样 BLoC 对象能被多个包含相同逻辑功能的组件复用。下面以计数器为例：</p>
+<h4 id="定义一个-BLoC-逻辑块"><a href="#定义一个-BLoC-逻辑块" class="headerlink" title="定义一个 BLoC 逻辑块"></a>定义一个 BLoC 逻辑块</h4><p>这里忽略数据层的接入，直接将数据存于 BLoC 对象里，更新、读取都在这个对象中。可以看到 BLoC 逻辑块都是逻辑代码，跟 UI 无关。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> CounterEvent &#123;increment, decrement&#125;;</span><br><span class="line"><span class="comment">// 定义将 CounterEvent 事件转换为 int 数据</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CounterBloc</span> <span class="keyword">extends</span> <span class="title">Bloc</span>&lt;<span class="title">CounterEvent</span>, <span class="title">int</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">int</span> <span class="keyword">get</span> initialState =&gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/// <span class="markdown">将事件转换为最终的数据</span></span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Stream&lt;<span class="built_in">int</span>&gt; mapEventToState(CounterEvent event) <span class="keyword">async</span>* &#123;</span><br><span class="line">    <span class="keyword">switch</span> (event) &#123;</span><br><span class="line">      <span class="keyword">case</span> CounterEvent.decrement:</span><br><span class="line">        <span class="keyword">yield</span> state - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> CounterEvent.increment:</span><br><span class="line">        <span class="keyword">yield</span> state + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="定义-UI"><a href="#定义-UI" class="headerlink" title="定义 UI"></a>定义 UI</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> main() =&gt; runApp(MyApp());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      title: <span class="string">&#x27;Flutter Demo&#x27;</span>,</span><br><span class="line">      home: BlocProvider&lt;CounterBloc&gt;(</span><br><span class="line">        create: (context) =&gt; CounterBloc(),</span><br><span class="line">        child: CounterPage(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CounterPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="comment">// ignore close_sinks</span></span><br><span class="line">    <span class="keyword">final</span> CounterBloc counterBloc = BlocProvider.of&lt;CounterBloc&gt;(context);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(title: Text(<span class="string">&#x27;Counter&#x27;</span>)),</span><br><span class="line">      <span class="comment">// 获取 CounterBloc 类型的 BLoC 数据块，数据格式为 int</span></span><br><span class="line">      body: BlocBuilder&lt;CounterBloc, <span class="built_in">int</span>&gt;(</span><br><span class="line">        builder: (context, count) &#123;</span><br><span class="line">          <span class="keyword">return</span> Center(</span><br><span class="line">            child: Text(</span><br><span class="line">              <span class="string">&#x27;<span class="subst">$count</span>&#x27;</span>,</span><br><span class="line">              style: TextStyle(fontSize: <span class="number">24.0</span>),</span><br><span class="line">            ),</span><br><span class="line">          );</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">      floatingActionButton: Column(</span><br><span class="line">        crossAxisAlignment: CrossAxisAlignment.end,</span><br><span class="line">        mainAxisAlignment: MainAxisAlignment.end,</span><br><span class="line">        children: &lt;Widget&gt;[</span><br><span class="line">          Padding(</span><br><span class="line">            padding: EdgeInsets.symmetric(vertical: <span class="number">5.0</span>),</span><br><span class="line">            child: FloatingActionButton(</span><br><span class="line">              child: Icon(Icons.add),</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                counterBloc.add(CounterEvent.increment);</span><br><span class="line">              &#125;,</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">          Padding(</span><br><span class="line">            padding: EdgeInsets.symmetric(vertical: <span class="number">5.0</span>),</span><br><span class="line">            child: FloatingActionButton(</span><br><span class="line">              child: Icon(Icons.remove),</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                counterBloc.add(CounterEvent.decrement);</span><br><span class="line">              &#125;,</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当 <code>CounterBloc</code> 数据更新后，会触发所有使用过 <code>CounterBloc</code> 的组件（在样例中，即是<code>BlocBuilder</code> 组件）重新 build。所以要求我们将 BLoC 模块的数据做的尽可能轻小，当然，也可以使用 <code>BlocBuilder</code> 提供的 condition 参数来控制是否更新当前组件。</p>
+<hr>
+<h2 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h2><p>Provider 同样是依赖注入（注入状态到组件）。但与 bloc 不太一样的是：Provider 本身是作为 flutter 库而创建的；bloc 库是基于 RxDart 开发的纯 dart 库，作为flutter状态管理的话，还需配合 flutter_bloc 开发使用。但不知为何 flutter_bloc 又依赖了 provider 作为底层实现。。。</p>
+<p>按照<a target="_blank" rel="noopener" href="https://pub.dev/packages/provider#-readme-tab-">readme.md</a>中所说，使用原生 Stream 也能很好的实现依赖注入的效果，但使用 Widget 的方式来使用依赖，更简单！因为组件很简单，也很容易扩展！</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ol>
+<li>单项数据流。（从上往下）</li>
+<li>可测试、可组合</li>
+<li>可靠，因为很难忘记去处理数据更新（这里没太明白）</li>
+</ol>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/provider#-readme-tab-">readme.md</a>文档中说明了一些使用禁忌，比如什么时候应该用.value 构造函数，什么时候不该用。这些其实是对 flutter 的更新机制有了了解后，自然而然能想到的东西。</p>
+<h4 id="构造数据类"><a href="#构造数据类" class="headerlink" title="构造数据类"></a>构造数据类</h4><p>首先，我们需要构建数据存储对象。在 Provider 中，有着与 BLoC 中类似的对象：通知者。简而言之，Provider 基于 flutter 的<code>ChangeNotifier</code> 类做了文章。当然，Provider 也可以使用单纯的 State 对象来存储状态。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="title">with</span> <span class="title">ChangeNotifier</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> _count = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">int</span> <span class="keyword">get</span> count =&gt; _count;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> increment() &#123;</span><br><span class="line">    _count++;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 provider 中，通常情况下使用 ChangeNotifier 作为数据载体，同时也起着通知更新的作用。</p>
+<h4 id="提供数据"><a href="#提供数据" class="headerlink" title="提供数据"></a>提供数据</h4><p>本例中，对所有 child 提供了两种类型的数据：Counter、ColorConfig，在此后任一层级可以获取到这些数据。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> MyApp();</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MultiProvider(</span><br><span class="line">      providers: [</span><br><span class="line">        ChangeNotifierProvider(create: (_) =&gt; Counter()),</span><br><span class="line">        ChangeNotifierProvider(create: (_) =&gt; ColorConfig()),</span><br><span class="line">      ],</span><br><span class="line">      child: Consumer&lt;Counter&gt;(</span><br><span class="line">        builder: (context, counter, _) &#123;</span><br><span class="line">          <span class="keyword">return</span> MaterialApp(</span><br><span class="line">            supportedLocales: <span class="keyword">const</span> [Locale(<span class="string">&#x27;en&#x27;</span>)],</span><br><span class="line">            localizationsDelegates: [</span><br><span class="line">              DefaultMaterialLocalizations.delegate,</span><br><span class="line">              DefaultWidgetsLocalizations.delegate,</span><br><span class="line">              _ExampleLocalizationsDelegate(counter.count),</span><br><span class="line">            ],</span><br><span class="line">            home: <span class="keyword">const</span> MyHomePage(),</span><br><span class="line">          );</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyHomePage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> MyHomePage(&#123;Key key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(title: <span class="keyword">const</span> Title()),</span><br><span class="line">      body: <span class="keyword">const</span> Center(child: CounterLabel()),</span><br><span class="line">      floatingActionButton: <span class="keyword">const</span> IncrementCounterButton(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IncrementCounterButton</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> IncrementCounterButton(&#123;Key key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;IncrementCounterButton &#x27;</span> + (i++).toString());</span><br><span class="line">    <span class="keyword">return</span> FloatingActionButton(</span><br><span class="line">      onPressed: () &#123;</span><br><span class="line">        Provider.of&lt;Counter&gt;(context, listen: <span class="keyword">false</span>).increment();</span><br><span class="line">      &#125;,</span><br><span class="line">      tooltip: <span class="string">&#x27;Increment&#x27;</span>,</span><br><span class="line">      child: <span class="keyword">const</span> Icon(Icons.add),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CounterLabel</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> CounterLabel(&#123;Key key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;CounterLabel &#x27;</span> + (i++).toString());</span><br><span class="line">    <span class="keyword">final</span> counter = Provider.of&lt;Counter&gt;(context);</span><br><span class="line">    <span class="keyword">return</span> Column(</span><br><span class="line">      mainAxisSize: MainAxisSize.min,</span><br><span class="line">      mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        <span class="keyword">const</span> Text(</span><br><span class="line">          <span class="string">&#x27;You have pushed the button this many times:&#x27;</span>,</span><br><span class="line">        ),</span><br><span class="line">        Text(</span><br><span class="line">          <span class="string">&#x27;<span class="subst">$&#123;counter.count&#125;</span>&#x27;</span>,</span><br><span class="line">          <span class="comment">// ignore: deprecated_member_use</span></span><br><span class="line">          style: Theme.of(context).textTheme.display1,</span><br><span class="line">        ),</span><br><span class="line">        <span class="keyword">const</span> TestText(),</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>获取数据还可以通过 <code>Consumer</code> 方式来获取，这里不赘述。</p>
+<h2 id="BLoC-对比-Provider"><a href="#BLoC-对比-Provider" class="headerlink" title="BLoC 对比 Provider"></a>BLoC 对比 Provider</h2><p>其实对比它们有点不合适：BLoC 是一种模式，而 Provider 是一种 flutter 的状态管理方案。BLoC 没有单独针对 flutter 设计，而 Provider 是给 flutter 使用的（从 flutter_bloc 依赖于 provider 也能看出来）。</p>
+<p>从状态管理的作用来说，它们的使用方式是非常相似的：定义存储单元（同时兼顾更新通知），在顶层注入所需的数据，在需要数据的地方通过一些方式获取。其实从原理来说，也是一样的：将数据传入给一个自定义的 <code>InheritedWidget</code>，由其管理数据；UI 中通过 Provider.of<Type>(context) 来注册依赖；当<code>InheritedWidget</code>的数据更新时，选择性地通知所有注册过的 UI 组件进行更新。采用这种方式，基于 flutter 自身的设计方式，实现了状态从上往下、局部最小更新。我们后面要探讨的 redux 在 flutter 中的原理，原理也是一致的。不过在这三者中对比，BLoC 和 redux 更像是同一类：自身本就是一种模式，不局限于 flutter 中。</p>
+<hr>
+<h2 id="redux"><a href="#redux" class="headerlink" title="redux"></a>redux</h2><p>关于 redux 模式，不介绍过多基础内容，可以从<a target="_blank" rel="noopener" href="https://redux.js.org/introduction/getting-started">这里</a>了解。</p>
+<p>在 flutter 中，需要引入</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">flutter_redux:</span> <span class="string">^0.6.0</span></span><br><span class="line">  <span class="attr">redux:</span> <span class="string">^4.0.0</span></span><br></pre></td></tr></table></figure>
+
+<p>这里只对 flutter_redux 做介绍。</p>
+<h3 id="flutter-redux"><a href="#flutter-redux" class="headerlink" title="flutter_redux"></a>flutter_redux</h3><p>看过这个库的同学可能比较了解，这个库整体比较简单：只通过一个文件，几个类定义即完成了状态管理。</p>
+<h4 id="StoreProvider-lt-Store-gt"><a href="#StoreProvider-lt-Store-gt" class="headerlink" title="StoreProvider&lt;Store&gt;"></a>StoreProvider&lt;Store&gt;</h4><p>自身是一个<code>InheritedWidget</code>，以类型 T 标志该 InheritedWidget。</p>
+<h4 id="StoreConnector-lt-Store-Data-gt"><a href="#StoreConnector-lt-Store-Data-gt" class="headerlink" title="StoreConnector&lt;Store, Data&gt;"></a>StoreConnector&lt;Store, Data&gt;</h4><p>将 Store 类型的数据转换为 Data 类型。</p>
+<h4 id="StoreBuilder-lt-Store-gt"><a href="#StoreBuilder-lt-Store-gt" class="headerlink" title="StoreBuilder&lt;Store&gt;"></a>StoreBuilder&lt;Store&gt;</h4><p>获取 Store，自由构建组件。</p>
+<h3 id="使用-flutter-redux"><a href="#使用-flutter-redux" class="headerlink" title="使用 flutter_redux"></a>使用 flutter_redux</h3><h4 id="构建数据对象"><a href="#构建数据对象" class="headerlink" title="构建数据对象"></a>构建数据对象</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">定义事件</span></span></span><br><span class="line"><span class="keyword">enum</span> Actions &#123; Increment &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">定义 reducers。讲道理，dart 中 redux 库应该也提供类似 combineReducers 的方法。</span></span></span><br><span class="line"><span class="built_in">int</span> counterReducer(<span class="built_in">int</span> state, <span class="built_in">dynamic</span> action) &#123;</span><br><span class="line">  <span class="keyword">if</span> (action == Actions.Increment) &#123;</span><br><span class="line">    <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">生成全局唯一 store。从 redux 的设计角度来说，它希望使用者是全局使用唯一的 store，而不是分为很多个 store。</span></span></span><br><span class="line"><span class="comment">/// <span class="markdown">store 下可以自由构建数据分支。</span></span></span><br><span class="line"><span class="keyword">final</span> store = Store&lt;<span class="built_in">int</span>&gt;(counterReducer, initialState: <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="提供数据-amp-amp-获取"><a href="#提供数据-amp-amp-获取" class="headerlink" title="提供数据 &amp;&amp; 获取"></a>提供数据 &amp;&amp; 获取</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> MyApp();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> FlutterReduxApp(</span><br><span class="line">      title: <span class="string">&#x27;Flutter Redux Demo&#x27;</span>,</span><br><span class="line">      store: store,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlutterReduxApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> Store&lt;<span class="built_in">int</span>&gt; store;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> title;</span><br><span class="line"></span><br><span class="line">  FlutterReduxApp(&#123;Key key, <span class="keyword">this</span>.store, <span class="keyword">this</span>.title&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="comment">// StoreProvider 的作用就是包裹一层 InheritedWidget</span></span><br><span class="line">    <span class="keyword">return</span> StoreProvider&lt;<span class="built_in">int</span>&gt;(</span><br><span class="line">      store: store,</span><br><span class="line">      child: MaterialApp(</span><br><span class="line">        theme: ThemeData.dark(),</span><br><span class="line">        title: title,</span><br><span class="line">        home: Scaffold(</span><br><span class="line">          appBar: AppBar(</span><br><span class="line">            title: Text(title),</span><br><span class="line">          ),</span><br><span class="line">          body: Center(</span><br><span class="line">            child: Column(</span><br><span class="line">              mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">              children: [</span><br><span class="line">                Text(</span><br><span class="line">                  <span class="string">&#x27;You have pushed the button this many times:&#x27;</span>,</span><br><span class="line">                ),</span><br><span class="line">                <span class="comment">// 根据当前 context，获取到 int 类型的最近 store，所需的数据类型为 String。</span></span><br><span class="line">                <span class="comment">// 每当 store 由 reducers 更新后，会自动触发更新。</span></span><br><span class="line">                StoreConnector&lt;<span class="built_in">int</span>, <span class="built_in">String</span>&gt;(</span><br><span class="line">                  <span class="comment">// 将 Store 转为这里需要的 String</span></span><br><span class="line">                  converter: (store) =&gt; store.state.toString(),</span><br><span class="line">                  builder: (context, count) &#123;</span><br><span class="line">                    <span class="keyword">return</span> Text(</span><br><span class="line">                      count,</span><br><span class="line">                      style: Theme.of(context).textTheme.display1,</span><br><span class="line">                    );</span><br><span class="line">                  &#125;,</span><br><span class="line">                )</span><br><span class="line">              ],</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line">          floatingActionButton: StoreConnector&lt;<span class="built_in">int</span>, VoidCallback&gt;(</span><br><span class="line">            <span class="comment">// 返回一个函数，用于触发事件派发。</span></span><br><span class="line">            converter: (store) &#123;</span><br><span class="line">              <span class="keyword">return</span> () =&gt; store.dispatch(Actions.Increment);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">// 使用这个，可以防止 store 更新时，rebuild 该处。原理是对 store 的更新数据流做过滤，</span></span><br><span class="line">            <span class="comment">// 当满足被过滤的条件时，相当于对于该组件来说，没有新的数据，StreamBuilder 就不会自动更新。</span></span><br><span class="line">            ignoreChange: (<span class="built_in">int</span> _) =&gt; <span class="keyword">true</span>,</span><br><span class="line">            builder: (context, callback) &#123;</span><br><span class="line">              <span class="keyword">return</span> FloatingActionButton(</span><br><span class="line">                onPressed: callback,</span><br><span class="line">                tooltip: <span class="string">&#x27;asdasdasd&#x27;</span>,</span><br><span class="line">                child: Icon(Icons.add),</span><br><span class="line">              );</span><br><span class="line">            &#125;,</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="多方对比"><a href="#多方对比" class="headerlink" title="多方对比"></a>多方对比</h2><h3 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式"></a>使用方式</h3><p>BLoC 与 Redux 是类似的，但由于 flutter_bloc 依赖了 provider，同时 flutter_bloc 与 provider 的使用姿势基本一致，所以笔者认为：如果要在 bloc 和 provider 中选一个，provider 是优选。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>不管是 provider 还是 redux，对测试都是友好的。可以随意选择。</p>
+<h3 id="更新UI"><a href="#更新UI" class="headerlink" title="更新UI"></a>更新UI</h3><p>这几者都是基于 InheritedWidget + 监听实现的。都能做到最小化更新。</p>
+<h3 id="学习成本"><a href="#学习成本" class="headerlink" title="学习成本"></a>学习成本</h3><p>Redux 本身是针对 js 而设计的一种状态容器，后被迁移到 dart 上。redux 需要单独去了解它的概念，以及一些通用的方法，比如中间件的概念、组合 reducers 等。provider 主要就是几种 Provider 和几种 Consumer，学习成本稍低。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对比了这几个状态管理方案，对于开发者来说，在使用方式上都大同小异：将数据封装为组件，最小化更新；外层提供数据，里层使用数据。在学习成本上，redux 比 bloc 复杂一些，provider 最简单。可以根据以往的开发经验来选择是使用 redux 还是 provider。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"># flutter</a>
+              <a href="/tags/%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" rel="tag"># 状态管理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/19/%E5%85%B3%E4%BA%8E%E8%B7%A8%E7%AB%AF%E6%96%B9%E6%A1%88%E7%9A%84%E8%B0%83%E7%A0%94/" rel="prev" title="关于跨端方案的调研">
+                  <i class="fa fa-chevron-left"></i> 关于跨端方案的调研
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="next" title="前端性能优化">
+                  前端性能优化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

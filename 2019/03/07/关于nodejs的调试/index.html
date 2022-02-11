@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="关于调试需要注意的Node在V7.7之前，调试可以用node debug index.js启动命令行的debug，或者使用node –debug index.js启动可连接chrome的调试窗口。在v7.7之后，使用inspect代替（inspect-brk）。下面分情况来具体描述怎么愉快滴调试node。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于nodejs的调试">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8Enodejs%E7%9A%84%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="关于调试需要注意的Node在V7.7之前，调试可以用node debug index.js启动命令行的debug，或者使用node –debug index.js启动可连接chrome的调试窗口。在v7.7之后，使用inspect代替（inspect-brk）。下面分情况来具体描述怎么愉快滴调试node。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tzxhy.github.io/images/debug-1.png">
+<meta property="og:image" content="https://tzxhy.github.io/images/debug-2.png">
+<meta property="article:published_time" content="2019-03-07T14:11:55.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.422Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="Nodejs">
+<meta property="article:tag" content="调试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tzxhy.github.io/images/debug-1.png">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8Enodejs%E7%9A%84%E8%B0%83%E8%AF%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;07&#x2F;%E5%85%B3%E4%BA%8Enodejs%E7%9A%84%E8%B0%83%E8%AF%95&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;07&#x2F;关于nodejs的调试&#x2F;&quot;,&quot;title&quot;:&quot;关于nodejs的调试&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>关于nodejs的调试 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%B0%83%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">关于调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84"><span class="nav-number">1.1.</span> <span class="nav-text">需要注意的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">关于版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%80%81%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.3.</span> <span class="nav-text">关于老项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E2%80%93debug%E5%92%8C%E2%80%93debug-brk"><span class="nav-number">1.4.</span> <span class="nav-text">了解–debug和–debug-brk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%94%AF%E6%8C%81%E5%BA%93"><span class="nav-number">1.5.</span> <span class="nav-text">安装图形界面支持库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E7%9A%84%E8%B0%83%E8%AF%95"><span class="nav-number">1.6.</span> <span class="nav-text">开始图形界面的调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%89%88%E6%9C%ACNode%E7%9A%84%E8%B0%83%E8%AF%95"><span class="nav-number">1.7.</span> <span class="nav-text">高版本Node的调试</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/07/%E5%85%B3%E4%BA%8Enodejs%E7%9A%84%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于nodejs的调试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-07 14:11:55" itemprop="dateCreated datePublished" datetime="2019-03-07T14:11:55Z">2019-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nodejs/" itemprop="url" rel="index"><span itemprop="name">Nodejs</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="关于调试"><a href="#关于调试" class="headerlink" title="关于调试"></a>关于调试</h1><h2 id="需要注意的"><a href="#需要注意的" class="headerlink" title="需要注意的"></a>需要注意的</h2><p>Node在V7.7之前，调试可以用node debug index.js启动命令行的debug，或者使用node –debug index.js启动可连接chrome的调试窗口。在v7.7之后，使用inspect代替（inspect-brk）。下面分情况来具体描述怎么愉快滴调试node。</p>
+<span id="more"></span>
+<h2 id="关于版本"><a href="#关于版本" class="headerlink" title="关于版本"></a>关于版本</h2><p>官方原话是，–inspect[=[host:]port]新增于6.3，–inspect-brk[=[host:]port]新增于7.6，–inspect-port=[host:]port同样于7.6。在v7.7的时候，官方就把debug和debug-brk给干掉了，让大家用他们的inspect、inspect-brk。好，历史介绍完，干正事。</p>
+<h2 id="关于老项目"><a href="#关于老项目" class="headerlink" title="关于老项目"></a>关于老项目</h2><p>啥是老项目？就是说其依赖的node版本比较低，在当时设计的时候没有使用、考虑到官方现在的一些新特性（当然没有，又不能穿越），并且项目也没有与时俱进，导致存在版本兼容问题，就是说我现在用高版本去运行这个项目，使用新特性的时候，可能这个项目并不支持。比如低版本对async、let、const等，以及对node命令行的参数不支持，如–inspect-brk等。那么对于老项目，咱们怎么调试捏？高潮来了。</p>
+<h2 id="了解–debug和–debug-brk"><a href="#了解–debug和–debug-brk" class="headerlink" title="了解–debug和–debug-brk"></a>了解–debug和–debug-brk</h2><p>这就是调试的关键属性。不同之处是前者直接运行代码，直到遇到debugger语句。后者会停在代码第一句，等待调试器连接后，在调试器上点击继续运行后才正常运行。还有一个不带俩中划线的，光棍debug，它用来在命令行中开起debug环境。在命令行环境中，会出现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">node-debug-tutorial ✗ node debug helloword-debug.js</span><br><span class="line">&lt; debugger listening on port 5858</span><br><span class="line">connecting... ok</span><br><span class="line"><span class="built_in">break</span> <span class="keyword">in</span> helloword-debug.js:1</span><br><span class="line">  1 var hello = <span class="string">&#x27;hello&#x27;</span>;</span><br><span class="line">  2 var world = <span class="string">&#x27;nodejs&#x27;</span>;</span><br><span class="line">  3 </span><br><span class="line">debug&gt; <span class="built_in">help</span></span><br><span class="line">Commands: run (r), cont (c), next (n), step (s), out (o), backtrace (bt), setBreakpoint (sb), clearBreakpoint (cb),</span><br><span class="line">watch, unwatch, watchers, repl, restart, <span class="built_in">kill</span>, list, scripts, breakOnException, breakpoints, version</span><br><span class="line">debug&gt; </span><br><span class="line">debug&gt; n</span><br><span class="line"><span class="built_in">break</span> <span class="keyword">in</span> helloword-debug.js:2</span><br><span class="line">  1 var hello = <span class="string">&#x27;hello&#x27;</span>;</span><br><span class="line">  2 var world = <span class="string">&#x27;nodejs&#x27;</span>;</span><br><span class="line">  3 </span><br><span class="line">  4 debugger;</span><br><span class="line">debug&gt; repl</span><br><span class="line">Press Ctrl + C to leave debug repl</span><br><span class="line">&gt; hello</span><br><span class="line"><span class="string">&#x27;hello&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>在debug&gt;后面可以输入这些命令：</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">run</td>
+<td align="left">执行脚本,在第一行暂停</td>
+</tr>
+<tr>
+<td align="left">restart</td>
+<td align="left">重新执行脚本</td>
+</tr>
+<tr>
+<td align="left">cont, c</td>
+<td align="left">继续执行,直到遇到下一个断点</td>
+</tr>
+<tr>
+<td align="left">next, n</td>
+<td align="left">单步执行</td>
+</tr>
+<tr>
+<td align="left">step, s</td>
+<td align="left">单步执行并进入函数</td>
+</tr>
+<tr>
+<td align="left">out, o</td>
+<td align="left">从函数中步出</td>
+</tr>
+<tr>
+<td align="left">setBreakpoint(), sb()</td>
+<td align="left">当前行设置断点</td>
+</tr>
+<tr>
+<td align="left">setBreakpoint(‘f()’), sb(…)</td>
+<td align="left">在函数f的第一行设置断点</td>
+</tr>
+<tr>
+<td align="left">setBreakpoint(‘script.js’, 20), sb(…)</td>
+<td align="left">在 script.js 的第20行设置断点</td>
+</tr>
+<tr>
+<td align="left">clearBreakpoint, cb(…)</td>
+<td align="left">清除所有断点</td>
+</tr>
+<tr>
+<td align="left">backtrace, bt</td>
+<td align="left">显示当前的调用栈</td>
+</tr>
+<tr>
+<td align="left">list(5)</td>
+<td align="left">显示当前执行到的前后5行代码</td>
+</tr>
+<tr>
+<td align="left">watch(expr)</td>
+<td align="left">把表达式 expr 加入监视列表</td>
+</tr>
+<tr>
+<td align="left">unwatch(expr)</td>
+<td align="left">把表达式 expr 从监视列表移除</td>
+</tr>
+<tr>
+<td align="left">watchers</td>
+<td align="left">显示监视列表中所有的表达式和值</td>
+</tr>
+<tr>
+<td align="left">repl</td>
+<td align="left">在当前上下文打开即时求值环境</td>
+</tr>
+<tr>
+<td align="left">kill</td>
+<td align="left">终止当前执行的脚本</td>
+</tr>
+<tr>
+<td align="left">scripts</td>
+<td align="left">显示当前已加载的所有脚本</td>
+</tr>
+<tr>
+<td align="left">version</td>
+<td align="left">显示v8版本</td>
+</tr>
+</tbody></table>
+<p>如你所见，命令行的方式确实麻烦。所幸，debug支持图形界面：</p>
+<h2 id="安装图形界面支持库"><a href="#安装图形界面支持库" class="headerlink" title="安装图形界面支持库"></a>安装图形界面支持库</h2><p>这玩意儿叫node-inspect。自行安装全局后，node-inspect &amp; 让他后台运行。会看到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Visit http://127.0.0.1:8080/?port=5858 to start debugging.</span><br></pre></td></tr></table></figure>
+<p>表明让你node-inspect起到了8080端口上（注意是否有端口占用），调试程序的端口在后面port中指定。一般–debug的程序默认端口是5858.</p>
+<h2 id="开始图形界面的调试"><a href="#开始图形界面的调试" class="headerlink" title="开始图形界面的调试"></a>开始图形界面的调试</h2><p>命令行中输入node –debug index.js或者node –debug-brk index.js即可（看你具体的需求，一般来说–debug就可以）。会提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Debugger listening on [::]:5858</span><br></pre></td></tr></table></figure>
+
+<p>这样的文字，表明调试端口起在了5858端口（如果有冲突，可以–debug=port指定端口号）。然后访问刚开始的node-inspect起的服务器，在port后输入上面看到的端口号。界面如下：</p>
+<p><img src="/images/debug-1.png" alt="debug"></p>
+<p>到这里就说明正确了，可以调试了鸭！</p>
+<h2 id="高版本Node的调试"><a href="#高版本Node的调试" class="headerlink" title="高版本Node的调试"></a>高版本Node的调试</h2><p>高版本的就简单多了，直接用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node --inspect index.js</span><br><span class="line">node --inspect-brk index.js</span><br></pre></td></tr></table></figure>
+<p>即可。对于稍低版本的node，会提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">To start debugging, open the following URL <span class="keyword">in</span> Chrome:</span><br><span class="line">    chrome-devtools://devtools/remote/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=<span class="literal">true</span>&amp;v8only=<span class="literal">true</span>&amp;ws=127.0.0.1:5859/0be383d4-bea2-4ff2-b916-9ba2ed2805e1</span><br></pre></td></tr></table></figure>
+<p>直接访问这个地址即可。对于高版本的node，会提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Debugger listening on ws://127.0.0.1:9229/b9d17b0a-2a0c-4668-b7da-60f2016725e4</span><br><span class="line">For <span class="built_in">help</span> see https://nodejs.org/en/docs/inspector</span><br></pre></td></tr></table></figure>
+<p>这个时候只需要在chrome地址栏输入：chrome://inspect，在configure中添加对应的端口号。就可以在Remote Target下面看到你要调试的程序了。如下图：</p>
+<p><img src="/images/debug-2.png" alt="debug"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+              <a href="/tags/%E8%B0%83%E8%AF%95/" rel="tag"># 调试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/07/toString%E5%92%8CvalueOf/" rel="prev" title="toString和valueOf">
+                  <i class="fa fa-chevron-left"></i> toString和valueOf
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/07/react%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="next" title="react单例模式">
+                  react单例模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

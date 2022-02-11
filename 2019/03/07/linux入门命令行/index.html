@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="linux入门走一波 前沿-为啥要入门 常用指令  前沿-为啥要入门 虽然咱们是大前端，虽然咱们用的是JS，但是，咱的服务可都是放在linux服务上的啊。看个日志啥的，基本骚操作都不会，怎么调试bug呀？（这里多指node后端哈）。服务器上启动程序失败了，看错误好像是端口的问题，这个怎么操作啊？明明我的一个shell文件，为啥不能执行啊？等等。这样看似很基础的问题。其实我们不用掌握很多很多，掌握得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux入门命令行">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/07/linux%E5%85%A5%E9%97%A8%E5%91%BD%E4%BB%A4%E8%A1%8C/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="linux入门走一波 前沿-为啥要入门 常用指令  前沿-为啥要入门 虽然咱们是大前端，虽然咱们用的是JS，但是，咱的服务可都是放在linux服务上的啊。看个日志啥的，基本骚操作都不会，怎么调试bug呀？（这里多指node后端哈）。服务器上启动程序失败了，看错误好像是端口的问题，这个怎么操作啊？明明我的一个shell文件，为啥不能执行啊？等等。这样看似很基础的问题。其实我们不用掌握很多很多，掌握得">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-07T15:23:35.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.414Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="命令行入门">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/07/linux%E5%85%A5%E9%97%A8%E5%91%BD%E4%BB%A4%E8%A1%8C/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;07&#x2F;linux%E5%85%A5%E9%97%A8%E5%91%BD%E4%BB%A4%E8%A1%8C&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;07&#x2F;linux入门命令行&#x2F;&quot;,&quot;title&quot;:&quot;linux入门命令行&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>linux入门命令行 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux%E5%85%A5%E9%97%A8%E8%B5%B0%E4%B8%80%E6%B3%A2"><span class="nav-number">1.</span> <span class="nav-text">linux入门走一波</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1"><span class="nav-number">1.1.</span> <span class="nav-text">前沿-为啥要入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2"><span class="nav-number">1.2.</span> <span class="nav-text">要讲滴内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E3%80%81%E5%AE%89%E8%A3%85%E3%80%81%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">历史、安装、基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%B7%A5%E5%85%B7"><span class="nav-number">1.2.2.</span> <span class="nav-text">基础工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.3.</span> <span class="nav-text">文件相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.4.</span> <span class="nav-text">管道操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">输出重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">输入重定向</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.5.</span> <span class="nav-text">网络相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">服务器相关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.2.5.1.1.</span> <span class="nav-text">http服务器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.6.</span> <span class="nav-text">进程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">终止程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.6.2.</span> <span class="nav-text">知识点介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%B7%A5%E5%85%B7"><span class="nav-number">1.2.6.3.</span> <span class="nav-text">进程工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.2.6.4.</span> <span class="nav-text">守护进程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3"><span class="nav-number">1.2.7.</span> <span class="nav-text">权限相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%BB%B4%E6%8A%A4"><span class="nav-number">1.2.8.</span> <span class="nav-text">系统维护</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">实用命令</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/07/linux%E5%85%A5%E9%97%A8%E5%91%BD%E4%BB%A4%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux入门命令行
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-07 15:23:35" itemprop="dateCreated datePublished" datetime="2019-03-07T15:23:35Z">2019-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="linux入门走一波"><a href="#linux入门走一波" class="headerlink" title="linux入门走一波"></a>linux入门走一波</h1><ul>
+<li><a href="#1">前沿-为啥要入门</a></li>
+<li><a href="#2">常用指令</a></li>
+</ul>
+<h2 id="1">前沿-为啥要入门</h2>
+虽然咱们是大前端，虽然咱们用的是JS，但是，咱的服务可都是放在linux服务上的啊。看个日志啥的，基本骚操作都不会，怎么调试bug呀？（这里多指node后端哈）。服务器上启动程序失败了，看错误好像是端口的问题，这个怎么操作啊？明明我的一个shell文件，为啥不能执行啊？等等。这样看似很基础的问题。其实我们不用掌握很多很多，掌握得多了，知识面广了，都有能力做运维了（当然得先做好本职工作，有时间有能力就可以去多学习）。下面我就分这么几方面来讲讲我眼中的入门。申明：本人linux渣渣一个，只是看linux从入门到精通后，把自己觉得有必要学习的东西分享一下，大神勿喷，有好的建议尽管来。哈哈。
+<span id="more"></span>
+<h2 id="2">要讲滴内容</h2>
+
+<h3 id="历史、安装、基本配置"><a href="#历史、安装、基本配置" class="headerlink" title="历史、安装、基本配置"></a>历史、安装、基本配置</h3><p><strong>略</strong>。</p>
+<h3 id="基础工具"><a href="#基础工具" class="headerlink" title="基础工具"></a>基础工具</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">man xxx <span class="comment"># 查看xxx程序的帮助文档</span></span><br><span class="line">whatis xxx <span class="comment"># 查看xxx程序的大致作用</span></span><br><span class="line">apropos <span class="keyword">function</span> <span class="comment"># 通过在帮助手册中查询function单词，反查帮助文档中包含function单词的xxx程序</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="文件相关"><a href="#文件相关" class="headerlink" title="文件相关"></a>文件相关</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mkdir dir <span class="comment"># 在当前目录下新建目录dir（自行查询参数）</span></span><br><span class="line">touch file.ext <span class="comment"># 在当前目录下创建一个叫做file.ext的文件</span></span><br><span class="line"><span class="built_in">pwd</span> <span class="comment"># 显示当前的工作目录</span></span><br><span class="line">mv file1 file2 <span class="comment"># 将file1重命名为file2</span></span><br><span class="line">mv file1 ./dir/file2 <span class="comment"># 将file1移动到dir目录中并命名为file2</span></span><br><span class="line">rm file <span class="comment"># 删除文件file（自行查询参数）</span></span><br><span class="line">rm -f dir <span class="comment"># 递归删除dir目录</span></span><br><span class="line">cp file1 file2 <span class="comment"># 拷贝file1为file2</span></span><br><span class="line"><span class="built_in">cd</span> dir <span class="comment"># 进入目录dir</span></span><br><span class="line"><span class="built_in">cd</span> - <span class="comment"># 返回上一次cd前的目录</span></span><br><span class="line">ls <span class="comment"># 列出目录、文件信息（参数很多，自行查询参数）</span></span><br><span class="line">cat file.ext <span class="comment"># 查看file.ext的内容（参数很多，自行查询参数）</span></span><br><span class="line">head file.ext <span class="comment"># 查看文件file.ext的开头（自行查询参数）</span></span><br><span class="line">tail file.ext <span class="comment"># 查看文件file.ext的结尾（自行查询参数）</span></span><br><span class="line">less file.ext <span class="comment"># 使用less工具查看file.ext（自行查询操作方式）</span></span><br><span class="line">find dir <span class="comment"># 在dir下查找文件（自行查询参数）</span></span><br><span class="line">grep <span class="comment"># 过滤输入流的内容（自行查询参数）</span></span><br><span class="line">locate file.ext <span class="comment"># 定位file.ext的位置</span></span><br><span class="line">ls -l <span class="comment"># 最左侧第一位：- 普通文件；d 目录；c 字符设备；b 块设备；s 本地套接口； p 管道；l 符号链接</span></span><br><span class="line">ln -s source_file target_file <span class="comment"># 建立从target_file指向source_file的链接（target_file是生成的链接符号）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="管道操作"><a href="#管道操作" class="headerlink" title="管道操作"></a>管道操作</h3><p>所谓管道就像小学数学的一根水管进，一根水管出，问你多久装满水池的问题。呸，不是！！！管道就是一个水管出，可以让其流入其它管道。数据在其中转换、流动。但是需要记住的一点，不是所有命令都支持管道操作。for example，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat access.log | grep 127.0.0.1 | tee filter.log</span><br><span class="line"><span class="comment"># 上面就是先读取access.log这个文件（可以看作新建一个链接到这个文件的输入流R1），生成一个输出流O1；将这个输出流O1作为grep的输入流R2，经过grep操作后，生成输出流O2；O2作为tee的输入流，最终生成一个filter.log文件。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls &gt; file.txt <span class="comment"># 将ls的执行结果输出重定向到file.txt文件中</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h4><p>通常来说，标准输入总是指向键盘。比如使用不带任何参数的cat命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="comment">#</span></span><br><span class="line">&gt; <span class="comment"># 这两种都会进入不断的打字界面</span></span><br><span class="line">cat &lt;&lt;<span class="string">EOF  # 这叫做立即文档（here document）</span></span><br><span class="line"><span class="string">&gt; sfes</span></span><br><span class="line"><span class="string">&gt; fsefsefs</span></span><br><span class="line"><span class="string">&gt; EOF</span></span><br><span class="line"></span><br><span class="line">ls | grep hehe <span class="comment"># 管道操作，将ls的输出作为grep的输入</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h3><h4 id="服务器相关"><a href="#服务器相关" class="headerlink" title="服务器相关"></a>服务器相关</h4><p>一般服务器会预装ftp文件服务器和ssh远程连接服务。两个命令分别是sftp和ssh。</p>
+<h5 id="http服务器"><a href="#http服务器" class="headerlink" title="http服务器"></a>http服务器</h5><p>咱们前端部署的一般是node服务。</p>
+<h3 id="进程相关"><a href="#进程相关" class="headerlink" title="进程相关"></a>进程相关</h3><h4 id="终止程序"><a href="#终止程序" class="headerlink" title="终止程序"></a>终止程序</h4><p>前台的程序一般可以通过Ctrl + C来终结（可能会被程序拦截），后台的程序只能手动使用kill去杀死。</p>
+<h4 id="知识点介绍"><a href="#知识点介绍" class="headerlink" title="知识点介绍"></a>知识点介绍</h4><ol>
+<li>PID：进程的ID号。每一个进程都有自己的唯一ID。</li>
+<li>PPID：父进程的PID。</li>
+<li>UID和EUID：真实和有效的用户ID。只有进程的创建者和root用户有才权利对该进程进行操作。EUID会在存在setuid程序的时候被用到。</li>
+<li>GID和EGID：同上，只是对象变成了创建者所属的组ID号。</li>
+<li>谦让度和优先级：对进程操作工具可见的是谦让度。谦让度越低，优先级越高，这个进程就更早地被处理。</li>
+</ol>
+<h4 id="进程工具"><a href="#进程工具" class="headerlink" title="进程工具"></a>进程工具</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ps aux <span class="comment"># 列出所有用户所有终端的进程</span></span><br><span class="line">top <span class="comment"># 动态显示占用cpu最多的进程</span></span><br><span class="line">losf file <span class="comment"># 查看占用文件的进程</span></span><br><span class="line"><span class="built_in">kill</span> pid <span class="comment"># 向进程号为pid的进程发送SIGTERM软件终止信号，试图终止进程</span></span><br><span class="line">Ctrl + C <span class="comment"># 向当前前台程序发送SIGINT中断信号，试图终止进程</span></span><br><span class="line">sudo <span class="built_in">kill</span> -9 pig <span class="comment"># 在内核级别杀死一个进程（如果这个命令都杀不死，就只能重启系统了。只能重启）</span></span><br><span class="line">nice -n 2 bc <span class="comment"># 设置bc以谦让度增量2启动</span></span><br><span class="line">renice +12 -p pid <span class="comment"># 对pid增加12点谦让度</span></span><br></pre></td></tr></table></figure>
+<h4 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h4><p>守护进程专用于管理其下的子进程，当子进程出现意外时，按照守护进程的逻辑进行相应的处理。比如为http服务器设置的守护进程，一般当http服务器宕机或者cpu占用异常时，可以重启服务。对于ssh连接，也有专门的sshd守护进程保护。当有ssh连接请求时，sshd新建一个ssh连接用于通信。当结束ssh连接后，sshd善后。</p>
+<h3 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ls -l <span class="comment"># 最左侧的rwx分别表示读写执行，分别表示拥有者（u）、拥有组（g）、其它人的权限（o）</span></span><br><span class="line">chown owner:group file <span class="comment"># 将file的拥有者改为owner，拥有组改为group</span></span><br><span class="line">chown owner file <span class="comment"># 将file的拥有者改为owner，拥有组不变</span></span><br><span class="line">chown :group file <span class="comment"># 将file的拥有者不变，拥有组改为group（注意group前不可省略冒号）</span></span><br><span class="line">chown owner -R dir <span class="comment"># 递归地将dir目录下的所有文件拥有者改为owner，拥有组不变</span></span><br><span class="line">chmod u+x file <span class="comment"># 对file的属主权限添加执行权限（u/g/o）</span></span><br><span class="line">chmod u-x file <span class="comment"># 对file的属主权限减少执行权限（u/g/o）</span></span><br><span class="line">chmod +x file <span class="comment"># 对file添加执行权限（u/g/o均添加）</span></span><br><span class="line">who <span class="comment"># 查看当前系统有哪些人登录</span></span><br><span class="line">whoami <span class="comment"># 查看自己登陆终端的用户名</span></span><br><span class="line">uname -a <span class="comment"># 查看当前系统的版本信息</span></span><br><span class="line"></span><br><span class="line">sudo useradd -m tzx <span class="comment"># 建立tzx帐号，并自动创建主目录（在服务器上不一定可以sudo，因为useradd正常情况下不能被所有用户sudo）</span></span><br><span class="line">sudo passwd tzx <span class="comment"># 为tzx修改登陆密码</span></span><br><span class="line">groupadd groupname <span class="comment"># 新增groupName属组</span></span><br><span class="line">id user <span class="comment"># 查看用户user的权限</span></span><br><span class="line">groups user <span class="comment"># 查看user的属组</span></span><br><span class="line">gpasswd <span class="comment"># 进行组相关的操作</span></span><br></pre></td></tr></table></figure>
+<h3 id="系统维护"><a href="#系统维护" class="headerlink" title="系统维护"></a>系统维护</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -cvf file.tar dir <span class="comment"># 将dir下的目录打包为file.tar</span></span><br><span class="line">tar -xvf file.tar <span class="comment"># 将file.tar解开</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">df <span class="comment"># 查看磁盘使用情况</span></span><br></pre></td></tr></table></figure>
+<p>配置/etc/crontab 文件，可以定时执行任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">at 16:00 <span class="comment"># 使用at命令简单定时一次性的任务</span></span><br><span class="line">atq <span class="comment"># 查看at任务</span></span><br><span class="line">atrm 8 <span class="comment"># 删除编号为8的任务</span></span><br></pre></td></tr></table></figure>
+<h2 id="实用命令"><a href="#实用命令" class="headerlink" title="实用命令"></a>实用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pushd</span> dir <span class="comment"># 将dir压入目录堆栈</span></span><br><span class="line"><span class="built_in">popd</span> <span class="comment"># 从目录堆栈中弹出目录</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%85%A5%E9%97%A8/" rel="tag"># 命令行入门</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/07/grep%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8C%97/" rel="prev" title="grep命令指北">
+                  <i class="fa fa-chevron-left"></i> grep命令指北
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/07/ng-nodejs%E5%81%B6%E5%8F%91502/" rel="next" title="ng-nodejs偶发502">
+                  ng-nodejs偶发502 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

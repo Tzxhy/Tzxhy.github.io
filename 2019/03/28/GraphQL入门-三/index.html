@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="这篇讲 GraphQL 的其他内容。 验证通过使用类型系统，能够预先确定一个 GraphQL 请求是否合法。这让服务器和客户端能有效地通知开发者一个 query 是否有效，而不用依赖运行时的检查。即在本地调试的时候，就能知道该请求是否符合 schema。代码详见https:&#x2F;&#x2F;graphql.github.io&#x2F;learn&#x2F;validation&#x2F; ,可以直接改变代码，来查看效果。 执行GraphQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GraphQL入门-三">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/28/GraphQL%E5%85%A5%E9%97%A8-%E4%B8%89/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="这篇讲 GraphQL 的其他内容。 验证通过使用类型系统，能够预先确定一个 GraphQL 请求是否合法。这让服务器和客户端能有效地通知开发者一个 query 是否有效，而不用依赖运行时的检查。即在本地调试的时候，就能知道该请求是否符合 schema。代码详见https:&#x2F;&#x2F;graphql.github.io&#x2F;learn&#x2F;validation&#x2F; ,可以直接改变代码，来查看效果。 执行GraphQ">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-28T10:29:07.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.406Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="GraphQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/28/GraphQL%E5%85%A5%E9%97%A8-%E4%B8%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;28&#x2F;GraphQL%E5%85%A5%E9%97%A8-%E4%B8%89&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;28&#x2F;GraphQL入门-三&#x2F;&quot;,&quot;title&quot;:&quot;GraphQL入门-三&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>GraphQL入门-三 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">1.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C"><span class="nav-number">2.</span> <span class="nav-text">执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E5%AD%97%E6%AE%B5%E5%92%8C-resolver"><span class="nav-number">2.1.</span> <span class="nav-text">根字段和 resolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5-resolver"><span class="nav-number">2.2.</span> <span class="nav-text">异步 resolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A-resolvers"><span class="nav-number">2.3.</span> <span class="nav-text">普通 resolvers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E5%BC%BA%E5%88%B6"><span class="nav-number">2.4.</span> <span class="nav-text">标量强制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E8%A1%A8-resolves"><span class="nav-number">2.5.</span> <span class="nav-text">列表 resolves</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%9C"><span class="nav-number">2.6.</span> <span class="nav-text">生成结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E7%9C%81"><span class="nav-number">3.</span> <span class="nav-text">内省</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/28/GraphQL%E5%85%A5%E9%97%A8-%E4%B8%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GraphQL入门-三
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-28 10:29:07" itemprop="dateCreated datePublished" datetime="2019-03-28T10:29:07Z">2019-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GraphQL/" itemprop="url" rel="index"><span itemprop="name">GraphQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这篇讲 GraphQL 的其他内容。</p>
+<h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p>通过使用类型系统，能够预先确定一个 GraphQL 请求是否合法。这让服务器和客户端能有效地通知开发者一个 query 是否有效，而不用依赖运行时的检查。即在本地调试的时候，就能知道该请求是否符合 schema。代码详见<a target="_blank" rel="noopener" href="https://graphql.github.io/learn/validation/">https://graphql.github.io/learn/validation/</a> ,可以直接改变代码，来查看效果。</p>
+<h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><p>GraphQL 的执行依赖于类型系统。来个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123;</span><br><span class="line">  human(id: ID!): Human</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Human &#123;</span><br><span class="line">  name: String</span><br><span class="line">  appearsIn: [Episode]</span><br><span class="line">  starships: [Starship]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum Episode &#123;</span><br><span class="line">  NEWHOPE</span><br><span class="line">  EMPIRE</span><br><span class="line">  JEDI</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Starship &#123;</span><br><span class="line">  name: String</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了描述当 query 执行时发生什么，用这个例子：<br>req:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  human(id: 1002) &#123;</span><br><span class="line">    name</span><br><span class="line">    appearsIn</span><br><span class="line">    starships &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>res:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;human&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Han Solo&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;appearsIn&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;NEWHOPE&quot;</span>,</span><br><span class="line">        <span class="string">&quot;EMPIRE&quot;</span>,</span><br><span class="line">        <span class="string">&quot;JEDI&quot;</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">&quot;starships&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Millenium Falcon&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Imperial shuttle&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="根字段和-resolver"><a href="#根字段和-resolver" class="headerlink" title="根字段和 resolver"></a>根字段和 resolver</h2><p>每一个字段都用一个函数（就是 resolver 的概念，有点类似于 redux 的 reducer 的意味）来生成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Query: &#123;</span><br><span class="line">  human(obj, args, context, info) &#123;</span><br><span class="line">    return context.db.loadHumanByID(args.id).then(</span><br><span class="line">      userData =&gt; new Human(userData)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>obj 先前的对象，一般是上一层的值。对于根字段没有这个值。</li>
+<li>args 传递进来的参数</li>
+<li>context 环境信息</li>
+<li>info 当前请求的详细信息和 schema 信息。</li>
+</ul>
+<h2 id="异步-resolver"><a href="#异步-resolver" class="headerlink" title="异步 resolver"></a>异步 resolver</h2><p>GraphQL 会等待异步的 resolver 返回后，再返回数据给前端。</p>
+<h2 id="普通-resolvers"><a href="#普通-resolvers" class="headerlink" title="普通 resolvers"></a>普通 resolvers</h2><p>当 Human 对象可访问后，GraphQL 的执行会继续下去：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Human: &#123;</span><br><span class="line">  name(obj, args, context, info) &#123;</span><br><span class="line">    return obj.name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时的 obj 是 Human 对象的值，因此简单返回该对象的 name 值即可。事实上，许多 GraphQL 库会让你忽略该简单实现：如果你没有定义该字段的 resolve，库会返回 obj[field]。</p>
+<h2 id="标量强制"><a href="#标量强制" class="headerlink" title="标量强制"></a>标量强制</h2><p>如果默认地使用普通 resolver 的话，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Human: &#123;</span><br><span class="line">  appearsIn(obj) &#123;</span><br><span class="line">    return obj.appearsIn // returns [ 4, 5, 6 ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>appearsIn返回的数字数组，而不是枚举值。怎么操作？</p>
+<p>这是标量强制的例子。类型系统知道需要什么，会将值转换所需的类型。</p>
+<h2 id="列表-resolves"><a href="#列表-resolves" class="headerlink" title="列表 resolves"></a>列表 resolves</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Human: &#123;</span><br><span class="line">  starships(obj, args, context, info) &#123;</span><br><span class="line">    return obj.starshipIDs.map(</span><br><span class="line">      id =&gt; context.db.loadStarshipByID(id).then(</span><br><span class="line">        shipData =&gt; new Starship(shipData)</span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>GraphQL 会等待 Promise List 完成后，才将数据返回。</p>
+<h2 id="生成结果"><a href="#生成结果" class="headerlink" title="生成结果"></a>生成结果</h2><p>在每一个字段完成后，结果值将被放入一个键值对。</p>
+<h1 id="内省"><a href="#内省" class="headerlink" title="内省"></a>内省</h1><p>能够去查看 GraphQL 的 Schema 能返回什么类型的数据是非常有用的。GraphQL 允许我们使用内省系统。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GraphQL/" rel="tag"># GraphQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/28/GraphQL%E5%85%A5%E9%97%A8-%E4%B8%80/" rel="prev" title="GraphQL入门(2)">
+                  <i class="fa fa-chevron-left"></i> GraphQL入门(2)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/29/%E4%BB%A3%E7%A0%81%E4%B8%AD%E6%97%B6%E9%97%B4%E7%9A%84%E6%A6%82%E5%BF%B5/" rel="next" title="代码中时间的概念">
+                  代码中时间的概念 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

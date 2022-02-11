@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="滚动嵌套1-webkit-overflow-scrolling: touch; 这个属性专用于ios开启滚动回弹及持续滚动效果（安卓自带）。当存在嵌套的滚动时，需要给每个 div 都加上这个属性，否则内部的滚动结束后无法传递到外部滚动容器。 在滚动的时候动态设置滚动容器的 overflow注意，如果在滚动的时候去动态设置滚动容器的 overflow，会导致强烈的抖动。因此，应该在滚动结束后再动态设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ios踩坑笔记">
+<meta property="og:url" content="https://tzxhy.github.io/2019/06/03/ios%E8%B8%A9%E5%9D%91%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="滚动嵌套1-webkit-overflow-scrolling: touch; 这个属性专用于ios开启滚动回弹及持续滚动效果（安卓自带）。当存在嵌套的滚动时，需要给每个 div 都加上这个属性，否则内部的滚动结束后无法传递到外部滚动容器。 在滚动的时候动态设置滚动容器的 overflow注意，如果在滚动的时候去动态设置滚动容器的 overflow，会导致强烈的抖动。因此，应该在滚动结束后再动态设">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-03T13:27:05.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.412Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="ios踩坑">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/06/03/ios%E8%B8%A9%E5%9D%91%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;06&#x2F;03&#x2F;ios%E8%B8%A9%E5%9D%91%E7%AC%94%E8%AE%B0&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;06&#x2F;03&#x2F;ios踩坑笔记&#x2F;&quot;,&quot;title&quot;:&quot;ios踩坑笔记&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>ios踩坑笔记 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BB%9A%E5%8A%A8%E5%B5%8C%E5%A5%97"><span class="nav-number">1.</span> <span class="nav-text">滚动嵌套</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E6%BB%9A%E5%8A%A8%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A8%E6%80%81%E8%AE%BE%E7%BD%AE%E6%BB%9A%E5%8A%A8%E5%AE%B9%E5%99%A8%E7%9A%84-overflow"><span class="nav-number">2.</span> <span class="nav-text">在滚动的时候动态设置滚动容器的 overflow</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9-img-%E8%AE%BE%E7%BD%AE-filter-blur"><span class="nav-number">3.</span> <span class="nav-text">对 img 设置 filter: blur</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E8%BF%87%E6%B8%A1%E6%97%B6%E5%8A%A8%E7%94%BB%E4%B8%8E-ios-%E8%BE%B9%E7%BC%98%E6%93%8D%E4%BD%9C%E8%A3%85%E8%BD%A6"><span class="nav-number">4.</span> <span class="nav-text">路由过渡时动画与 ios 边缘操作装车</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/06/03/ios%E8%B8%A9%E5%9D%91%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ios踩坑笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-06-03 13:27:05" itemprop="dateCreated datePublished" datetime="2019-06-03T13:27:05Z">2019-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%B8%A9%E5%9D%91%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">踩坑笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="滚动嵌套"><a href="#滚动嵌套" class="headerlink" title="滚动嵌套"></a>滚动嵌套</h1><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-webkit-<span class="attribute">overflow</span>-scrolling: touch;</span><br></pre></td></tr></table></figure>
+<p>这个属性专用于ios开启滚动回弹及持续滚动效果（安卓自带）。<br>当存在嵌套的滚动时，需要给每个 div 都加上这个属性，否则内部的滚动结束后无法传递到外部滚动容器。</p>
+<h1 id="在滚动的时候动态设置滚动容器的-overflow"><a href="#在滚动的时候动态设置滚动容器的-overflow" class="headerlink" title="在滚动的时候动态设置滚动容器的 overflow"></a>在滚动的时候动态设置滚动容器的 overflow</h1><p>注意，如果在滚动的时候去动态设置滚动容器的 overflow，会导致强烈的抖动。因此，应该在滚动结束后再动态设置 overflow 属性。</p>
+<h1 id="对-img-设置-filter-blur"><a href="#对-img-设置-filter-blur" class="headerlink" title="对 img 设置 filter: blur"></a>对 img 设置 filter: blur</h1><p>ios 上时常出现渲染失败，表现为图片呲了。解决方法：添加 transform: translateZ(0); 强行交由 GPU 处理。</p>
+<h1 id="路由过渡时动画与-ios-边缘操作装车"><a href="#路由过渡时动画与-ios-边缘操作装车" class="headerlink" title="路由过渡时动画与 ios 边缘操作装车"></a>路由过渡时动画与 ios 边缘操作装车</h1><p>IOS 边缘操作，了解一下，比如：屏幕左侧右滑，返回上一页；右侧左滑，前进一页。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ios%E8%B8%A9%E5%9D%91/" rel="tag"># ios踩坑</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/04/28/h5-drag-%E7%9B%B8%E5%85%B3/" rel="prev" title="h5 drag 相关">
+                  <i class="fa fa-chevron-left"></i> h5 drag 相关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/06/docker%E9%A9%BE%E9%A9%AD%E5%A7%BF%E5%8A%BF/" rel="next" title="docker驾驭姿势">
+                  docker驾驭姿势 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

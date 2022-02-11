@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="今天分享的内容主要是 flutter 中很基础的一个概念：尺寸与限制。 当然，这里并不是说尺寸、限制的实现，在 flutter 中就是采用Container，这里只是以Container为例。下面将跳出与 web 的比较，直接讲述 flutter 中的尺寸限制。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宽高?限制?">
+<meta property="og:url" content="https://tzxhy.github.io/2020/12/09/%E5%AE%BD%E9%AB%98-%E9%99%90%E5%88%B6/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="今天分享的内容主要是 flutter 中很基础的一个概念：尺寸与限制。 当然，这里并不是说尺寸、限制的实现，在 flutter 中就是采用Container，这里只是以Container为例。下面将跳出与 web 的比较，直接讲述 flutter 中的尺寸限制。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/6062d420ad5b6.png">
+<meta property="og:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/d0945995a2045.png">
+<meta property="og:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/c0241494f3ca4.png">
+<meta property="og:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/14bcbcc784d0a.png">
+<meta property="og:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/7c5c01539ae83.png">
+<meta property="article:published_time" content="2020-12-09T11:18:44.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.424Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="flutter">
+<meta property="article:tag" content="盒模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/6062d420ad5b6.png">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2020/12/09/%E5%AE%BD%E9%AB%98-%E9%99%90%E5%88%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2020&#x2F;12&#x2F;09&#x2F;%E5%AE%BD%E9%AB%98-%E9%99%90%E5%88%B6&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;12&#x2F;09&#x2F;宽高-限制&#x2F;&quot;,&quot;title&quot;:&quot;宽高?限制?&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>宽高?限制? | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%93%BA%E5%9E%AB"><span class="nav-number">1.</span> <span class="nav-text">基础铺垫</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BA%E5%AF%B8"><span class="nav-number">1.1.</span> <span class="nav-text">尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%90%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Container%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-number">1.3.</span> <span class="nav-text">Container的注释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%811"><span class="nav-number">1.3.1.</span> <span class="nav-text">验证1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%812"><span class="nav-number">1.3.2.</span> <span class="nav-text">验证2</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9D%BE%E7%B4%A7%E7%BA%A6%E6%9D%9F"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">松紧约束</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%813"><span class="nav-number">1.3.3.</span> <span class="nav-text">验证3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%814"><span class="nav-number">1.3.4.</span> <span class="nav-text">验证4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%815"><span class="nav-number">1.3.5.</span> <span class="nav-text">验证5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%816"><span class="nav-number">1.3.6.</span> <span class="nav-text">验证6</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%931"><span class="nav-number">2.</span> <span class="nav-text">总结1</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/12/09/%E5%AE%BD%E9%AB%98-%E9%99%90%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          宽高?限制?
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-09 11:18:44" itemprop="dateCreated datePublished" datetime="2020-12-09T11:18:44Z">2020-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/flutter/" itemprop="url" rel="index"><span itemprop="name">flutter</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>今天分享的内容主要是 flutter 中很基础的一个概念：尺寸与限制。</p>
+<p>当然，这里并不是说尺寸、限制的实现，在 flutter 中就是采用<code>Container</code>，这里只是以<code>Container</code>为例。下面将跳出与 web 的比较，直接讲述 flutter 中的尺寸限制。</p>
+<span id="more"></span>
+<h2 id="基础铺垫"><a href="#基础铺垫" class="headerlink" title="基础铺垫"></a>基础铺垫</h2><p>flutter 中的布局与浏览器中的布局行为是类似的（flutter 中负责布局、渲染这一块的负责人也是 chrome 浏览器中负责页面布局、渲染的主要开发者），因此理解尺寸、限制对于布局是尤为重要的。</p>
+<h3 id="尺寸"><a href="#尺寸" class="headerlink" title="尺寸"></a>尺寸</h3><p>这里的尺寸就是普通意义上的宽度、高度。常用的组件有：</p>
+<ul>
+<li><code>Container</code>: 可设置<code>width</code>/<code>height</code>；</li>
+<li><code>SizedBox</code>: 可设置<code>width</code>/<code>height</code>。</li>
+</ul>
+<p>它看似表面上是以<code>width</code>/<code>height</code>定死了容器的宽高，但在 flutter 内部，它会转换为 <strong>限制</strong>！这句话怎么理解呢？比如如下代码：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent1</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Container(</span><br><span class="line">      width: <span class="number">100</span>,</span><br><span class="line">      height: <span class="number">100</span>,</span><br><span class="line">      color: Colors.blue,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里定义了一个<code>MyComponent1</code>组件，它只是组合了其他组件（widget 的分类详见本专题其他文章），内部使用了<code>Container</code>作为容器，宽高都为100物理像素（这个先埋个伏笔：这个蓝框框的实际大小会是100*100吗？）。我们看一下<code>Container</code>的构造函数（出于简化目的，之后都会省略非关键代码）：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Container</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  Container(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    <span class="keyword">this</span>.alignment,</span><br><span class="line">    <span class="keyword">this</span>.padding,</span><br><span class="line">    Color color,</span><br><span class="line">    Decoration decoration,</span><br><span class="line">    <span class="keyword">this</span>.foregroundDecoration,</span><br><span class="line">    <span class="comment">// 非类实例属性</span></span><br><span class="line">    <span class="built_in">double</span> width,</span><br><span class="line">    <span class="built_in">double</span> height,</span><br><span class="line">    BoxConstraints constraints,</span><br><span class="line">    <span class="keyword">this</span>.margin,</span><br><span class="line">    <span class="keyword">this</span>.transform,</span><br><span class="line">    <span class="keyword">this</span>.child,</span><br><span class="line">  &#125;) : decoration = decoration ?? (color != <span class="keyword">null</span> ? BoxDecoration(color: color) : <span class="keyword">null</span>),</span><br><span class="line">       constraints =</span><br><span class="line">        (width != <span class="keyword">null</span> || height != <span class="keyword">null</span>)</span><br><span class="line">          ? constraints?.tighten(width: width, height: height)</span><br><span class="line">            ?? BoxConstraints.tightFor(width: width, height: height)</span><br><span class="line">          : constraints,</span><br><span class="line">       <span class="keyword">super</span>(key: key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以很明显地发现<code>width</code>和<code>height</code>只是参数，不是类实例属性，在初始化列表中利用 <code>width</code>和<code>height</code> 对类实例属性<code>constraints</code>赋值。这里暂不讨论方法 <strong>#tighten</strong> 和 <strong>#tightFor</strong> 。</p>
+<h3 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h3><p>限制就是对宽高的限制，比如最大宽度，最小高度等。常用的限制类组件有：</p>
+<ul>
+<li><code>Container</code>: 可设置<code>constraints</code>；</li>
+<li><code>LimitedBox</code>: 可设置<code>maxWidth</code>/<code>maxHeight</code>;</li>
+<li><code>ConstrainedBox</code>: 可设置<code>constraints</code>。</li>
+</ul>
+<p>其实限制类的组件并没有很多。像刚才列举的<code>Container</code>可以作为限制容器，其实也是因为内部使用了<code>ConstrainedBox</code>作为包裹，才有了限制的功能。</p>
+<h3 id="Container的注释"><a href="#Container的注释" class="headerlink" title="Container的注释"></a><code>Container</code>的注释</h3><p>其实从<code>Container</code>的注释上，我们能发现一些端倪。这里我把关于布局相关的注释翻译一下，同时优先级也是按照从上到下的顺序：</p>
+<ol>
+<li>如果没有设置 child, width, height, constraints， 并且父组件提供无限制的限制（有点拗口，可理解为无限大的限制），则该 Container 会尽可能小；</li>
+<li>如果没有 child 和 alignment，但是至少有 width/height/constraints 的其中之一，当前限制会与父组件传递的限制组合为新的限制，该 Container 会在满足新的限制条件下尽可能小（<strong>Note</strong>: 这里不确定是翻译问题，还是理解问题，我得出的结论与官方相反。我的理解：<strong>应该是满足新的限制条件下尽可能大</strong>）；</li>
+<li>如果没有 child、height、width、contraints、alignment，但是父组件提供了有限的限制，那么该 Container 就会扩展去满足父组件的（最大）限制；</li>
+<li>如果有 alignment，并且父组件提供无限制的限制，那么该 Container 会围绕 child 来调整它的大小；</li>
+<li>如果有 alignment，父组件提供有限的限制，那么该 Container 会先扩展扩大去满足父组件的限制，然后按照对齐方式定位子元素。</li>
+<li>否则，只有 child，没有 height、width、constraints、alignment，那么该 Container 会将父组件的限制传递给 child，然后调整该 Container 的大小去匹配 child 的大小。</li>
+</ol>
+<p>看到这里，建议各位读者先仔细看几遍，然后再继续。后文将主要通过一些例子来验证上述限制的逻辑，同时解答一些常见的 overflow 报错。</p>
+<h4 id="验证1"><a href="#验证1" class="headerlink" title="验证1"></a>验证1</h4><p>如果没有设置 child, width, height, constraints， 并且父组件提供无限制的限制（有点拗口，可理解为无限大的限制），则该 Container 会尽可能小：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启动</span></span><br><span class="line"><span class="keyword">void</span> main() =&gt; runApp(MyComponent1());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent1</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: Test(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="comment">// 这里使用 Builder 获取到子组件创建时的 context</span></span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="comment">// 打印 Test 组件的限制</span></span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="comment">// 打印蓝框框的大小</span></span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">      );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (20090): Test constraints: BoxConstraints(unconstrained)</span><br><span class="line">I/flutter (20090): Child size: Size(0.0, 0.0)</span><br></pre></td></tr></table></figure>
+
+<p>Test 接收到的限制为unconstrained（最大宽度、高度都是无穷大），内部蓝框框不设置child, width, height, constraints，发现打印出的蓝框框大小就是0，符合1.</p>
+<p>我们将限制只放在单一方向上，比如只让垂直方向无限制：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启动</span></span><br><span class="line"><span class="keyword">void</span> main() =&gt; runApp(MyComponent1());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent1</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: Test(),</span><br><span class="line">      <span class="comment">// 保持水平的限制，即只让垂直方向无限制</span></span><br><span class="line">      constrainedAxis: Axis.horizontal,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Test 不变</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (20090): Test constraints: BoxConstraints(w=392.7, 0.0&lt;=h&lt;=Infinity)</span><br><span class="line">I/flutter (20090): Child size: Size(392.7, 0.0)</span><br></pre></td></tr></table></figure>
+<p>发现水平方向其实是有大小的，为 Test 组件的宽度大小。但垂直方向变为最小的。同样符合1.</p>
+<h4 id="验证2"><a href="#验证2" class="headerlink" title="验证2"></a>验证2</h4><p>如果没有 child 和 alignment，但是至少有 width/height/constraints 的其中之一，当前限制会与父组件传递的限制组合为新的限制，该 Container 会在满足新的限制条件下尽可能小（<strong>Note</strong>: 这里不确定是翻译问题，还是理解问题，我得出的结论与官方相反。我的理解：<strong>应该是满足新的限制条件下尽可能大</strong>）：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;dart:async&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent2</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="comment">// 先包一层 UnconstrainedBox 以产生无限制</span></span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      <span class="comment">// 再包一层 ConstrainedBox 以产生需要的限制</span></span><br><span class="line">      child: ConstrainedBox(</span><br><span class="line">        child: Test(),</span><br><span class="line">        constraints: BoxConstraints(maxWidth: <span class="number">300</span>, minWidth: <span class="number">100</span>, maxHeight: <span class="number">300</span>, minHeight: <span class="number">100</span>),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          width: <span class="number">150</span>,</span><br><span class="line">          height: <span class="number">150</span>,</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">      );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Test 组件的外层限制应该是最大宽度、高度为300，最小宽度、高度为100。我们看看输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (22330): Test constraints: BoxConstraints(100.0&lt;=w&lt;=300.0, 100.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (22330): Child size: Size(150.0, 150.0)</span><br></pre></td></tr></table></figure>
+<p>如果将蓝框框的宽高都设为80呢？看输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (22330): Test constraints: BoxConstraints(100.0&lt;=w&lt;=300.0, 100.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (22330): Child size: Size(100.0, 100.0)</span><br></pre></td></tr></table></figure>
+<p>不是设置的80了，而是满足当前限制与父组件的组合。父组件都说了，最小100，最大300，你自己设置的80我可不认，最小100！就是这么霸道！</p>
+<p>我们不用固定值，我们来使用限制呢？</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">    constraints: BoxConstraints(minHeight: <span class="number">100</span>, maxHeight: <span class="number">110</span>, minWidth: <span class="number">120</span>, maxWidth: <span class="number">220</span>),</span><br><span class="line">    color: Colors.blue,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>仅去掉蓝框框的 width/height，增加修改蓝框框的约束，看看结果呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (22330): Test constraints: BoxConstraints(100.0&lt;=w&lt;=300.0, 100.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (22330): Child size: Size(220.0, 110.0)</span><br></pre></td></tr></table></figure>
+<p>发现，大小并不是组合限制（本例中为 120&lt;=w&lt;=220, 100&lt;=h&lt;=110）中的最小值(120, 100)，而是最大值(220, 110)。正如 <strong>2</strong> 中括号注释的一样（官方文档没有，笔者自己领悟的），当为紧约束时，为紧约束的大小；当为松约束时，为松约束的最大值。什么是紧送约束？</p>
+<h5 id="松紧约束"><a href="#松紧约束" class="headerlink" title="松紧约束"></a>松紧约束</h5><p>直接看代码：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BoxConstraints 中</span></span><br><span class="line"><span class="built_in">bool</span> <span class="keyword">get</span> hasTightWidth =&gt; minWidth &gt;= maxWidth;</span><br><span class="line"><span class="built_in">bool</span> <span class="keyword">get</span> hasTightHeight =&gt; minHeight &gt;= maxHeight;</span><br><span class="line"></span><br><span class="line"><span class="built_in">bool</span> <span class="keyword">get</span> isTight =&gt; hasTightWidth &amp;&amp; hasTightHeight;</span><br></pre></td></tr></table></figure>
+<p>很简单：紧（tight）约束就是最小宽度等于最大宽度 &amp;&amp; 最小高度等于最大高度。也就是说，当我们设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">width: 100,</span><br><span class="line">height: 100,</span><br></pre></td></tr></table></figure>
+<p>时，会被转换成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">constraints = BoxContraints.tightFor(width: 100, height: 100)</span><br><span class="line">// constraints == BoxContraints(minHeight: 100, maxHeight: 100, minWidth: 100, maxWidth: 100)</span><br></pre></td></tr></table></figure>
+<p>此时就说该限制是紧的。相反，当最小宽度、高度分别小于最大宽度、高度，此时就说是松约束。<br>那么松、紧约束在此条件下，为什么表现不一致呢？看一下<code>Container</code>的 build 方法：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Widget build(BuildContext context) &#123;</span><br><span class="line">    Widget current = child;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (child == <span class="keyword">null</span> &amp;&amp; (constraints == <span class="keyword">null</span> || !constraints.isTight)) &#123;</span><br><span class="line">      current = LimitedBox(</span><br><span class="line">        maxWidth: <span class="number">0.0</span>,</span><br><span class="line">        maxHeight: <span class="number">0.0</span>,</span><br><span class="line">        child: ConstrainedBox(constraints: <span class="keyword">const</span> BoxConstraints.expand()),</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当 child 为 null 并且（限制为 null 或者是松约束），则包一层 <code>LimitedBox</code>。这个<code>LimitedBox</code>有啥作用？因为它不是本文主要内容，这里就简单讲解一下：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> LimitedBox(&#123;</span><br><span class="line">  Key key,</span><br><span class="line">  <span class="keyword">this</span>.maxWidth = <span class="built_in">double</span>.infinity,</span><br><span class="line">  <span class="keyword">this</span>.maxHeight = <span class="built_in">double</span>.infinity,</span><br><span class="line">  Widget child,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>LimitedBox</code>作用：当父组件给的限制是无限制的时候，则把对 child 的限制改为<code>maxWidth</code>、<code>maxHeight</code>。当 child 为 null 时，在<code>Container</code>的最内层使用了<code>LimitedBox(width: 0, height: 0, child: ConstrainedBox(constraints: const BoxConstraints.expand()), )</code>，意思是：当父组件给的限制为无限制时，大小就为0（这个是 LimitedBox 的作用），这个符合验证1；当父组件给的限制为有限限制时，大小就为BoxConstraints.expand()，<strong>也即满足限制的最大尺寸</strong>。这就解释了为什么验证2中我添加的注释。如果大家有疑问，可以留言。</p>
+<h4 id="验证3"><a href="#验证3" class="headerlink" title="验证3"></a>验证3</h4><p>如果没有 child、height、width、contraints、alignment，但是父组件提供了有限的限制，那么该 Container 就会扩展去满足父组件的（最大）限制：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;dart:async&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent3</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: ConstrainedBox(</span><br><span class="line">        child: Test(),</span><br><span class="line">        constraints: BoxConstraints(maxWidth: <span class="number">300</span>, minWidth: <span class="number">100</span>, maxHeight: <span class="number">300</span>, minHeight: <span class="number">100</span>),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">        );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(100.0&lt;=w&lt;=300.0, 100.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (26984): Child size: Size(300.0, 300.0)</span><br></pre></td></tr></table></figure>
+<p>原因也很明显了，验证2中最后就拿根本原因 <code>LimitedBox</code> 解释过。因为父组件给的是有限限制，所以 LimitedBox 不生效，但LimitedBox中的 child 的限制却生效了：BoxConstraints.expand()，即满足限制条件的最大。</p>
+<h4 id="验证4"><a href="#验证4" class="headerlink" title="验证4"></a>验证4</h4><p>如果有 alignment，并且父组件提供无限制的限制，那么该 Container 会围绕 child 来调整它的大小：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;dart:async&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent4</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: Test(),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">          child: SizedBox(</span><br><span class="line">            width: <span class="number">100</span>,</span><br><span class="line">            height: <span class="number">120</span>,</span><br><span class="line">            child: DecoratedBox(</span><br><span class="line">              decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">            ),</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(unconstrained)</span><br><span class="line">I/flutter (26984): Child size: Size(100.0, 120.0)</span><br></pre></td></tr></table></figure>
+<p><code>Container</code> 的大小是 <code>SizedBox</code> 的大小（一定会是这样吗？），虽然没有设置 <code>alignment</code>（也没必要，毕竟该 <code>Container</code> 的大小就为 child 的大小，定位是无意义的），但也符合4。此时看一下页面显示：<br><img src="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/6062d420ad5b6.png" alt="显示"></p>
+<p>下面看一下，分几种情况，我们应用<code>alignment</code>：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">    color: Colors.blue,</span><br><span class="line">    width: <span class="number">200</span>,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// alignment: Alignment.centerLeft,</span></span><br><span class="line">    child: SizedBox(</span><br><span class="line">        width: <span class="number">100</span>,</span><br><span class="line">        height: <span class="number">120</span>,</span><br><span class="line">        child: DecoratedBox(</span><br><span class="line">            decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">        ),</span><br><span class="line">    ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>不设置<code>alignment</code>，此时讲道理，蓝框框会比黄的大。但此时页面：<br><img src="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/d0945995a2045.png" alt="展示"><br>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(unconstrained)</span><br><span class="line">I/flutter (26984): Child size: Size(200.0, 120.0)</span><br></pre></td></tr></table></figure>
+
+<p>黄框框完全遮挡住了蓝框框。为什么呢？因为父组件给的限制是紧宽度，松高度，即使 <code>SizedBox</code> 限制了宽度，由于父组件的绝对限制，导致宽度变成了父组件的宽度。</p>
+<p>当设置对齐方式时，比如 center(水平垂直都居中):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">    color: Colors.blue,</span><br><span class="line">    width: <span class="number">200</span>,</span><br><span class="line">    height: <span class="number">200</span>,</span><br><span class="line">    alignment: Alignment.center,</span><br><span class="line">    child: SizedBox(</span><br><span class="line">        width: <span class="number">100</span>,</span><br><span class="line">        height: <span class="number">100</span>,</span><br><span class="line">        child: DecoratedBox(</span><br><span class="line">            decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">        ),</span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>此时，页面展示：<br><img src="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/c0241494f3ca4.png" alt=" 展示"><br>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(unconstrained)</span><br><span class="line">I/flutter (26984): Child size: Size(200.0, 200.0)</span><br></pre></td></tr></table></figure>
+<p>符合预期。外层 Container 宽高为200，内层 <code>SizedBox</code> 宽高为100，设置的对齐方式为水平垂直居中。</p>
+<h4 id="验证5"><a href="#验证5" class="headerlink" title="验证5"></a>验证5</h4><p>如果有 alignment，父组件提供有限的限制，那么该 Container 会先扩展扩大去满足父组件的限制，然后按照对齐方式定位子元素：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent5</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: ConstrainedBox(</span><br><span class="line">        constraints: BoxConstraints.loose(Size(<span class="number">300</span>, <span class="number">300</span>)),</span><br><span class="line">        child: Test(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">          alignment: Alignment.center,</span><br><span class="line">          child: SizedBox(</span><br><span class="line">            width: <span class="number">100</span>,</span><br><span class="line">            height: <span class="number">120</span>,</span><br><span class="line">            child: DecoratedBox(</span><br><span class="line">              decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">            ),</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(0.0&lt;=w&lt;=300.0, 0.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (26984): Child size: Size(300.0, 300.0)</span><br></pre></td></tr></table></figure>
+<p>页面：<br><img src="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/14bcbcc784d0a.png" alt="展示"><br>Container 的大小即是扩展到父组件的最大，即300*300，然后根据<code>alignment</code>去定位 child。</p>
+<h4 id="验证6"><a href="#验证6" class="headerlink" title="验证6"></a>验证6</h4><p>否则，只有 child，没有 height、width、constraints、alignment，那么该 Container 会将父组件的限制传递给 child，然后调整该 Container 的大小去匹配 child 的大小。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;dart:async&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent6</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: ConstrainedBox(</span><br><span class="line">        constraints: BoxConstraints.loose(Size(<span class="number">300</span>, <span class="number">300</span>)),</span><br><span class="line">        child: Test(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">          child: SizedBox(</span><br><span class="line">            width: <span class="number">100</span>,</span><br><span class="line">            height: <span class="number">120</span>,</span><br><span class="line">            child: DecoratedBox(</span><br><span class="line">              decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">            ),</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(0.0&lt;=w&lt;=300.0, 0.0&lt;=h&lt;=300.0)</span><br><span class="line">I/flutter (26984): Child size: Size(100.0, 120.0)</span><br></pre></td></tr></table></figure>
+<p>看到 Container 的大小就是 child 的大小。</p>
+<p>当我们修改父组件的限制时：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyComponent6</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    RenderBox rb = context.findRenderObject();</span><br><span class="line">    rb?.constraints;</span><br><span class="line">    <span class="keyword">return</span> UnconstrainedBox(</span><br><span class="line">      child: ConstrainedBox(</span><br><span class="line">        <span class="comment">// 改动点，最小宽高为200，最大无穷</span></span><br><span class="line">        constraints: BoxConstraints(minWidth: <span class="number">200</span>, minHeight: <span class="number">200</span>),</span><br><span class="line">        child: Test(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> Builder(</span><br><span class="line">      builder: (BuildContext childContext) &#123;</span><br><span class="line">        Timer.run(() &#123;</span><br><span class="line">          RenderBox rb = context.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Test constraints: &#x27;</span> + rb?.constraints.toString());</span><br><span class="line"></span><br><span class="line">          RenderBox rbc = childContext.findRenderObject();</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;Child size: &#x27;</span> + rbc?.size.toString());</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> Container(</span><br><span class="line">          color: Colors.blue,</span><br><span class="line">          child: SizedBox(</span><br><span class="line">            width: <span class="number">100</span>,</span><br><span class="line">            height: <span class="number">120</span>,</span><br><span class="line">            child: DecoratedBox(</span><br><span class="line">              decoration: BoxDecoration(color: Colors.yellow),</span><br><span class="line">            ),</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">    &#125;,);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">I/flutter (26984): Test constraints: BoxConstraints(200.0&lt;=w&lt;=Infinity, 200.0&lt;=h&lt;=Infinity)</span><br><span class="line">I/flutter (26984): Child size: Size(200.0, 200.0)</span><br></pre></td></tr></table></figure>
+<p>看到 Container 的大小是200*200了（当然 SizedBox 也是200*200，而不会管100*120，原因上面也说过，就是父组件的限制强于自己的限制）。也就是说这种情况下将父组件的限制透传给了 child。作用于<code>SizedBox</code>的限制是<code>BoxConstraints(200.0&lt;=w&lt;=Infinity, 200.0&lt;=h&lt;=Infinity)</code>。</p>
+<h2 id="总结1"><a href="#总结1" class="headerlink" title="总结1"></a>总结1</h2><ol>
+<li>flutter 中的限制是从顶层（比如 MaterialApp 这样的功能组件）传入底层（任意分支），上一层的限制会限制这一层的限制。举个例：<br><img src="https://www.tanzhixuan.top/ng-s1/static/upload/img/6be26730/7c5c01539ae83.png" alt="限制组合"></li>
+</ol>
+<p><code>COMPONENT2</code>会接收其父组件<code>COMPONENT1</code>传递的约束1，同时自身也有约束2，那么新的约束条件就是3。图中的约束3所表示的宽高不一定是实际情况（根据组件功能的不同，情况会有变化），主要看对应 <code>RenderObject</code> 中 <code>performLayout</code>中怎么生成新的组合限制。<br>2. flutter 中的 size 是从底层回传到顶层。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/flutter/" rel="tag"># flutter</a>
+              <a href="/tags/%E7%9B%92%E6%A8%A1%E5%9E%8B/" rel="tag"># 盒模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="prev" title="前端性能优化">
+                  <i class="fa fa-chevron-left"></i> 前端性能优化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/09/ts-%E6%B3%9B%E5%9E%8B%E6%B7%B1%E5%85%A5/" rel="next" title="ts 泛型深入">
+                  ts 泛型深入 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

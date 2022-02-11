@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="react单例组件的实现方式说到react的单例，大家可能一哈子就想到了像Alert啊，弹层啊、Confirm啊之类的。没毛病。单例嘛，就是全局唯一一个实例，不可能同时出现两个嘛。是的。极大部分业务情况下是这样的。所以，怎么实现一个单例组件，是个值得思考的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react单例模式">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/07/react%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="react单例组件的实现方式说到react的单例，大家可能一哈子就想到了像Alert啊，弹层啊、Confirm啊之类的。没毛病。单例嘛，就是全局唯一一个实例，不可能同时出现两个嘛。是的。极大部分业务情况下是这样的。所以，怎么实现一个单例组件，是个值得思考的问题。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-07T14:22:40.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.417Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="React">
+<meta property="article:tag" content="单例">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/07/react%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;07&#x2F;react%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;07&#x2F;react单例模式&#x2F;&quot;,&quot;title&quot;:&quot;react单例模式&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>react单例模式 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#react%E5%8D%95%E4%BE%8B%E7%BB%84%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">react单例组件的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E5%9C%B0%E5%88%B6%E5%AE%9C%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E6%8F%90%E6%98%AFreact%E7%BB%84%E4%BB%B6%E7%9A%84%E5%8D%95%E4%BE%8B%E3%80%82"><span class="nav-number">1.1.</span> <span class="nav-text">因地制宜，我们的前提是react组件的单例。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B2%A1%E5%95%A5%E6%AF%9B%E7%97%85%EF%BC%8C%E6%84%8F%E6%80%9D%E6%98%AF%E6%9C%89%E7%82%B9%E5%B0%8F%E6%AF%9B%E7%97%85%E5%92%AF%EF%BC%9F"><span class="nav-number">1.1.1.</span> <span class="nav-text">没啥毛病，意思是有点小毛病咯？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9F%E5%8D%95%E4%BE%8B%E7%BB%84%E4%BB%B6%E6%9C%89%E5%95%A5%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">跟单例组件有啥关系？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8API%E8%B0%83%E7%94%A8%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E7%BB%84%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">使用API调用的方式实现单例组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BB%84%E4%BB%B6%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">使用声明式组件实现单例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/07/react%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react单例模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-07 14:22:40" itemprop="dateCreated datePublished" datetime="2019-03-07T14:22:40Z">2019-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="react单例组件的实现方式"><a href="#react单例组件的实现方式" class="headerlink" title="react单例组件的实现方式"></a>react单例组件的实现方式</h1><p>说到react的单例，大家可能一哈子就想到了像Alert啊，弹层啊、Confirm啊之类的。没毛病。单例嘛，就是全局唯一一个实例，不可能同时出现两个嘛。是的。极大部分业务情况下是这样的。所以，怎么实现一个单例组件，是个值得思考的问题。</p>
+<span id="more"></span>
+<h2 id="因地制宜，我们的前提是react组件的单例。"><a href="#因地制宜，我们的前提是react组件的单例。" class="headerlink" title="因地制宜，我们的前提是react组件的单例。"></a>因地制宜，我们的前提是react组件的单例。</h2><p>使用react组件常见的套路是写jsx，直接声明式地将组件放在它该在地位置，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> (</span><br><span class="line">        <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;wrapperClassNames&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">GoBack</span> <span class="attr">goBack</span> = <span class="string">&#123;props.goBack&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span> = <span class="string">&#x27;header-title&#x27;</span>&gt;</span>&#123;props.headerTitle&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="xml">            &#123;</span></span><br><span class="line"><span class="xml">                rightOptions ? <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span> = <span class="string">&#x27;header-right&#x27;</span>&gt;</span>&#123; rightOptions &#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span> : null</span></span><br><span class="line"><span class="xml">            &#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">	);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>如果我们想根据某种状态来决定是否显示某个组件，可以三目。这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> (</span><br><span class="line">        <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;wrapperClassNames&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">            &#123;</span></span><br><span class="line"><span class="xml">				this.state.showModal ? <span class="tag">&lt;<span class="name">Modal</span> /&gt;</span> : null</span></span><br><span class="line"><span class="xml">			&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">	);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>是这样的吧？相信大家也都是这么用的。没没啥大毛病。</p>
+<h3 id="没啥毛病，意思是有点小毛病咯？"><a href="#没啥毛病，意思是有点小毛病咯？" class="headerlink" title="没啥毛病，意思是有点小毛病咯？"></a>没啥毛病，意思是有点小毛病咯？</h3><p>正如小标题，确实没啥大毛病，却有一些小毛病，我说说我在业务中遇到的问题。</p>
+<ol>
+<li>动画直接丢失。好理解吧？我这个组件有进场、退场动画，在状态变化、变为不显示时，直接就被干掉了，退场动画写给谁看啊？</li>
+<li>有多少个Modal，就要写多少次（除非把Modal的数据写在上层组件的state里，一并传给Modal）</li>
+</ol>
+<h2 id="跟单例组件有啥关系？"><a href="#跟单例组件有啥关系？" class="headerlink" title="跟单例组件有啥关系？"></a>跟单例组件有啥关系？</h2><p>正如前面所说，使用React，就注定了对组件的使用是声明式的。声明式的组件也意味着满足条件时会直接render到页面上（虽然可以用state来判断是否显示组件，但这种方式直接导致动画失效，这里排除了这种情况）。一般来说，使用单例组件可以采用调用的形式，这里引用一个同事的Alert组件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Alert</span> <span class="keyword">extends</span> <span class="title">PureComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(props);</span><br><span class="line">        <span class="built_in">this</span>.state = &#123;</span><br><span class="line">            <span class="attr">show</span>: props.show,</span><br><span class="line">            <span class="attr">onConfirm</span>: props.onConfirm,</span><br><span class="line">            <span class="attr">content</span>: props.content</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">this</span>.timer = <span class="literal">null</span>;</span><br><span class="line">        that = <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">componentWillUnmount</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (container) &#123;</span><br><span class="line">            <span class="built_in">document</span>.body.removeChild(container);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; show, content, onConfirm &#125; = <span class="built_in">this</span>.state;</span><br><span class="line">        <span class="keyword">const</span> actions = [&#123;</span><br><span class="line">            <span class="attr">text</span>: <span class="string">&#x27;确定&#x27;</span>,</span><br><span class="line">            <span class="attr">callback</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">                onConfirm();</span><br><span class="line">                <span class="built_in">this</span>.setState(&#123;</span><br><span class="line">                    <span class="attr">show</span>: <span class="literal">false</span></span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;];</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="name">Modal</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">title</span> =<span class="string">&#x27;提示&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">footer</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onHide</span> = <span class="string">&#123;()</span> =&gt;</span> false&#125;</span></span><br><span class="line"><span class="xml">                actions = &#123;actions&#125;</span></span><br><span class="line"><span class="xml">                show = &#123;show&#125;</span></span><br><span class="line"><span class="xml">            &gt;</span></span><br><span class="line"><span class="xml">                &#123; content &#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">Modal</span>&gt;</span></span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Alert.propTypes = &#123;</span><br><span class="line">    <span class="attr">show</span>: PropTypes.bool,</span><br><span class="line">    <span class="attr">onConfirm</span>: PropTypes.func,</span><br><span class="line">    <span class="attr">content</span>: PropTypes.string</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Alert.defaultProps = &#123;</span><br><span class="line">    <span class="attr">show</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">onConfirm</span>: <span class="function">() =&gt;</span> <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!isNodeEnv()) &#123;</span><br><span class="line">    container = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(container);</span><br><span class="line">    ReactDom.render(<span class="xml"><span class="tag">&lt;<span class="name">Alert</span> /&gt;</span></span>, container);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="function"><span class="title">alert</span>(<span class="params">config</span>)</span> &#123;</span><br><span class="line">        that.setState(<span class="built_in">Object</span>.assign(&#123;&#125;, config, &#123; <span class="attr">show</span>: <span class="literal">true</span> &#125;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如上，对外暴露的不再是一个组件，而是包含alert方法的对象。通过手动调用alert(config)的方式，实现了单例组件。这种方式也非常常见。但这种方式有一个弊端，是什么呢？思考下。</p>
+<h2 id="使用API调用的方式实现单例组件"><a href="#使用API调用的方式实现单例组件" class="headerlink" title="使用API调用的方式实现单例组件"></a>使用API调用的方式实现单例组件</h2><p>是组件吧？那我们肯定要传一些参数对吧？（不要把Alert这个单例组件那来当话题背景，你可以想象一个模态框弹层组件，除了外面的掩层，里面的内容是不是得完全自己去写呀？）调用api的话，必须每次都把配置对象传入，可能是很大一个对象，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">globalLayer.show(&#123;</span><br><span class="line">	<span class="attr">title</span>: <span class="string">&#x27;测试&#x27;</span>,</span><br><span class="line">	<span class="attr">onHide</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">	<span class="attr">onClick</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">	<span class="attr">content</span>: (<span class="xml"><span class="tag">&lt;<span class="name">Component1</span>&gt;</span> <span class="tag">&lt;<span class="name">Son</span>/&gt;</span>  <span class="tag">&lt;/<span class="name">Component1</span>&gt;</span></span>)</span><br><span class="line">	<span class="comment">// .....</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这样的配置。而且每次调用这个方法都得传一个大对象过去。是不是有点麻烦？</p>
+<h2 id="使用声明式组件实现单例"><a href="#使用声明式组件实现单例" class="headerlink" title="使用声明式组件实现单例"></a>使用声明式组件实现单例</h2><p>什么是声明组件？就是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">	<span class="xml"><span class="tag">&lt;<span class="name">GlobalLayer</span> <span class="attr">show</span> = <span class="string">&#123;this.state.showLayer1&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;/<span class="name">GlobalLayer</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="xml"><span class="tag">&lt;<span class="name">GlobalLayer</span> <span class="attr">show</span> = <span class="string">&#123;this.state.showLayer2&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;/<span class="name">GlobalLayer</span>&gt;</span></span></span><br><span class="line">	</span><br><span class="line">	<span class="xml"><span class="tag">&lt;<span class="name">GlobalLayer</span> <span class="attr">show</span> = <span class="string">&#123;this.state.showLayer3&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;/<span class="name">GlobalLayer</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>类似这种的“直接render“。虽然看上去被直接render了，看上去应该有3个被塞入DOM了。但巧妙的就是GlobalLayer是一个高阶函数，它管理了自己的state中显示逻辑—-用这个state来控制children是否显示。这里贴一下我的高阶函数的实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; PureComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> LazyRender <span class="keyword">from</span> <span class="string">&#x27;../LazyRender&#x27;</span>; <span class="comment">// 这个是一个单独的用来懒渲染的高阶函数，可脱离本高阶函数独立使用</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> (<span class="params">MyComponent</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Wrapper</span> <span class="keyword">extends</span> <span class="title">PureComponent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> displayName = <span class="string">&#x27;SelfDeleteWrapper&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        state = &#123;</span><br><span class="line">            <span class="attr">showComponent</span>: <span class="literal">false</span> <span class="comment">// 用来控制是否显示内部组件</span></span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> <span class="function"><span class="title">getDerivedStateFromProps</span>(<span class="params">props, state</span>)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (props.show &amp;&amp; !state.showComponent) &#123; <span class="comment">// 准备展示组件</span></span><br><span class="line">                <span class="keyword">return</span> &#123;</span><br><span class="line">                    <span class="attr">showComponent</span>: <span class="literal">true</span></span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        deleteComponent = <span class="function">() =&gt;</span> &#123; <span class="comment">// 销毁组件</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">            <span class="built_in">this</span>.setState(&#123;</span><br><span class="line">                <span class="attr">showComponent</span>: <span class="literal">false</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        LazyComponent = LazyRender(MyComponent); <span class="comment">// 缓存要渲染的东西</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> &#123;</span><br><span class="line">                showComponent</span><br><span class="line">            &#125; = <span class="built_in">this</span>.state;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> &#123;</span><br><span class="line">                deleteComponent,</span><br><span class="line">                LazyComponent</span><br><span class="line">            &#125; = <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> (</span><br><span class="line">                showComponent ?</span><br><span class="line">                    <span class="xml"><span class="tag">&lt;<span class="name">LazyComponent</span> &#123;<span class="attr">...this.props</span>&#125; <span class="attr">__onDelete</span>=<span class="string">&#123;deleteComponent&#125;</span> /&gt;</span></span> : <span class="literal">null</span></span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Wrapper;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>关键点还是在于__onDelete函数。在MyComponent触发了onHide函数或者被上层组件设置为show: false时会触发__onDelete，使LazyComponent这个组件被react干掉。当然，触发__onDelete是在执行完MyComponent的退场动画后才触发的。这样保证了全局单一的实例。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/React/" rel="tag"># React</a>
+              <a href="/tags/%E5%8D%95%E4%BE%8B/" rel="tag"># 单例</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/07/%E5%85%B3%E4%BA%8Enodejs%E7%9A%84%E8%B0%83%E8%AF%95/" rel="prev" title="关于nodejs的调试">
+                  <i class="fa fa-chevron-left"></i> 关于nodejs的调试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/07/chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2/" rel="next" title="chrome浏览器加载一个页面">
+                  chrome浏览器加载一个页面 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

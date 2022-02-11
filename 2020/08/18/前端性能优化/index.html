@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="首屏加载静态资源图片压缩 imagemin: 压缩并导出渐进式JPEG&#x2F;WebP 图像元信息清除 tinyPNG 替换大 GIF 为视频，可以使用FFMpeg 图标压缩 图标神器 创建自己的 iconFont  字体压缩 fontmin 静态字体压缩 woff2 字体格式压缩工具  分析包体积构成 webpack-bundle-analyzer 代码拆分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端性能优化">
+<meta property="og:url" content="https://tzxhy.github.io/2020/08/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="首屏加载静态资源图片压缩 imagemin: 压缩并导出渐进式JPEG&#x2F;WebP 图像元信息清除 tinyPNG 替换大 GIF 为视频，可以使用FFMpeg 图标压缩 图标神器 创建自己的 iconFont  字体压缩 fontmin 静态字体压缩 woff2 字体格式压缩工具  分析包体积构成 webpack-bundle-analyzer 代码拆分">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tzxhy.github.io/images/5d071c7ae4b024f7b66f7b8e.png">
+<meta property="article:published_time" content="2020-08-17T19:46:20.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.423Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="前端优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tzxhy.github.io/images/5d071c7ae4b024f7b66f7b8e.png">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2020/08/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2020&#x2F;08&#x2F;18&#x2F;%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;08&#x2F;18&#x2F;前端性能优化&#x2F;&quot;,&quot;title&quot;:&quot;前端性能优化&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>前端性能优化 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A6%96%E5%B1%8F%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">首屏加载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90"><span class="nav-number">1.1.</span> <span class="nav-text">静态资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.1.1.</span> <span class="nav-text">图片压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E6%A0%87%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.1.2.</span> <span class="nav-text">图标压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E4%BD%93%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.1.3.</span> <span class="nav-text">字体压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%8C%85%E4%BD%93%E7%A7%AF%E6%9E%84%E6%88%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">分析包体积构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js-css-minify-amp-purify"><span class="nav-number">1.1.5.</span> <span class="nav-text">js&#x2F;css minify &amp; purify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E9%A6%96%E5%B1%8F%E6%89%80%E9%9C%80%E7%9A%84-css%E3%80%81js%EF%BC%8C%E5%BB%B6%E8%BF%9F%E9%9D%9E%E9%A6%96%E5%B1%8F%E8%B5%84%E6%BA%90"><span class="nav-number">1.1.6.</span> <span class="nav-text">提取首屏所需的 css、js，延迟非首屏资源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93"><span class="nav-number">1.2.</span> <span class="nav-text">网络传输</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN-Brotli-Gzip-%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.2.1.</span> <span class="nav-text">CDN: Brotli&#x2F;Gzip 压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-control-%E5%A4%B4"><span class="nav-number">1.2.2.</span> <span class="nav-text">cache-control 头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http2"><span class="nav-number">1.2.3.</span> <span class="nav-text">http2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3"><span class="nav-number">1.3.</span> <span class="nav-text">浏览器相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-meta-renderer-%E6%A0%87%E7%AD%BE"><span class="nav-number">1.3.1.</span> <span class="nav-text">使用 meta renderer 标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CRP%E4%BC%98%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">CRP优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#link-%E6%A0%87%E7%AD%BE%E5%89%8D%E7%BD%AE-script-%E6%A0%87%E7%AD%BE%E7%BD%AE%E5%BA%95"><span class="nav-number">1.4.1.</span> <span class="nav-text">link 标签前置 script 标签置底</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM-%E6%A0%91%E6%89%81%E5%B9%B3"><span class="nav-number">1.4.2.</span> <span class="nav-text">DOM 树扁平</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%8F%E5%B0%91%E9%98%BB%E5%A1%9E%E7%9A%84-css"><span class="nav-number">1.4.3.</span> <span class="nav-text">减少阻塞的 css</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-LightHouse-%E5%AE%A1%E6%A0%B8%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84"><span class="nav-number">1.4.4.</span> <span class="nav-text">使用 LightHouse 审核关键渲染路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-preload%E3%80%81prefetch-%E5%BE%AE%E8%B0%83%E8%B5%84%E6%BA%90%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.4.5.</span> <span class="nav-text">使用 preload、prefetch 微调资源优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-defer-%E4%BC%98%E5%8C%96-script-%E8%A7%A3%E6%9E%90%EF%BC%8C%E5%87%8F%E5%B0%91%E9%A6%96%E5%B1%8F%E9%98%BB%E5%A1%9E"><span class="nav-number">1.4.6.</span> <span class="nav-text">使用 defer 优化 script 解析，减少首屏阻塞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.5.</span> <span class="nav-text">懒加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-InteractionObserver-%E7%9B%91%E5%90%AC%E5%85%83%E7%B4%A0%E6%98%AF%E5%90%A6%E5%9C%A8%E7%89%B9%E5%AE%9A%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.5.1.</span> <span class="nav-text">使用 InteractionObserver 监听元素是否在特定区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%9A%E5%8A%A8%E7%9B%91%E5%90%AC%E3%80%81resize-%E7%AD%89"><span class="nav-number">1.5.2.</span> <span class="nav-text">滚动监听、resize 等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E8%A7%86%E9%A2%91%E4%BB%A3%E6%9B%BF-gif%E5%B9%B6%E8%AE%BE%E7%BD%AE-lt-video-gt-preload-%E4%B8%BA-none"><span class="nav-number">1.5.3.</span> <span class="nav-text">用视频代替 gif并设置&lt;\video&gt;\ preload 为 none</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%8B%86%E5%88%86-%E4%BB%A5-vue-%E4%B8%BA%E4%BE%8B"><span class="nav-number">1.5.4.</span> <span class="nav-text">代码拆分(以 vue 为例)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E9%A6%96%E5%B1%8F%E5%90%8E%E5%8A%A0%E8%BD%BD%E5%85%B6%E4%BB%96%E9%9D%9E%E9%A6%96%E5%B1%8F%E8%B5%84%E6%BA%90"><span class="nav-number">1.5.5.</span> <span class="nav-text">在首屏后加载其他非首屏资源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%A8%E6%9E%B6%E5%B1%8F"><span class="nav-number">1.6.</span> <span class="nav-text">骨架屏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%A6%BB%E7%BA%BF%E5%8C%96"><span class="nav-number">1.7.</span> <span class="nav-text">应用离线化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-storage"><span class="nav-number">1.7.1.</span> <span class="nav-text">web storage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#service-worker"><span class="nav-number">1.7.2.</span> <span class="nav-text">service worker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.7.3.</span> <span class="nav-text">实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebView-%E5%8A%A0%E8%BD%BD%E4%BC%98%E5%8C%96"><span class="nav-number">1.8.</span> <span class="nav-text">WebView 加载优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%8A%A0%E8%BD%BD-%E2%80%93-%E6%89%93%E5%BC%80-webview-%E7%9A%84%E5%90%8C%E6%97%B6%E8%AF%B7%E6%B1%82%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE"><span class="nav-number">1.8.1.</span> <span class="nav-text">数据预加载 – 打开 webview 的同时请求接口数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-transfer-encoding-chunked-%E6%8F%90%E5%8D%87-TTFB"><span class="nav-number">1.8.2.</span> <span class="nav-text">http transfer-encoding: chunked 提升 TTFB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%85%E8%99%8E14%E6%9D%A1"><span class="nav-number">1.8.3.</span> <span class="nav-text">雅虎14条</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%9A%84%E6%9C%BA%E4%BC%9A"><span class="nav-number">1.9.</span> <span class="nav-text">优化的机会</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">实时渲染优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%8F%E5%B0%91%E6%A0%B7%E5%BC%8F%E9%87%8D%E6%96%B0%E8%AE%A1%E7%AE%97%E6%88%90%E6%9C%AC"><span class="nav-number">2.2.</span> <span class="nav-text">减少样式重新计算成本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%B8%83%E5%B1%80%E6%8A%96%E5%8A%A8"><span class="nav-number">2.3.</span> <span class="nav-text">避免布局抖动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E9%87%8D%E7%BB%98%E6%95%88%E7%8E%87"><span class="nav-number">2.4.</span> <span class="nav-text">优化重绘效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%90%88%E6%88%90%E6%95%88%E7%8E%87"><span class="nav-number">2.5.</span> <span class="nav-text">优化合成效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E5%8E%8B%E5%8A%9B%E7%82%B9%E5%8E%BB%E6%8A%96%E5%8A%A8"><span class="nav-number">2.6.</span> <span class="nav-text">高压力点去抖动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8E%E7%AB%AF%E6%9C%BA%E5%85%BC%E5%AE%B9"><span class="nav-number">2.7.</span> <span class="nav-text">低端机兼容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E6%93%8E%E4%BC%98%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">引擎优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JIT"><span class="nav-number">3.1.</span> <span class="nav-text">JIT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebAssembly"><span class="nav-number">3.2.</span> <span class="nav-text">WebAssembly</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">绘制优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#canvas"><span class="nav-number">4.1.</span> <span class="nav-text">canvas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG"><span class="nav-number">4.2.</span> <span class="nav-text">SVG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebGl"><span class="nav-number">4.3.</span> <span class="nav-text">WebGl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-number">4.4.</span> <span class="nav-text">转化工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-number">5.</span> <span class="nav-text">性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A7%E7%8E%87%E3%80%81%E4%B8%A2%E5%B8%A7%E4%B8%8E%E6%B5%81%E7%95%85%E5%BA%A6%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">帧率、丢帧与流畅度概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RAIL%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.</span> <span class="nav-text">RAIL模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%92%8C%E6%8C%87%E5%AF%BC"><span class="nav-number">5.2.1.</span> <span class="nav-text">目标和指导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Response%EF%BC%9A%E5%9C%A8-50ms-%E5%86%85%E5%93%8D%E5%BA%94%E4%BA%8B%E4%BB%B6"><span class="nav-number">5.2.2.</span> <span class="nav-text">Response：在 50ms 内响应事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Animation%EF%BC%9A%E5%9C%A8-10ms-%E5%86%85%E5%AE%8C%E6%88%90%E4%B8%80%E5%B8%A7"><span class="nav-number">5.2.3.</span> <span class="nav-text">Animation：在 10ms 内完成一帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Idle%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%8C%96%E7%A9%BA%E9%97%B2%E6%97%B6%E9%97%B4"><span class="nav-number">5.2.4.</span> <span class="nav-text">Idle：最大化空闲时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Load%EF%BC%9A%E5%88%86%E5%8F%91%E5%86%85%E5%AE%B9%E5%B9%B6%E5%9C%A85s%E5%86%85%E5%8F%AF%E4%BA%A4%E4%BA%92"><span class="nav-number">5.2.5.</span> <span class="nav-text">Load：分发内容并在5s内可交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E9%87%8F-RAIL"><span class="nav-number">5.2.6.</span> <span class="nav-text">测量 RAIL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%90%8C%E6%AD%A5-FreeSynx-G-Sync-%E5%8C%BA%E5%88%AB"><span class="nav-number">5.3.</span> <span class="nav-text">垂直同步 FreeSynx G-Sync 区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%95%85%E6%84%9F%E7%9F%A5%E5%8E%9F%E7%90%86"><span class="nav-number">5.4.</span> <span class="nav-text">流畅感知原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E6%B8%B2%E6%9F%93%E6%8C%87%E6%A0%87-TODO"><span class="nav-number">5.5.</span> <span class="nav-text">渐进式渲染指标 TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%BB%8F%E9%AA%8C%E4%BF%A1%E6%81%AF"><span class="nav-number">5.6.</span> <span class="nav-text">相关经验信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">5.7.</span> <span class="nav-text">相关工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">渲染原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%B7%A5%E4%BD%9C%E7%BA%BF%E7%A8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">浏览器工作线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF"><span class="nav-number">6.2.</span> <span class="nav-text">渲染管线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B7%E5%BC%8F%E9%87%8D%E6%96%B0%E8%AE%A1%E7%AE%97"><span class="nav-number">6.2.1.</span> <span class="nav-text">样式重新计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%83%E5%B1%80%E4%B8%8E%E5%9B%9E%E6%B5%81"><span class="nav-number">6.2.2.</span> <span class="nav-text">布局与回流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%98%E5%88%B6"><span class="nav-number">6.2.3.</span> <span class="nav-text">绘制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%B1%82%E3%80%81%E5%88%9B%E5%BB%BA%E5%90%88%E6%88%90%E5%B1%82"><span class="nav-number">6.2.4.</span> <span class="nav-text">合成层、创建合成层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">调试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%B1%8F%E6%80%A7%E8%83%BD"><span class="nav-number">7.1.</span> <span class="nav-text">首屏性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LightHouse-Audits"><span class="nav-number">7.1.1.</span> <span class="nav-text">LightHouse(Audits)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E6%80%A7%E8%83%BD"><span class="nav-number">7.1.2.</span> <span class="nav-text">渲染性能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2020/08/18/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端性能优化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-08-17 19:46:20" itemprop="dateCreated datePublished" datetime="2020-08-17T19:46:20Z">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF%E4%BC%98%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">前端优化</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="首屏加载"><a href="#首屏加载" class="headerlink" title="首屏加载"></a>首屏加载</h1><h2 id="静态资源"><a href="#静态资源" class="headerlink" title="静态资源"></a>静态资源</h2><h3 id="图片压缩"><a href="#图片压缩" class="headerlink" title="图片压缩"></a>图片压缩</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/imagemin/imagemin">imagemin: 压缩并导出渐进式JPEG/WebP</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.verexif.com/en/">图像元信息清除</a></li>
+<li><a target="_blank" rel="noopener" href="https://tinypng.com/">tinyPNG</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/replace-gifs-with-videos/">替换大 GIF 为视频</a>，可以使用<a target="_blank" rel="noopener" href="http://ffmpeg.org/download.html">FFMpeg</a></li>
+<li><img src="/images/5d071c7ae4b024f7b66f7b8e.png" alt="图片选择"><h3 id="图标压缩"><a href="#图标压缩" class="headerlink" title="图标压缩"></a>图标压缩</h3></li>
+<li><a target="_blank" rel="noopener" href="https://icomoon.io/">图标神器</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bsdfzzzy/iconfont-all-in-one">创建自己的 iconFont</a></li>
+</ol>
+<h3 id="字体压缩"><a href="#字体压缩" class="headerlink" title="字体压缩"></a>字体压缩</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/ecomfe/fontmin">fontmin 静态字体压缩</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.font-converter.net/en">woff2 字体格式压缩工具</a></li>
+</ol>
+<h3 id="分析包体积构成"><a href="#分析包体积构成" class="headerlink" title="分析包体积构成"></a>分析包体积构成</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-bundle-analyzer">webpack-bundle-analyzer</a></li>
+<li>代码拆分</li>
+</ol>
+<span id="more"></span>
+
+<h3 id="js-css-minify-amp-purify"><a href="#js-css-minify-amp-purify" class="headerlink" title="js/css minify &amp; purify"></a>js/css minify &amp; purify</h3><h3 id="提取首屏所需的-css、js，延迟非首屏资源"><a href="#提取首屏所需的-css、js，延迟非首屏资源" class="headerlink" title="提取首屏所需的 css、js，延迟非首屏资源"></a>提取首屏所需的 css、js，延迟非首屏资源</h3><h2 id="网络传输"><a href="#网络传输" class="headerlink" title="网络传输"></a>网络传输</h2><h3 id="CDN-Brotli-Gzip-压缩"><a href="#CDN-Brotli-Gzip-压缩" class="headerlink" title="CDN: Brotli/Gzip 压缩"></a>CDN: Brotli/Gzip 压缩</h3><h3 id="cache-control-头"><a href="#cache-control-头" class="headerlink" title="cache-control 头"></a>cache-control 头</h3><h3 id="http2"><a href="#http2" class="headerlink" title="http2"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/http2">http2</a></h3><h2 id="浏览器相关"><a href="#浏览器相关" class="headerlink" title="浏览器相关"></a>浏览器相关</h2><h3 id="使用-meta-renderer-标签"><a href="#使用-meta-renderer-标签" class="headerlink" title="使用 meta renderer 标签"></a>使用 meta renderer 标签</h3><h2 id="CRP优化"><a href="#CRP优化" class="headerlink" title="CRP优化"></a>CRP优化</h2><p>Critical Rendering Path</p>
+<h3 id="link-标签前置-script-标签置底"><a href="#link-标签前置-script-标签置底" class="headerlink" title="link 标签前置 script 标签置底"></a>link 标签前置 script 标签置底</h3><h3 id="DOM-树扁平"><a href="#DOM-树扁平" class="headerlink" title="DOM 树扁平"></a>DOM 树扁平</h3><h3 id="减少阻塞的-css"><a href="#减少阻塞的-css" class="headerlink" title="减少阻塞的 css"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css">减少阻塞的 css</a></h3><ol>
+<li>使用 Chrome DevTools 中 Coverage 查看未使用的 css 和 js<h3 id="使用-LightHouse-审核关键渲染路径"><a href="#使用-LightHouse-审核关键渲染路径" class="headerlink" title="使用 LightHouse 审核关键渲染路径"></a>使用 LightHouse 审核关键渲染路径</h3><h3 id="使用-preload、prefetch-微调资源优先级"><a href="#使用-preload、prefetch-微调资源优先级" class="headerlink" title="使用 preload、prefetch 微调资源优先级"></a><a target="_blank" rel="noopener" href="https://web.dev/defer-non-critical-css/">使用 preload、prefetch 微调资源优先级</a></h3><h3 id="使用-defer-优化-script-解析，减少首屏阻塞"><a href="#使用-defer-优化-script-解析，减少首屏阻塞" class="headerlink" title="使用 defer 优化 script 解析，减少首屏阻塞"></a>使用 defer 优化 script 解析，减少首屏阻塞</h3></li>
+</ol>
+<h2 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/">懒加载</a></h2><h3 id="使用-InteractionObserver-监听元素是否在特定区域"><a href="#使用-InteractionObserver-监听元素是否在特定区域" class="headerlink" title="使用 InteractionObserver 监听元素是否在特定区域"></a>使用 InteractionObserver 监听元素是否在特定区域</h3><h3 id="滚动监听、resize-等"><a href="#滚动监听、resize-等" class="headerlink" title="滚动监听、resize 等"></a>滚动监听、resize 等</h3><h3 id="用视频代替-gif并设置-lt-video-gt-preload-为-none"><a href="#用视频代替-gif并设置-lt-video-gt-preload-为-none" class="headerlink" title="用视频代替 gif并设置&lt;\video&gt;\ preload 为 none"></a>用视频代替 gif并设置&lt;\video&gt;\ preload 为 none</h3><h3 id="代码拆分-以-vue-为例"><a href="#代码拆分-以-vue-为例" class="headerlink" title="代码拆分(以 vue 为例)"></a><a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/components-dynamic-async.html#ad">代码拆分(以 vue 为例)</a></h3><h3 id="在首屏后加载其他非首屏资源"><a href="#在首屏后加载其他非首屏资源" class="headerlink" title="在首屏后加载其他非首屏资源"></a>在首屏后加载其他非首屏资源</h3><h2 id="骨架屏"><a href="#骨架屏" class="headerlink" title="骨架屏"></a><a target="_blank" rel="noopener" href="https://juejin.im/post/5b79a2786fb9a01a18267362">骨架屏</a></h2><h2 id="应用离线化"><a href="#应用离线化" class="headerlink" title="应用离线化"></a>应用离线化</h2><h3 id="web-storage"><a href="#web-storage" class="headerlink" title="web storage"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/instant-and-offline/web-storage/offline-for-pwa#%E5%A6%82%E4%BD%95%E4%BA%86%E8%A7%A3%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8%E7%9B%AE%E5%89%8D%E4%BD%BF%E7%94%A8%E4%BA%86%E5%A4%9A%E5%B0%91%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%EF%BC%9F">web storage</a></h3><h3 id="service-worker"><a href="#service-worker" class="headerlink" title="service worker"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/">service worker</a></h3><h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32753012">实践</a></h3><h2 id="WebView-加载优化"><a href="#WebView-加载优化" class="headerlink" title="WebView 加载优化"></a><a target="_blank" rel="noopener" href="https://tech.meituan.com/2017/06/09/webviewperf.html">WebView 加载优化</a></h2><h3 id="数据预加载-–-打开-webview-的同时请求接口数据"><a href="#数据预加载-–-打开-webview-的同时请求接口数据" class="headerlink" title="数据预加载 – 打开 webview 的同时请求接口数据"></a>数据预加载 – 打开 webview 的同时请求接口数据</h3><h3 id="http-transfer-encoding-chunked-提升-TTFB"><a href="#http-transfer-encoding-chunked-提升-TTFB" class="headerlink" title="http transfer-encoding: chunked 提升 TTFB"></a>http transfer-encoding: chunked 提升 TTFB</h3><h3 id="雅虎14条"><a href="#雅虎14条" class="headerlink" title="雅虎14条"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/qfkfw/article/details/7272961">雅虎14条</a></h3><h2 id="优化的机会"><a href="#优化的机会" class="headerlink" title="优化的机会"></a>优化的机会</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://web.dev/render-blocking-resources/">消除阻塞渲染的资源</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-responsive-images/">使用正确大小的图片</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/offscreen-images/">延迟离屏的图片</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/unminified-css/">减小css</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/unminified-javascript/">减小js</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/unused-css-rules/">移除未使用的 css</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-optimized-images/">更有效地编码图片</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-webp-images/">使用下一代的图片编码方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-text-compression/">开启http 压缩</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-rel-preconnect/">预连接指定的域</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/time-to-first-byte/">减少 TTFB 时间</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/redirects/">避免多页重定向</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/uses-rel-preload/">预加载关键资源</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/efficient-animated-content/">使用视频来代替动画内容</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/third-party-summary/">减小三方代码的影响</a>，<a target="_blank" rel="noopener" href="https://web.dev/efficiently-load-third-party-javascript/">如何更有效地加载第三方代码</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/non-composited-animations/">避免非合成的动画</a></li>
+</ol>
+<hr>
+<h1 id="实时渲染优化"><a href="#实时渲染优化" class="headerlink" title="实时渲染优化"></a>实时渲染优化</h1><p><a target="_blank" rel="noopener" href="https://toutiao.io/posts/r7iwjp/preview">图解 Chrome</a></p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>使用 web worker 或者 rAF 分离计算</p>
+<h2 id="减少样式重新计算成本"><a href="#减少样式重新计算成本" class="headerlink" title="减少样式重新计算成本"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/reduce-the-scope-and-complexity-of-style-calculations">减少样式重新计算成本</a></h2><h2 id="避免布局抖动"><a href="#避免布局抖动" class="headerlink" title="避免布局抖动"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing">避免布局抖动</a></h2><ol>
+<li>使用 flex</li>
+<li>高压力点避免任何布局相关任务</li>
+<li>避免强制布局<ol>
+<li>使用上一帧缓存的布局信息</li>
+<li>禁止频繁读写布局信息</li>
+<li>使用 <a target="_blank" rel="noopener" href="https://github.com/wilsonpage/fastdom">FastDom</a> 优化 dom 读写</li>
+<li>使用 Chrome Performance <a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/chrome-devtools/rendering-tools/forced-synchronous-layouts">检查 FSL</a> </li>
+</ol>
+</li>
+<li>修改布局信息时，可以用 display:none 暂时移出 DOM 树</li>
+</ol>
+<h2 id="优化重绘效率"><a href="#优化重绘效率" class="headerlink" title="优化重绘效率"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/simplify-paint-complexity-and-reduce-paint-areas">优化重绘效率</a></h2><ol>
+<li>避免使用性能高消耗的阴影等css3</li>
+<li>使用 Chrome DevTools 检查重绘区域</li>
+<li>避免多个动画</li>
+</ol>
+<h2 id="优化合成效率"><a href="#优化合成效率" class="headerlink" title="优化合成效率"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/stick-to-compositor-only-properties-and-manage-layer-count">优化合成效率</a></h2><ol>
+<li>使用仅触发 Composite 的 css 属性（transform/opacity）</li>
+<li>提升图层<ol>
+<li>布局易变动</li>
+<li>重绘代价高、频率高</li>
+<li>可接受额外内存开销</li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/entry/6844903502678867981">触发提升为合成层的条件</a></li>
+</ol>
+</li>
+</ol>
+<h2 id="高压力点去抖动"><a href="#高压力点去抖动" class="headerlink" title="高压力点去抖动"></a>高压力点去抖动</h2><ol>
+<li>输入事件</li>
+<li>滚动事件</li>
+</ol>
+<h2 id="低端机兼容"><a href="#低端机兼容" class="headerlink" title="低端机兼容"></a>低端机兼容</h2><ol>
+<li>去除高消耗动画</li>
+<li>优化高压力 cpu、io 计算</li>
+</ol>
+<hr>
+<h1 id="引擎优化"><a href="#引擎优化" class="headerlink" title="引擎优化"></a>引擎优化</h1><h2 id="JIT"><a href="#JIT" class="headerlink" title="JIT"></a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25669120">JIT</a></h2><h2 id="WebAssembly"><a href="#WebAssembly" class="headerlink" title="WebAssembly"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/WebAssembly">WebAssembly</a></h2><h1 id="绘制优化"><a href="#绘制优化" class="headerlink" title="绘制优化"></a>绘制优化</h1><h2 id="canvas"><a href="#canvas" class="headerlink" title="canvas"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas">canvas</a></h2><ol>
+<li>离屏渲染 + 缓存部分元素</li>
+<li>分层画布：z-index 实现多层 canvas 叠绘</li>
+<li>渲染差异帧</li>
+<li>避免使用浮点数与图像缩放：使用 transfrom 将运算转至 GPU</li>
+<li>关闭透明度：getContext(‘2d’, {alpha: false})</li>
+<li>减少模糊和阴影的使用<h2 id="SVG"><a href="#SVG" class="headerlink" title="SVG"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/lfsf802/article/details/40628453">SVG</a></h2></li>
+<li>线上优化工具 <a target="_blank" rel="noopener" href="https://jakearchibald.github.io/svgomg/">SVGOMG</a></li>
+<li>lllustrator 中使用 SVG 滤镜 (应避免使用滤镜或渐变)</li>
+<li>不可交互元素设置 pointer-event: none</li>
+<li>使用 Defs 标签缓存复杂 path 渲染</li>
+<li>Fill + Fill &gt; Fill + Stroke</li>
+<li>SVG 服务端渲染</li>
+</ol>
+<h2 id="WebGl"><a href="#WebGl" class="headerlink" title="WebGl"></a>WebGl</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weitaming1/article/details/84540706">Three.js 使用建议</a></li>
+<li>WebGl &amp; Canvas 开发优化<a target="_blank" rel="noopener" href="http://www.uml.org.cn/ajax/201807203.asp">策略</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.uwa4d.com/archives/TechSharing_122.html">WebGL 使用注意事项和浏览器支持</a></li>
+</ol>
+<h2 id="转化工具"><a href="#转化工具" class="headerlink" title="转化工具"></a>转化工具</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://demo.qunee.com/svg2canvas/">SVG2Canvas</a></li>
+<li><a target="_blank" rel="noopener" href="https://html2canvas.hertzen.com/">HTML2Canvas</a></li>
+</ol>
+<hr>
+<h1 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h1><h2 id="帧率、丢帧与流畅度概念"><a href="#帧率、丢帧与流畅度概念" class="headerlink" title="帧率、丢帧与流畅度概念"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/matric/p/6942281.html">帧率、丢帧与流畅度概念</a></h2><h2 id="RAIL模型"><a href="#RAIL模型" class="headerlink" title="RAIL模型"></a><a target="_blank" rel="noopener" href="https://web.dev/rail/">RAIL模型</a></h2><p>用户为中心的性能模型，提供了对能提升性能的结构。拆分了用户体验为几个关键的操作（比如点击、滚动，加载等）。<br>RAIL 全称为：Response、Animation、Idle 和 Load。</p>
+<p>用户感觉视觉停留：</p>
+<ol>
+<li>0-16ms：用户非常擅长跟踪运动，当动画不流畅时，他们会不喜欢它。 只要每秒渲染60个新帧，他们就能感觉到动画的流畅性。 每帧16毫秒，包括浏览器将新帧绘制到屏幕上所花费的时间，而应用程序大约需要10毫秒才能生成一帧。</li>
+<li>0-100ms：在此时间窗口内响应用户的操作，用户会感觉到结果是即时的。 当时间更长时，操作与反应之间的联系就被打破了。</li>
+<li>100-1000ms：在此窗口中，会感觉该操作是自然连续的过程的一部分。 对于网络上的大多数用户而言，加载页面或更改视图是一项任务。</li>
+<li>1000ms and more：超过1秒，用户就对操作失去了关注。</li>
+<li>10s and more：超过10秒，用户就会沮丧，并且很可能丢弃任务。可能不会再回来了。。</li>
+</ol>
+<h3 id="目标和指导"><a href="#目标和指导" class="headerlink" title="目标和指导"></a>目标和指导</h3><ul>
+<li>目标：关键的性能指标与用户体验相关。比如，点击后在100ms 内绘制。由于人类的感知是相对恒定的，所以他们的目标在很长时间内不会改变。</li>
+<li>指导：帮助你实现目标的建议。它们可能跟设备、网络状态等有关，并且会随时间而改变。</li>
+</ul>
+<h3 id="Response：在-50ms-内响应事件"><a href="#Response：在-50ms-内响应事件" class="headerlink" title="Response：在 50ms 内响应事件"></a>Response：在 50ms 内响应事件</h3><p>目标：在100ms 内完成用户的输入转换，这样用户会觉得他们的交互是连续的。</p>
+<p>指导：</p>
+<ul>
+<li>为了保证在 100ms 内可见的响应，处理用户的输入应该在50ms 内处理完成。包括绝大多数的输入，比如点击按钮，切换表单的控制项（radio、checkbox、select 等），或者是动画。 <strong>不适用于拖动或者滚动。</strong></li>
+<li>不是总需要立即响应用户的输入，虽然这听起来有点反直觉。你可以在这100ms 内处理一些其他高消耗的工作，但是注意不要阻塞用户。如果可能，在后台工作。</li>
+<li>对于需要超过 50ms 完成的任务，总是提供反馈。</li>
+</ul>
+<h3 id="Animation：在-10ms-内完成一帧"><a href="#Animation：在-10ms-内完成一帧" class="headerlink" title="Animation：在 10ms 内完成一帧"></a>Animation：在 10ms 内完成一帧</h3><p>目标：</p>
+<ul>
+<li>在10ms 内完成一帧。从技术上讲，最多16ms 需要完成一帧，但浏览器需要6ms 去渲染每一帧，所以要在10ms 内完成一帧</li>
+<li>视觉上的流畅。用户会感觉到帧率的变化。</li>
+</ul>
+<p>指导：</p>
+<ul>
+<li>高压力点比如动画时，什么都不做；在绝对最低时更不能做。尽可能在100ms 内响应预先计算的高消耗工作，这能让你最大程度达到60fps。</li>
+<li>通过 Rendering Performance 工具查看动画的优化策略。</li>
+</ul>
+<p>认清动画：</p>
+<ul>
+<li>视觉动画，比如进入、移出、tween，加载指示器等；</li>
+<li>滚动。用户拖动页面，开始滚动，然后放开，页面会继续滚动。</li>
+<li>拖动。动画经常发生在用户的交互上。比如平移地图上或者缩放。</li>
+</ul>
+<h3 id="Idle：最大化空闲时间"><a href="#Idle：最大化空闲时间" class="headerlink" title="Idle：最大化空闲时间"></a>Idle：最大化空闲时间</h3><p>目标：最大化空闲时间以增加页面在50ms 内响应用户输入的几率。<br>指导：</p>
+<ul>
+<li>使用空闲时间完成延迟的工作。比如，对于页面首次加载，可以先加载尽量少的数据，再在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback">空闲时间</a>加载其他数据。</li>
+<li>在50ms 内的空闲时间内去完成任务。超过50ms，你可能就会影响页面在50ms内响应用户输入。</li>
+<li>空闲时间内有工作时，如果用户在这时产生交互，需要将用户的交互提高为最高优先级，先中断当前的空闲时间任务。（TODO// HOW）</li>
+</ul>
+<h3 id="Load：分发内容并在5s内可交互"><a href="#Load：分发内容并在5s内可交互" class="headerlink" title="Load：分发内容并在5s内可交互"></a>Load：分发内容并在5s内可交互</h3><p>目标（这些目标会随着时间而改变）：</p>
+<ul>
+<li>针对设备、网络能力，优化加载性能。一个好的目标就是5s 内可交互（中端手机，slow 3G）</li>
+<li>对于后续的加载，期望在2s内完成。</li>
+</ul>
+<p>指导：</p>
+<ul>
+<li>测试加载性能。</li>
+<li>需要明确的是，你的用户的设备可能是2G、3G、4G，实际上有效连接速度会明显更慢。</li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/render-blocking-resources/">消除渲染阻塞的资源</a>。</li>
+<li>不必要进行完整加载。可以懒加载图片、代码拆分等，以及 <a target="_blank" rel="noopener" href="https://web.dev/fast/">web.dev 上的建议</a>。</li>
+</ul>
+<h3 id="测量-RAIL"><a href="#测量-RAIL" class="headerlink" title="测量 RAIL"></a>测量 RAIL</h3><ol>
+<li>Chrome DevTools</li>
+<li>Lighthouse</li>
+<li>WebPageTest</li>
+</ol>
+<h2 id="垂直同步-FreeSynx-G-Sync-区别"><a href="#垂直同步-FreeSynx-G-Sync-区别" class="headerlink" title="垂直同步 FreeSynx G-Sync 区别"></a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/41274376">垂直同步 FreeSynx G-Sync 区别</a></h2><h2 id="流畅感知原理"><a href="#流畅感知原理" class="headerlink" title="流畅感知原理"></a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/52397668">流畅感知原理</a></h2><ol>
+<li>视觉残留：100ms</li>
+<li>似动现象：20ms-1s</li>
+<li>临界闪烁融合阈值：50Hz-100Hz<h2 id="渐进式渲染指标-TODO"><a href="#渐进式渲染指标-TODO" class="headerlink" title="渐进式渲染指标 TODO"></a><a href="">渐进式渲染指标</a> TODO</h2></li>
+<li><a target="_blank" rel="noopener" href="https://web.dev/speed-index/">speed index</a></li>
+<li><a target="_blank" rel="noopener" href="https://llp0574.github.io/2017/10/19/performance-metrics-whats-this-all-about/">FP/FCP/FMP/TTI/TTCI</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.alloyteam.com/2015/09/explore-performance/">使用 performance 接口衡量指标</a></li>
+</ol>
+<h2 id="相关经验信息"><a href="#相关经验信息" class="headerlink" title="相关经验信息"></a>相关经验信息</h2><ol>
+<li>卡顿 = 帧延迟抖动（&gt;20ms）=&gt; 需要降低帧绘制成本，锁 60fps</li>
+<li>抖动 = 帧间丢失信息量过高 =&gt; 节流，提升帧率到 60fps</li>
+<li>rAF/css3 均与显示器刷新率同步，rAF 可控而 css3 不可控</li>
+<li>文字/位置动画（scroll，touch 等）应该保持最大帧率（避免使用 passive: false）</li>
+<li>颜色/形状动画可锁帧，节约性能</li>
+<li>在必须逐步加载时采用渐进式渲染</li>
+<li>交互响应应控制在100ms 内，不满足条件时提供视觉反馈（比如 loading）</li>
+</ol>
+<h2 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h2><p><a target="_blank" rel="noopener" href="https://googlechrome.github.io/lighthouse/scorecalc/">lighthouse 分数计算器</a></p>
+<hr>
+<h1 id="渲染原理"><a href="#渲染原理" class="headerlink" title="渲染原理"></a>渲染原理</h1><h2 id="浏览器工作线程"><a href="#浏览器工作线程" class="headerlink" title="浏览器工作线程"></a><a target="_blank" rel="noopener" href="https://www.infoq.cn/article/CS9-WZQlNR5h05HHDo1b">浏览器工作线程</a></h2><ol>
+<li>iframe 使用独立渲染进程</li>
+<li>输入、滚动事件监听会与主线程通信<h2 id="渲染管线"><a href="#渲染管线" class="headerlink" title="渲染管线"></a><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903760003596296">渲染管线</a></h2><h3 id="样式重新计算"><a href="#样式重新计算" class="headerlink" title="样式重新计算"></a>样式重新计算</h3></li>
+<li>css 默认继承属性</li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9c71c70be3dc">css 渲染原理</a></li>
+</ol>
+<h3 id="布局与回流"><a href="#布局与回流" class="headerlink" title="布局与回流"></a>布局与回流</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction">渲染树构建原理</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhangxinxu.com/wordpress/2015/02/css-deep-understand-flow-bfc-column-two-auto-layout/">BFC</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/">清除浮动</a></li>
+<li>影响布局性能的属性</li>
+</ol>
+<h3 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h3><ol>
+<li>影响绘制性能的属性<ol>
+<li>transform rotate</li>
+<li>gradients</li>
+<li>shadow</li>
+<li>border-radius</li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/">层叠上下文与层叠顺序</a></li>
+<li>canvas 重绘时依据改变内容决定重绘区域大小</li>
+</ol>
+<h3 id="合成层、创建合成层"><a href="#合成层、创建合成层" class="headerlink" title="合成层、创建合成层"></a>合成层、创建合成层</h3><ol>
+<li>Document</li>
+<li>能够提升为合成层的 css 属性、html 标签</li>
+<li><a target="_blank" rel="noopener" href="https://csstriggers.com/">css 属性在不同浏览器内核中触发的渲染管线层级</a></li>
+</ol>
+<hr>
+<h1 id="调试工具"><a href="#调试工具" class="headerlink" title="调试工具"></a>调试工具</h1><h2 id="首屏性能"><a href="#首屏性能" class="headerlink" title="首屏性能"></a>首屏性能</h2><h3 id="LightHouse-Audits"><a href="#LightHouse-Audits" class="headerlink" title="LightHouse(Audits)"></a><a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/lighthouse">LightHouse(Audits)</a></h3><ol>
+<li>检查 SEO 优化</li>
+<li>检查网页潜在阅读障碍</li>
+<li>避免使用过时或不推荐的 api</li>
+<li>不使用 http 的资源</li>
+<li>审查首屏 Metrics 指标<ol>
+<li>未使用的 css 引用</li>
+<li>检查资源压缩</li>
+<li>检查 CRP</li>
+</ol>
+</li>
+<li>检查是否符合 PWA<h3 id="渲染性能"><a href="#渲染性能" class="headerlink" title="渲染性能"></a>渲染性能</h3></li>
+<li>使用 Performance、Performance Monitor 考察性能开销<ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/web/tools/chrome-devtools/rendering-tools/js-execution">侦测 js 瓶颈段</a></li>
+<li>检查强制布局同步问题 FSL</li>
+<li>监视内存开销</li>
+<li>查看主线程、交互线程、光栅线程</li>
+<li>分析渲染管线耗时比例</li>
+</ol>
+</li>
+<li>使用 Rendering 查看渲染开销<ol>
+<li>重绘区域</li>
+<li>显示层边缘</li>
+<li>滚动响应问题区域检查</li>
+</ol>
+</li>
+<li>使用 Layers 查看合成层开销</li>
+<li>使用 Animations 调试 css3 动画</li>
+<li>使用 Coverage 检查当前页面未使用的 js、css 代码</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://web.dev/fast/#prioritize-resources">Google 优化</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E4%BC%98%E5%8C%96/" rel="tag"># 前端优化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/03/flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B0%83%E7%A0%94/" rel="prev" title="flutter状态管理调研">
+                  <i class="fa fa-chevron-left"></i> flutter状态管理调研
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/09/%E5%AE%BD%E9%AB%98-%E9%99%90%E5%88%B6/" rel="next" title="宽高?限制?">
+                  宽高?限制? <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

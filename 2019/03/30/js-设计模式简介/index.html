@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="最近在做需求的时候，发现逻辑结构比较乱，整体思路不够清晰。于是便想用一些设计模式来抽象自己的逻辑，美化代码结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js 设计模式简介">
+<meta property="og:url" content="https://tzxhy.github.io/2019/03/30/js-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="最近在做需求的时候，发现逻辑结构比较乱，整体思路不够清晰。于是便想用一些设计模式来抽象自己的逻辑，美化代码结构。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-03-29T21:57:41.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.413Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2019/03/30/js-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2019&#x2F;03&#x2F;30&#x2F;js-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;03&#x2F;30&#x2F;js-设计模式简介&#x2F;&quot;,&quot;title&quot;:&quot;js 设计模式简介&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>js 设计模式简介 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%80%A7%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">创建性设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82"><span class="nav-number">1.1.</span> <span class="nav-text">简单工厂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">安全工厂方法模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">抽象工厂模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.5.</span> <span class="nav-text">单例模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E6%80%A7%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">结构性设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">外观模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">装饰者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.</span> <span class="nav-text">享元模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">设计型设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">模板方法模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">状态模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.5.</span> <span class="nav-text">职责链模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.6.</span> <span class="nav-text">访问者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.7.</span> <span class="nav-text">中介者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.8.</span> <span class="nav-text">备忘录模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.9.</span> <span class="nav-text">迭代器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.10.</span> <span class="nav-text">解释器模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E5%B7%A7%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">技巧型设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%A8%A1%E5%BC%8F%EF%BC%88%E7%95%A5%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">链模式（略）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A7%94%E6%89%98%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text">委托模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E6%B5%81%E6%A8%A1%E5%BC%8F-%E2%80%93-%E5%8C%BA%E5%88%AB%E9%98%B2%E6%8A%96"><span class="nav-number">4.3.</span> <span class="nav-text">节流模式 – 区别防抖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.4.</span> <span class="nav-text">简单模板模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.5.</span> <span class="nav-text">惰性模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E5%BE%85%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.6.</span> <span class="nav-text">等待者模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">架构型设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E6%A8%A1%E5%9D%97%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text">同步模块模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9D%97%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text">异步模块模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Widget-%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.3.</span> <span class="nav-text">Widget 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVC"><span class="nav-number">5.4.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVP"><span class="nav-number">5.5.</span> <span class="nav-text">MVP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVVM"><span class="nav-number">5.6.</span> <span class="nav-text">MVVM</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/30/js-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js 设计模式简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-03-29 21:57:41" itemprop="dateCreated datePublished" datetime="2019-03-29T21:57:41Z">2019-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最近在做需求的时候，发现逻辑结构比较乱，整体思路不够清晰。于是便想用一些设计模式来抽象自己的逻辑，美化代码结构。</p>
+<span id="more"></span>
+
+<h2 id="创建性设计模式"><a href="#创建性设计模式" class="headerlink" title="创建性设计模式"></a>创建性设计模式</h2><p>主要是处理创建对象的设计模式。通过控制对象的创建来避免手动创建对象可能导致的问题及复杂度。</p>
+<h3 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h3><p>场景：组件类太多，记不住名字。可以对外提供一个创建组件类的工厂方法，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> componentsMap = &#123;</span><br><span class="line">    <span class="attr">alert</span>: Alert,</span><br><span class="line">    <span class="attr">prompt</span>: Prompt,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createComponent</span>(<span class="params">name, props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> componentsMap[name](props);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果许多类的相似处很多，可以把相似的放入工厂中，同时不同的也在工厂中处理：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createBall</span>(<span class="params">name: <span class="built_in">string</span>, props: <span class="built_in">object</span></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.ball = <span class="keyword">new</span> Ball();</span><br><span class="line">    <span class="built_in">this</span>.type = name;</span><br><span class="line">    <span class="built_in">this</span>.show = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    <span class="keyword">if</span> (name === <span class="string">&#x27;basketball&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// some difference</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name === <span class="string">&#x27;other&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// some difference</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安全工厂方法模式"><a href="#安全工厂方法模式" class="headerlink" title="安全工厂方法模式"></a>安全工厂方法模式</h3><p>上面的代码中可以发现，当有新增的类时，需要修改componentsMap映射关系或者createBall里面的逻辑。有一个更好的模式：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ComponentFactory</span>(<span class="params"><span class="keyword">type</span>, props</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> ComponentFactory) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">this</span>[<span class="keyword">type</span>](props);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ComponentFactory(<span class="keyword">type</span>, props);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ComponentFactory.prototype.BasketBall = <span class="function"><span class="keyword">function</span>(<span class="params">props</span>) </span>&#123;&#125;;</span><br><span class="line">ComponentFactory.prototype.FootBall = <span class="function"><span class="keyword">function</span>(<span class="params">props</span>) </span>&#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>当有新的构造方式时，直接利用原型链即可。</p>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>js 是种没有抽象类的，但可以用原型链来模拟实现。比如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">Car.prototype.run = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;抽象方法！&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> BMW = <span class="keyword">new</span> Car();</span><br><span class="line">BMW.run(); <span class="comment">// throw new Error</span></span><br></pre></td></tr></table></figure>
+<p>需要手动实现 run 方法。</p>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><p>建造者模式就是将复杂的构建过程分离成多个单独的步骤，如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Human = <span class="function"><span class="keyword">function</span>(<span class="params">info</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> Name = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.lastName = <span class="string">&#x27;l&#x27;</span>;</span><br><span class="line">    <span class="built_in">this</span>.firstName = <span class="string">&#x27;f&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Family = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">name, family</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> _person = <span class="keyword">new</span> Human();</span><br><span class="line">    _person.name = <span class="keyword">new</span> Name(name);</span><br><span class="line">    _person.family = <span class="keyword">new</span> Family();</span><br><span class="line">    <span class="keyword">return</span> _person;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>可以实现命名空间，可以实现惰性单例。（略）</p>
+<hr>
+<hr>
+<h2 id="结构性设计模式"><a href="#结构性设计模式" class="headerlink" title="结构性设计模式"></a>结构性设计模式</h2><p>关注如何将对象、类组合成更大、更复杂的结构，以简化设计。</p>
+<h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><p>为复杂的子系统接口提供更高级的统一接口。js 中经常对底层 API 进行封装，以兼容多个浏览器。（略）</p>
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>将一个类的接口（方法或者属性）转化成另一个接口可以使用的方式。（略）</p>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>在不改变原对象的基础上，通过对其进行包装拓展（添加属性或方法）使原有对象可以满足用户的更复杂的需求。可以想像@override 这样的 js 修饰器，它的原理就是就是检查原型链上是否有同名的函数，如果没有，就报错，有的话，就执行定义的函数。</p>
+<h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><p>一个数据结构对外提供统一结构，有不同的实现类。这些不同的实现类都能添加到一个池子里处理，因为它们的接口是一致的。（略）</p>
+<h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><p>共享源数据的模式，避免创造大量相同的对象（包括 js 对象和函数等），占用内存。（略）</p>
+<hr>
+<hr>
+<h2 id="设计型设计模式"><a href="#设计型设计模式" class="headerlink" title="设计型设计模式"></a>设计型设计模式</h2><h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><p>将基础的方法作为扩展方法的原型对象即可。（略）</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>又称为发布-订阅者模式或者消息机制，定义了一种依赖关系，解决了主题对象与观察者之间 <strong>功能</strong> 的解耦。(略)</p>
+<h3 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h3><p>当一个对象的内部状态发生改变时，会导致其行为的改变。</p>
+<p>举例：超级玛丽，可以跳跃，开枪，蹲下，奔跑，这些都是一个一个状态，这些状态都是可以组合的，因此不能单单使用 if 来判断（组合的情况非常多）。可以将一个时间点的状态都存入一个数组，然后执行对应状态的方法即可。</p>
+<h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><p>预先定义好针对某一执行流程的逻辑，在调用时指定对应的策略名即可。</p>
+<h3 id="职责链模式"><a href="#职责链模式" class="headerlink" title="职责链模式"></a>职责链模式</h3><p>将一个复杂的执行过程分解成许多细小的模块，每个模块完成独立、细小的功能， <strong>这也是代码编写时要极力遵循的</strong> ，也方便单元测试。</p>
+<h3 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h3><p>针对于对象结构中的元素，定义在不改变该对象的前提下访问结构中元素的新方法。和外观模式有很相似处，不同之处是要考虑 this 的指向问题，因此通常要使用 call 和 apply 来更改函数的执行作用域。</p>
+<h3 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h3><p>通过中介者对象封装一系列对象之间的交互，使对象之间不再相互引用，降低耦合。</p>
+<h3 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h3><p>保存对象的多个状态，可用于恢复对象某一时刻的状态。比如 redux 的 action。</p>
+<h3 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h3><p>顺序地访问聚合对象的内部元素。</p>
+<h3 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h3><p>对于一种语言，给出其文法表示形式，并定义一种解释器，通过这种介绍起来解释语言中定义的句子。</p>
+<hr>
+<hr>
+<h2 id="技巧型设计模式"><a href="#技巧型设计模式" class="headerlink" title="技巧型设计模式"></a>技巧型设计模式</h2><h3 id="链模式（略）"><a href="#链模式（略）" class="headerlink" title="链模式（略）"></a>链模式（略）</h3><h3 id="委托模式"><a href="#委托模式" class="headerlink" title="委托模式"></a>委托模式</h3><p>比如依靠事件冒泡，把事件绑定在父元素上。</p>
+<h3 id="节流模式-–-区别防抖"><a href="#节流模式-–-区别防抖" class="headerlink" title="节流模式 – 区别防抖"></a>节流模式 – 区别防抖</h3><p>节流是时间间隔 t 内只以参数 x1 运行 f(x) 1次；防抖是时间间隔 t 内，如果 f(x)没有再次调用，就以 x1 参数执行一次，否则，将参数换为 x2，时间间隔 t 内没有 f(x) 再次调用的话，就以 x2 参数执行一次。（具体场景，具体修改）</p>
+<h3 id="简单模板模式"><a href="#简单模板模式" class="headerlink" title="简单模板模式"></a>简单模板模式</h3><p>在频繁创建 DOM 节点并操作时，可以考虑将 HTML 直接赋予某个元素.innerHTML</p>
+<h3 id="惰性模式"><a href="#惰性模式" class="headerlink" title="惰性模式"></a>惰性模式</h3><p>减少每次代码执行时的重复性分支判断。一般是判断后直接修改原函数即可。</p>
+<h3 id="等待者模式"><a href="#等待者模式" class="headerlink" title="等待者模式"></a>等待者模式</h3><p>通过对多个异步进程监听，来触发未来发生的动作。类似 Promise。</p>
+<hr>
+<hr>
+<h2 id="架构型设计模式"><a href="#架构型设计模式" class="headerlink" title="架构型设计模式"></a>架构型设计模式</h2><h3 id="同步模块模式"><a href="#同步模块模式" class="headerlink" title="同步模块模式"></a>同步模块模式</h3><p>模块化：将复杂的系统分解成高内聚、低耦合的模块，使系统开发变得可控、可维护、可拓展，提高模块的复用率。<br>同步模块模式：当指定了依赖后，直接调用逻辑函数，不等待对应的依赖模块是否获取到。</p>
+<h3 id="异步模块模式"><a href="#异步模块模式" class="headerlink" title="异步模块模式"></a>异步模块模式</h3><p>在同步的基础上，等待所有依赖都可访问时，再执行逻辑。</p>
+<h3 id="Widget-模式"><a href="#Widget-模式" class="headerlink" title="Widget 模式"></a>Widget 模式</h3><p>Widget: (Web Widget 指的是一块可以在任意页面中执行的代码块)借用 Web Widget 思想，将页面分解成部件，针对部件开发，最终完成完整页面。也是现在的 Web 组件所提倡的组件化设计（React、Vue 等都是组件化开发）。</p>
+<h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p>model-view-controller。<br>model 提供数据相关接口；view 提供视图相关，比如创建视图；controller 提供逻辑相关。视图层和数据层耦合在一起。</p>
+<h3 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h3><p>model-view-presenter。<br>model 跟 MVC 中的 model 差不多；view 变化较大：view 中不再直接引用 model 来绘制页面，而是提供一系列方法；presenter 引用 model 和 view 来控制展现和逻辑。</p>
+<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p>model-view-ViewModel。<br>ViewModel 和 view 之间实现了数据双向绑定，model 和 ViewModel 之间实现了更新、推送的机制（即数据主动更新后，向VM推送消息；视图改变，引起 VM 更新 model）。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/29/%E4%BB%A3%E7%A0%81%E4%B8%AD%E6%97%B6%E9%97%B4%E7%9A%84%E6%A6%82%E5%BF%B5/" rel="prev" title="代码中时间的概念">
+                  <i class="fa fa-chevron-left"></i> 代码中时间的概念
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/04/03/typescript-%E5%AD%A6%E4%B9%A0/" rel="next" title="typescript 学习(1)">
+                  typescript 学习(1) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

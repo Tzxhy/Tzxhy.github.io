@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="1,css中引用了，名称都对了，但引用不上？可能是路径不对，名称，css选择器的结构，其中，更有可能的是，css中添加了&#x2F;&#x2F;双斜线注释。这在css中是不合法的。会导致下一行失效。 2,引用了bootstrap-fileinput插件,结合ajaxFileUpload发送文件时起冲突,导致发送一次后无法显示的问题.这是因为ajaxFileUpload原理是克隆原input元素, 克隆时导致boots">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作踩坑记录">
+<meta property="og:url" content="https://tzxhy.github.io/2017/06/27/%E5%B7%A5%E4%BD%9C%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="1,css中引用了，名称都对了，但引用不上？可能是路径不对，名称，css选择器的结构，其中，更有可能的是，css中添加了&#x2F;&#x2F;双斜线注释。这在css中是不合法的。会导致下一行失效。 2,引用了bootstrap-fileinput插件,结合ajaxFileUpload发送文件时起冲突,导致发送一次后无法显示的问题.这是因为ajaxFileUpload原理是克隆原input元素, 克隆时导致boots">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-06-26T17:46:49.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.425Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="踩坑">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2017/06/27/%E5%B7%A5%E4%BD%9C%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2017&#x2F;06&#x2F;27&#x2F;%E5%B7%A5%E4%BD%9C%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95&#x2F;&quot;,&quot;path&quot;:&quot;2017&#x2F;06&#x2F;27&#x2F;工作踩坑记录&#x2F;&quot;,&quot;title&quot;:&quot;工作踩坑记录&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>工作踩坑记录 | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2017/06/27/%E5%B7%A5%E4%BD%9C%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          工作踩坑记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-06-26 17:46:49" itemprop="dateCreated datePublished" datetime="2017-06-26T17:46:49Z">2017-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>1,css中引用了，名称都对了，但引用不上？<br>可能是路径不对，名称，css选择器的结构，其中，更有可能的是，css中添加了//双斜线注释。这在css中是不合法的。会导致下一行失效。</p>
+<p>2,引用了bootstrap-fileinput插件,结合ajaxFileUpload发送文件时起冲突,导致发送一次后无法显示的问题.<br>这是因为ajaxFileUpload原理是克隆原input元素, 克隆时导致bootstrap-fileinput对input绑定的data数据发生改变(主要是由this指针引起), 从而导致span元素不能正确显示选择的文件名称.解决方式是每次ajaxFileUpload请求之后, 将外层  [data-provides=”fileinput”]元素用  outerHTML  覆盖自身, 此时便会清空data数据, 在bootstrap-fileinput中会自动添加data数据, 并且需要手动设置input[file]元素的name属性. 达到修复的目的.</p>
+<p>3,限制input输入内容格式,可在keyup事件中使用正则表达式去除非想要信息.如,只想要数字和英文逗号,则可以, replace(/[^\d,]/g, ‘’);</p>
+<p>4,$(“#selectedUser”).val().split(“,”), 就算$(“#selectedUser”).val()是’’空字符串,但是split后为[“”]</p>
+<p>5,jquery.clone在IE中, 复制input:file元素时,貌似不会复制files属性, 导致后面程序访问不了选择的文件. 解决方法, 手动$.extends(新.files, 旧.files); 即可.</p>
+<p>webpack打包相关问题：<br>1，打包后除了字体资源路径不对，其它都对。<br>原因可能是output.publicPath是一个相对地址。在实际上线时，publicPath要求是一个绝对地址，以”/“开头</p>
+<p>使用Vuex的坑点。<br>按照Vuex的官方文档介绍，讲道理，store应该只包含值为原始值的键值对，如： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> store = &#123;</span><br><span class="line">	<span class="attr">name</span>: <span class="string">&#x27;tzx&#x27;</span>,<span class="comment">//字符串</span></span><br><span class="line">	<span class="attr">age</span>: <span class="number">22</span>, <span class="comment">// 数字</span></span><br><span class="line">	<span class="attr">testNull</span>: <span class="literal">null</span>, <span class="comment">// null</span></span><br><span class="line">	<span class="attr">testUndefined</span>: <span class="literal">undefined</span>, <span class="comment">// undefined</span></span><br><span class="line">	<span class="attr">isMarried</span>: <span class="literal">false</span>, <span class="comment">//bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果store包含对象的话，操作起来时一定要更加小心。因为我们都知道对象是引用类型，一个地方变了，会引起所有引用它的变量改变。举个栗子，在Vue组件的mounted中使用getter获取store中的一个对象，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> store = &#123;</span><br><span class="line">	<span class="attr">tzx</span>: &#123;</span><br><span class="line">		<span class="attr">age</span>: <span class="number">22</span>,</span><br><span class="line">		<span class="attr">isMarried</span>: <span class="literal">false</span>,</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果将获取到的tzx这个对象直接赋予表格的v-model，问题就出来了。因为获取的是引用。我们在表格中直接操作了tzx这个对象，相当于直接操作了store中的对象，相当于没有经过mutation或者action就完成了操作！！！这是很可怕的。<br>解决办法也是有的，就是获取数据时，新建一个对象，操作这个新的对象，就跟store中的对象没有半毛钱的关系了（对象中不包含其它引用类型）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">mounted</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.tableEditData = &#123;...this.$store.getters[<span class="string">&quot;getterName&quot;</span>]&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这样即可。或者用es5的</span></span><br><span class="line"><span class="built_in">this</span>.tableEditData = <span class="built_in">Object</span>.create(&#123;&#125;, <span class="built_in">this</span>.$store.getters[<span class="string">&quot;getterName&quot;</span>])</span><br></pre></td></tr></table></figure>
+<p>同理，在进行操作（mutation、action）时，提供的数据对象也要新建，不能直接使用从data中的数据，因为对象就是引用类型，你这里提供给Vuex一个引用了当前data中的对象，那么当你再次修改table数据时，store中的数据又再次改变了。原因你们懂了吧。。。可怕。<br>讲道理的话，Vuex中的store应该只存储原始类型，因为Vuex的出发点就是构造一个全局的状态库。这些状态用原始值完全足够了，你说是吗？？</p>
+<p>post提交表单的形式<br>如果请求的Content-Type设置为application/x-www-form-urlencoded，那么这个Post请求被认为是HTTP POST表单请求，参数出现在form data；其他情况如使用原生AJAX的POST请求如果不指定请求头Request Header，默认使用的Content-Type是text/plain;charset=UTF-8，或者application/json ，参数出现在Request payload块。详情可参考<a target="_blank" rel="noopener" href="http://blog.csdn.net/yiifaa/article/details/73468001">这个博客</a>. 意思是原生form表单提交, form data内的数据其实都是name=tzx&amp;passrd=123456&amp;….这种形式的. 而ajax默认提交的是一个json对象. 在后端已布置的情况下, 要注意前端请求的格式. </p>
+<p>sass中使用webpack别名引用资源时, 在别名前添加~即可. webpack github原话:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">webpack provides an advanced mechanism to resolve files. The sass-loader uses node-sass<span class="string">&#x27; custom importer feature to pass all queries to the webpack resolving engine. Thus you can import your Sass modules from node_modules. Just prepend them with a ~ to tell webpack that this is not a relative import:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@import &quot;~bootstrap/dist/css/bootstrap&quot;;</span></span><br><span class="line"><span class="string">It&#x27;</span>s important to only prepend it with ~, because ~/ resolves to the home directory. webpack needs to distinguish between bootstrap and ~bootstrap because CSS and Sass files have no special syntax <span class="keyword">for</span> importing relative files. Writing @import <span class="string">&quot;file&quot;</span> is the same as @import <span class="string">&quot;./file&quot;</span>;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%B8%A9%E5%9D%91/" rel="tag"># 踩坑</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/06/21/viewport/" rel="prev" title="viewport">
+                  <i class="fa fa-chevron-left"></i> viewport
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/07/11/input-file-%E6%B3%A8%E6%84%8F%E7%82%B9/" rel="next" title="input file 注意点">
+                  input file 注意点 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>

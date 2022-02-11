@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;tzxhy.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Mist&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12,&quot;b2t&quot;:false,&quot;scrollpercent&quot;:false,&quot;onmobile&quot;:false},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:true,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;slideDownIn&quot;,&quot;post_body&quot;:&quot;slideDownIn&quot;,&quot;coll_header&quot;:&quot;slideLeftIn&quot;,&quot;sidebar&quot;:&quot;slideUpIn&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;Searching...&quot;,&quot;empty&quot;:&quot;We didn&#39;t find any results for the search: ${query}&quot;,&quot;hits_time&quot;:&quot;${hits} results found in ${time} ms&quot;,&quot;hits&quot;:&quot;${hits} results found&quot;}}</script>
+<meta name="description" content="在春节放假前夕，业务似乎没有那么忙了。在空余时间里，又思考了下：后端方案选型。当然，作为一个 FEer，我没有使用过除了 Node.js 以外的其他方案做过后端开发，对于其他语言的思考，也只能通过网络搜索、相关帖子等信息，结合多方的探讨，来获取我需要的答案。本文也是通过结合网络上大家的讨论及自己的思考，总结出来的。 由于后端方案也是技术方案，因此下文将讨论：技术方案选型。 通常来说，技术方案选型包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我能用Nodejs来做后端吗?">
+<meta property="og:url" content="https://tzxhy.github.io/2021/02/10/%E6%88%91%E8%83%BD%E7%94%A8Nodejs%E6%9D%A5%E5%81%9A%E5%90%8E%E7%AB%AF%E5%90%97/index.html">
+<meta property="og:site_name" content="CMeUp">
+<meta property="og:description" content="在春节放假前夕，业务似乎没有那么忙了。在空余时间里，又思考了下：后端方案选型。当然，作为一个 FEer，我没有使用过除了 Node.js 以外的其他方案做过后端开发，对于其他语言的思考，也只能通过网络搜索、相关帖子等信息，结合多方的探讨，来获取我需要的答案。本文也是通过结合网络上大家的讨论及自己的思考，总结出来的。 由于后端方案也是技术方案，因此下文将讨论：技术方案选型。 通常来说，技术方案选型包">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-09T16:12:34.000Z">
+<meta property="article:modified_time" content="2021-05-24T09:30:32.425Z">
+<meta property="article:author" content="谭智轩">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="技术方案">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzxhy.github.io/2021/02/10/%E6%88%91%E8%83%BD%E7%94%A8Nodejs%E6%9D%A5%E5%81%9A%E5%90%8E%E7%AB%AF%E5%90%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;en&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;tzxhy.github.io&#x2F;2021&#x2F;02&#x2F;10&#x2F;%E6%88%91%E8%83%BD%E7%94%A8Nodejs%E6%9D%A5%E5%81%9A%E5%90%8E%E7%AB%AF%E5%90%97&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;02&#x2F;10&#x2F;我能用Nodejs来做后端吗&#x2F;&quot;,&quot;title&quot;:&quot;我能用Nodejs来做后端吗?&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>我能用Nodejs来做后端吗? | CMeUp</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CMeUp</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一些学习心得，QQ:1139723651.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%9C%AC%E8%BA%AB"><span class="nav-number">1.</span> <span class="nav-text">技术本身</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">业务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA"><span class="nav-number">3.</span> <span class="nav-text">人</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94"><span class="nav-number">5.</span> <span class="nav-text">回答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">谭智轩</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tzxhy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tzxhy" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/1820446984508072" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;1820446984508072" rel="noopener" target="_blank">掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/tanzhixuan-zebzs" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;tanzhixuan-zebzs" rel="noopener" target="_blank">语雀</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2021/02/10/%E6%88%91%E8%83%BD%E7%94%A8Nodejs%E6%9D%A5%E5%81%9A%E5%90%8E%E7%AB%AF%E5%90%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我能用Nodejs来做后端吗?
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-09 16:12:34" itemprop="dateCreated datePublished" datetime="2021-02-09T16:12:34Z">2021-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A1%88%E4%BE%8B/" itemprop="url" rel="index"><span itemprop="name">案例</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在春节放假前夕，业务似乎没有那么忙了。在空余时间里，又思考了下：<strong>后端方案选型</strong>。当然，作为一个 FEer，我没有使用过除了 Node.js 以外的其他方案做过后端开发，对于其他语言的思考，也只能通过网络搜索、相关帖子等信息，结合多方的探讨，来获取我需要的答案。本文也是通过结合网络上大家的讨论及自己的思考，总结出来的。</p>
+<p>由于后端方案也是技术方案，因此下文将讨论：<strong>技术方案选型</strong>。</p>
+<p>通常来说，技术方案选型包括了：开发语言是什么？选用的框架是什么？周边设施完善度？</p>
+<p>那么技术方案如何选型呢？</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="技术本身"><a href="#技术本身" class="headerlink" title="技术本身"></a>技术本身</h2><p>技术本身是具有时代色彩的，一个时代的标志性技术，往往在下一个时代已经无人问津。我们可选的技术，一般是满足这些条件的：</p>
+<ol>
+<li>稳定性足够高；</li>
+<li>已被大规模验证（非硬性条件）；</li>
+<li>有活跃的社区；</li>
+<li>有明确的发展规划；</li>
+<li>具有自己的优势。</li>
+</ol>
+<p>拿 jQuery 举例，它的存在，是那个时代的互联网环境决定的：浏览器争霸，没有同一的接口规范，导致了跨浏览器兼容方案的需要。而现在，Chrome 基本一统天下，其他主流浏览器也都在相同的规范下，表现越来越一致，这个时候，jQuery 就没有用武之地了。</p>
+<p>技术本身需要是<strong>稳定</strong>的，换句话说，技术的生命周期必须显著长于项目的生命周期，否则你项目还没开发完，技术就不被维护了，这个时候该怎么办？ 我们怎么看一个技术是否稳定呢？常规来说，如果一个技术是周期性发布新版本，且带上了上一版本衍生的问题的修复或者新特性，并且是向后兼容的（不包括一些重大更新），那么可以说它是稳定的。</p>
+<p>技术本身需要被大规模验证，这也可以当做<strong>稳定性</strong>的佐证。有了大公司的技术背书，用起来时才不会担惊受怕。不过这不是硬性条件。很多小公司或者一些大公司的某些部门，可能会比较激进地尝试新技术，自己作为该技术的先驱，比如：闲鱼的 flutter 团队，做的就比较早，在当时 flutter 还非常不完善的时候，就入场了。不过闲鱼的 flutter 现在确实是业内比较领先的。</p>
+<p>技术需要有活跃的社区。有了社区，才能促进交流，才能不断升级迭代出更好的技术产品出来。没有社区，当你有问题时，你短时间内无法定位、解决问题，这对开发是致命的。</p>
+<p>技术需要有前瞻的设想。没有想法的技术，是死的。拿 React 举例，React 每一个小版本都会解决一些遗留的问题；每一个大版本会提出新的设想，以及产生这些设想的原因。比如 React v16 的 Fiber 结构、函数式状态组件（hooks）等，它是根据开发者在日常工作中使用 React 时遇到的痛点而提出的，它的目的是让开发者更好地使用 React，更好地服务于用户。</p>
+<p>技术需要有自己的优势。每一种技术都有它特定的使用场景的，没有银弹。<strong>优势往往与业务直接相关</strong>。比如，Node.js 的优势就是高 I/O，在 RESTFul 这种场景下，Node.js 仅仅是获取资源并返回给前端，这时是非常高效的。如果说是计算密集型的，那么 Node.js 就可以说 bye bye 了，可以考虑 Go、C/C++ 等方案。</p>
+<h2 id="业务"><a href="#业务" class="headerlink" title="业务"></a>业务</h2><p>技术选型跟业务是非常相关的。</p>
+<p>处于初创期的公司，往往是非常灵活的：它需要快速上线、快速验证结果。此时对技术方案没有特定的要求，只需要它足够高效，毕竟快速验证的过程中，可能是朝令夕改的，技术必须适应业务的节奏。</p>
+<p>当业务稳定后，选型就需要是“稳定”的。当业务稳定了，技术却不够稳定，技术便会成为发展的短板。此时你会需要去修正技术方案：是推倒重做还是逐步切换？这个取决于业务。</p>
+<p>当进入维护期时，是妥协的时候。这时的选型方案已经基本定型。代码只会越来越多，越来越乱，基本上一两年就会有一次重构。此时是重新设计技术方案，还是在已有的方案上做部分迁移，这也依赖于业务这个环境。</p>
+<p>引用作者：</p>
+<blockquote>
+<p>正因为技术选型和业务相关，我们能够观察到一些很明显的现象：新技术往往被早期创业团队或大公司的新兴业务使用；中大型公司的核心业务则更倾向于用一些稳定了几年的技术；一个公司如果长期使用一种技术，就会倾向于一直使用下去，甚至连版本都不更新的使用下去。这现象背后都是有道理的。</p>
+</blockquote>
+<h2 id="人"><a href="#人" class="headerlink" title="人"></a>人</h2><p>技术选型，最后决定的是人。</p>
+<p>团队中可能会出现很多个声音，发出这些声音的可能是一些基层同学，也可能是与业务无关的其他同学。他们的建议可以当做参考，但决不能以多数服从少数的方法来决定最后的选择。毕竟每个人的思考出发点不同，思考的高度、目标不同，因此需要一个有绝对决定权的人。</p>
+<p>技术的选择，本身是依托于业务的。从大的角度来说，技术应该是服务于业务的，而不是想用什么技术就用什么，因此本身需要决策人的经验。只有丰富的经验，才能在确切的业务场景中选择出最适合的技术方案。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>在看了一些别人的分享后，某些东西还是让我受益匪浅。</p>
+<ol>
+<li>技术选型要慎重。<strong>再怎么谨慎都不为过</strong>。了解的例子是：由于选型不慎重，使用了当下很火的技术，在测试时确实达到了自己的要求，但当下用户大环境，设备性能普遍低下，导致上线后，性能成为瓶颈，最后不得不改为 C++ 实现。引用作者：<blockquote>
+<p>当时我还不是很理解，为什么公司不能更早一点止损，后来我慢慢发现，这真的是当局者迷，当一个决策作出之后大家就天然的希望能通过努力来解决眼前的问题，结果反而越陷越深。这也意味着最初选型的时候得十分谨慎，特别是选型影响面巨大时保守点会更好。</p>
+</blockquote>
+</li>
+<li>大公司往往更注重稳定性。比如一个技术出现后，如果有尝试的场景，会采用灰度验证或者实验，只会一步步放量，而且这个验证流程足够长。这里面的思考就是对于一个新技术的天然不信任，在技术接受程度还不够高且公司内没有人能吃透这个技术的情况下，不愿意让自己的业务做第一个吃螃蟹的人。</li>
+<li>技术选型依赖于经验，经验又来源于知识索引的建设，这依赖于平时的总结和不断的新知识输入，技术是一辈子的事，必须得投入大量时间维持状态。学无止尽。</li>
+</ol>
+<h2 id="回答"><a href="#回答" class="headerlink" title="回答"></a>回答</h2><p>所以，标题：<strong>我能用Nodejs来做后端吗?<strong>，这个其实很好回答：</strong>能</strong>。只要你的业务场景刚好是 Nodejs 的优势范围，那么就随意~ 但另一个问题是：<strong>Nodejs 能很好的服务于你的业务吗？</strong></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7409866426ec">技术选型那些事</a>，文字较多，缺少分段，但整体质量不错</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+              <a href="/tags/%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88/" rel="tag"># 技术方案</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/09/ts-%E6%B3%9B%E5%9E%8B%E6%B7%B1%E5%85%A5/" rel="prev" title="ts 泛型深入">
+                  <i class="fa fa-chevron-left"></i> ts 泛型深入
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/25/Dockerfile-%E4%BD%9C%E7%94%A8/" rel="next" title="Dockerfile 作用(翻译自官网)">
+                  Dockerfile 作用(翻译自官网) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MjY5OS8yOTE3Ng=="></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">谭智轩</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script src="/js/third-party/comments/livere.js"></script>
+
+</body>
+</html>
