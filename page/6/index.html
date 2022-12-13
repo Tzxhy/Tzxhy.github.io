@@ -128,7 +128,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -141,7 +141,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -181,84 +181,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2019/03/05/css%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="谭智轩">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CMeUp">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/03/05/css%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">css媒体查询</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-03-04 17:53:01" itemprop="dateCreated datePublished" datetime="2019-03-04T17:53:01Z">2019-03-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="css媒体查询"><a href="#css媒体查询" class="headerlink" title="css媒体查询"></a>css媒体查询</h1><p>在写媒体查询的时候，顺序很重要。</p>
-<ul>
-<li>min相关的，必须从上到下的值依次递增。</li>
-<li>max相关的，必须从上到下的值依次递减。</li>
-</ul>
-<p>原因：相同的权重，最后一条被选中。比如现在宽度750px，能匹配到第一条和第三条，最小值700px–最大值800px</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">min-width</span>: <span class="number">700px</span>) &#123; <span class="comment">/* 依次递增 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: yellow;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">min-width</span>: <span class="number">800px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: white;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>: <span class="number">800px</span>) &#123; <span class="comment">/* 依次递减 */</span></span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>: <span class="number">700px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">div</span><span class="selector-class">.example</span> &#123;</span><br><span class="line">	<span class="attribute">background-color</span>: pink;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1258,6 +1180,79 @@
 <p>post提交表单的形式<br>如果请求的Content-Type设置为application/x-www-form-urlencoded，那么这个Post请求被认为是HTTP POST表单请求，参数出现在form data；其他情况如使用原生AJAX的POST请求如果不指定请求头Request Header，默认使用的Content-Type是text/plain;charset=UTF-8，或者application/json ，参数出现在Request payload块。详情可参考<a target="_blank" rel="noopener" href="http://blog.csdn.net/yiifaa/article/details/73468001">这个博客</a>. 意思是原生form表单提交, form data内的数据其实都是name=tzx&amp;passrd=123456&amp;….这种形式的. 而ajax默认提交的是一个json对象. 在后端已布置的情况下, 要注意前端请求的格式. </p>
 <p>sass中使用webpack别名引用资源时, 在别名前添加~即可. webpack github原话:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">webpack provides an advanced mechanism to resolve files. The sass-loader uses node-sass<span class="string">&#x27; custom importer feature to pass all queries to the webpack resolving engine. Thus you can import your Sass modules from node_modules. Just prepend them with a ~ to tell webpack that this is not a relative import:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@import &quot;~bootstrap/dist/css/bootstrap&quot;;</span></span><br><span class="line"><span class="string">It&#x27;</span>s important to only prepend it with ~, because ~/ resolves to the home directory. webpack needs to distinguish between bootstrap and ~bootstrap because CSS and Sass files have no special syntax <span class="keyword">for</span> importing relative files. Writing @import <span class="string">&quot;file&quot;</span> is the same as @import <span class="string">&quot;./file&quot;</span>;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tzxhy.github.io/2017/06/21/viewport/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="谭智轩">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CMeUp">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017/06/21/viewport/" class="post-title-link" itemprop="url">viewport</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-06-20 22:43:24" itemprop="dateCreated datePublished" datetime="2017-06-20T22:43:24Z">2017-06-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTML/" itemprop="url" rel="index"><span itemprop="name">HTML</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>当网页文档足够宽时，设置   viewport width=device-width 也会出现水平滚动条。可能因为有个最大上限制，超过后，假设屏幕会缩放，则可能完全看不清。因此浏览器选择水平滚动以保持文字的可读性。<br>现代移动浏览器会自动采用  viewport width=device-width  ？？？ 因为不设置这个，也会按这个显示。有待考证。首先如果不设置meta viewport标签，那么移动设备上浏览器默认的宽度值为800px，980px，1024px等这些，总之是大于屏幕宽度的。这里的宽度所用的单位px都是指css中的px，它跟代表实际屏幕物理像素的px不是一回事。<br>以下为个人拙见，虽没官方依据，但帮助了我理解。<br>width 设置内容的最小宽度（如果内容比你设置的还宽，以内容为准，并且值必须比屏幕宽），这个也是可见像素宽度。<br>如果不设置缩放，此时一般没有水平滚动条（默认的initial-scale会让文档全屏显示）。<br>若设置initial-scale，会改变屏幕的水平像素值。如，设置为1时，水平像素值为400px，设置为0.5时，水平像素值为800px。这也是为什么设置了width 和 initial-scale=1 时，不全屏的原因，因为width设置为屏幕宽度数值后（其实很小，不是像素数值，一般由于这个值小于文档本来宽度，故无效），设置initial-scale=1时，一屏像素宽度为400px，显示不完整个文档，当然有水平滚动条。设置initial-scale后，会让水平像素值为屏幕宽度的缩放倍数。</p>
+
       
     </div>
 
